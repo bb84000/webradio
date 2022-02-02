@@ -1,0 +1,7 @@
+backup/**
+lib/**
+plugins/**
+*.dll
+webradiowin64.exe
+InstallWebradio.exe
+DotMatrix.ttf

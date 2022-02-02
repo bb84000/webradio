@@ -1,0 +1,40 @@
+Web Radio Tuner - Tuner Radio Web
+
+Version 0.5.0.0 - 24/01/2022
+- Initial alpha version
+- Please report bugs !
+
+Version 0.5.0.1 - 25/01/2022
+- Replaced presets TSpeedButtons with BGRA TColorSpeedButtons
+- Application.minimize no longer remove small windows in bottom left: Use Application.MainFormOnTaskBar
+  instead
+- Implemented audio file reading
+
+Version 0.5.0.2 - 27/01/2022
+- Activated update function
+- Added some functions to audio file reading
+- Corrected some annoying bugs
+- Added recording feature
+- Created and used fptimer component (in lazbbcomponents packet)
+
+Version 0.6.0.0 - 29/01/2022
+- Added FLAC format playing (limited)
+- Added translations for TFRadios form
+- Recording in MP3, AAC, OGG and WAV formats
+
+Version 0.6.0.1 - 31/01/2022
+- Added translation of settings dialog
+- Added tags from OGG streams
+- Use of any JPG or PNG images for radios logos
+- Changed icons
+- Added menu to open an url
+- Added 9 band parametric equalizer
+- Added button bar
+
+Version 0.6.0.2 - 02/02/2022
+- Added setting to hide button bar, use instead the context menu
+- Added restart feature on system login if the application was active at logout
+- Added tray icon feature
+- Can change radio name font. Default font is embedded
+- Changed layout, scrolling title under the radio name
+- Implemented Windows 64 installer in zip file

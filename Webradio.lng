@@ -1,0 +1,320 @@
+;Languages File/Fichier de langues
+;It is possible to create a new language using its ID as new section
+;Il est possible de créer une nouvelle langue en utilisant son identifiant
+;Danish	[da], Dutch [nl], Finnish [fi], German [de], Greek [el], Hungarian [hu]
+;Icelandic [is], Italian [it], Norwegian [no], Polish [pl], Portuguese [pt]
+;Russian [ru], Serbo Croatian [sr], Slovak [sk], Swedish [sv], Turkish [tr]
+
+;Save this file in a secure place if you change it, it will be replaced by any update !
+;you wiill probably need to add some items.
+;Submit your translation on my site or GitHub
+
+;English
+[en]
+;General
+Language=English
+Caption=Web radio tuner
+OKBtn=OK
+YesBtn=Yes
+NoBtn=No
+CancelBtn=Cancel
+sStereoCaption=Stereo
+sMonoCaption=Mono
+sRecordingCaption=Recording
+sPauseCaption=Pause
+sStopCaption=Stoped
+LLeft.Caption=L
+LRight.Caption=R
+LLeft.Hint=Left channel
+LRight.Hint=Right channel
+sMuteHint=Click to mute the sound
+sMutedHint=Click to unmute the sound
+sMuteMenu=Mute the sound
+sMutedMenu=Unmute the sound
+
+sRecordingHint=Click to record the radio
+sStopRecordingHint=Click to stop recording
+sNoLongerChkUpdates=No longer check updates
+sUpdateAlertBox=Current version: %sA new version %s is available
+sConnectStr=Connecting...
+sLoadStr=Loading
+sBufferStr=Buffering...
+sConnectedStr=Connected
+sEnterUrl=Enter a radio's URL
+
+;Menus
+PMnuOpenRadio.Caption=Open radio in the list
+PMnuReadFile.Caption=Open audio file
+PMnuOpenURL.Caption=Open radio Url
+PMnuEqualizer.Caption=Equalizer
+PMnuSettings.Caption=Options
+PMnuRadList.Caption=Radios list
+PMnuAbout.Caption=About Web radio tuner
+PMnuQuit.Caption=Quit
+PTMnuRestore.Caption=Restore
+PTMnuIconize.Caption=Minimize
+
+;About
+Aboutbox.Caption=About %s
+AboutBox.LUpdate.Caption=Search update
+AboutBox.UpdateAvailable=New version %s available. Click to download it
+AboutBox.NoUpdateAvailable=MailsInBox is up to date.
+AboutBox.LastUpdateSearch=Last update check
+AboutBox.LProgPage.Caption=Program home page
+AboutBox.UrlProgSite=https://github.com/bb84000/webradio/wiki
+AboutBox.LWebSite.Caption=Web site home page
+AboutBox.LSourceCode.Caption=Source code Web page
+
+; Radios form
+FRadios.Caption=Radios list
+FRadios.OPDLogo.Title=Select an image
+FRadios.sConfirmDeleteRadio=Do you want really delete the radio %s ?
+FRadios.SBAddRadio.Hint=Add a radio
+FRadios.SBEditRadio.Hint=Edit the selected radio
+FRadios.SBValidRadio.Hint=Valid changes
+FRadios.SBCancelChanges.Hint=Cancel changes
+FRadios.SBDeleteRadio.Hint=Delete the selected radio
+FRadios.Lname.Caption=Name
+FRadios.LUrl.Caption=URL
+FRadios.LComment.Caption=Comment
+FRadios.LFavicon.Caption=Logo file
+FRadios.LPresets.Caption=Presets
+
+; Misc
+
+; Options form
+FSettings.Caption=Web Radio Tuner settings
+FSettings.TPSystem.Caption=System
+FSettings.TPEncode.Caption=Recording settings
+FSettings.CBSavSizePos.Caption=Save window size and position
+FSettings.CBStartup.Caption=Launch at system startup
+FSettings.CBStartMini.Caption=Start minimized
+FSettings.CBNoChkNewVer.Caption=No check for update
+FSettings.LBitrate.Caption=Bitrate (Kbits/s)
+FSettings.LSampling.Caption=Sampling (Hz)
+FSettings.LLangue.Caption=Language
+FSettings.LDataFolder.Caption=Recording folder
+FSettings.LFont.Caption=Font
+FSettings.CBFonts.Hint=Select the font for radio name display
+; Equalizer
+
+FEqualizer.Caption=Parametric equalizer
+FEqualizer.CBEqualize.Caption=Enable the equalizer
+FEqualizer.LReset.Caption=Reset levels
+
+;Errors
+ErrLoadStr=Erreur loading
+ErrOpenFile=Open file error
+ErrInvalidHnd=Invalid handle
+ErrInvalidDev=Invalide device
+ErrTimeout=Timeout
+ErrFileFormat=Incorrect file format
+ErrNetConnect=Internet connection error
+ErrBassVersion=Wrong version of BASS.DLL
+ErrBassInit=Bass library initialization error
+ErrUnknown=Unknown error
+ErrReading=Unable to play radio
+ErrWinVersion=The program cannot operate with this Windows' version
+ErrNoBassPLAY=The Bass%s libray is not installed.%sCannot play %s streams.
+ErrNoBassEnc=The BassEnc%s library is not installed.%sCannot record in %s the playing radio
+ErrBassEncVer=The BassEncode library version is wrong. %s Recording is impossible.
+ErrUnsupportedEnc=Cannot record, %s encoding not supported
+ErrEncoding=Encoding error # %d
+
+
+;Http error messages
+SErrInvalidProtocol=Invalid protocol "%s"
+SErrReadingSocket=Error reading data from socket
+SErrInvalidProtocolVersion=Invalid protocol version in response: %s
+SErrInvalidStatusCode=Invalid response status code: %s
+SErrUnexpectedResponse=Unexpected response status code: %s
+SErrChunkTooBig=Chunk too big
+SErrChunkLineEndMissing=Chunk line end missing
+SErrMaxRedirectsReached=Maximum allowed redirects reached: %s
+
+;Socket error messages
+strHostNotFound=Host name resolution for "%s" failed.
+strSocketCreationFailed=Creation of socket failed: %s
+strSocketBindFailed=Binding of socket failed: %s
+strSocketListenFailed=Listening on port #%s failed, error: %s
+strSocketConnectFailed=Connect to %s failed
+strSocketAcceptFailed=Could not accept a client connection on socket: %s, error %s
+strSocketAcceptWouldBlock=Accept would block on socket: %s
+strSocketIOTimeOut=Failed to set IO Timeout to %s
+strErrNoStream=Socket stream not assigned
+
+;lazbbosver
+Home=Home
+Professional=Professional
+Server=Server
+00000=Unknown version
+10240=v 1507 "July 2015 update"
+10586=v 1511 "November 2015 update"
+14393=v 1607 "July 2016 (Anniversary update)"
+15063=v 1703 "April 2017 (Creators update)"
+16299=v 1709 "October 2017 (Fall Creators update)"
+17134=v 1803 "April 2018 update"
+17763=v 1809 "October 2018 update"
+18362=v 1903 "May 2019 update"
+18363=v 1909 "November 2019 update"
+19041=v 2004 "May 2020 update"
+19042=v 20H2 "October 2020 update"
+19043=v 21H1 "May 2021 update"
+19044=v 21H2 "October 2021 update"
+22000=v 21H2 "October 2021 Initial version"
+
+;Français
+[fr]
+;General
+Language=Français
+Caption=Tuner radio Web
+OKBtn=OK
+YesBtn=Oui
+NoBtn=Non
+CancelBtn=Annuler
+sStereoCaption=Stéréo
+sMonoCaption=Mono
+sRecordingCaption=Enregistrement
+sPauseCaption=Pause
+sStopCaption=Stoppé
+LLeft.Caption=G
+LRight.Caption=D
+LLeft.Hint=Voie gauche
+LRight.Hint=Voie droite
+sMuteHint=Cliquer pour couper le son
+sMutedHint=Cliquer pour rétablir le son
+sMuteMenu=Couper le son
+sMutedMenu=Rétablir le son
+
+sRecordingHint=Cliquer pour enregistrer la radio
+sStopRecordingHint=Cliquer pour arrêter l'enregistrement
+sNoLongerChkUpdates=Ne plus rechercher de mises à jour
+sUpdateAlertBox=Version actuelle : %sUne nouvelle version %s est disponible
+sConnectStr=Connexion...
+sLoadStr=Chargement de
+sBufferStr=Mise en buffer...
+sConnectedStr=Connecté
+sEnterUrl=Saisir l'URL d'une radio
+
+;Menus
+PMnuOpenRadio.Caption=Ouvrir une radio dans la liste
+PMnuRadList.Caption=Liste des radios
+PMnuOpenURL.Caption=Ouvrir un Url de radio
+PMnuEqualizer.Caption=Egaliseur
+PMnuReadFile.Caption=Lire un fichier audio
+PMnuSettings.Caption=Préférences
+PMnuAbout.Caption=A propos du Tuner radio web
+PMnuQuit.Caption=Quitter
+PTMnuRestore.Caption=Restaurer
+PTMnuIconize.Caption=Réduire
+
+;About
+Aboutbox.Caption=A propos de Radio Web
+AboutBox.LUpdate.Caption=Recherche de mise à jour
+AboutBox.UpdateAvailable=Nouvelle version %s disponible. Cliquer pour la télécharger
+AboutBox.NoUpdateAvailable=Courriels en attente est à jour.
+AboutBox.LastUpdateSearch=Dernière recherche de mise à jour
+AboutBox.LProgPage.Caption=Page d'accueil du programme
+AboutBox.UrlProgSite=https://github.com/bb84000/webradio/wiki/Accueil
+AboutBox.LWebSite.Caption=Page d'accueil du site Web
+AboutBox.LSourceCode.Caption=Page Web du code source
+
+; Radios form
+FRadios.Caption=Liste des radios
+FRadios.OPDLogo.Title=Sélectionner une image
+FRadios.sConfirmDeleteRadio=Voulez-vous vraiment supprimer la radio %s ?
+FRadios.SBAddRadio.Hint=Ajouter une radio
+FRadios.SBEditRadio.Hint=Modifier la radio sélectionnée
+FRadios.SBValidRadio.Hint=Valider les modifications
+FRadios.SBCancelChanges.Hint=Annuler les modifications
+FRadios.SBDeleteRadio.Hint=Supprimer la radio sélectionnée
+FRadios.Lname.Caption=Nom
+FRadios.LUrl.Caption=URL
+FRadios.LComment.Caption=Commentaire
+FRadios.LFavicon.Caption=Fichier logo
+FRadios.LPresets.Caption=Présélections
+
+;Equalizer form
+
+FEqualizer.Caption=Egaliseur paramétrique
+FEqualizer.CBEqualize.Caption=Activer l'égaliseur
+FEqualizer.LReset.Caption=Remettre à zéro
+
+;Divers
+
+; Options form
+FSettings.Caption=Préférences du Tuner radio web
+FSettings.TPSystem.Caption=Système
+FSettings.TPEncode.Caption=Paramètres d'enregistrement
+FSettings.CBSavSizePos.Caption=Sauvegarder taille et position de la fenêtre
+FSettings.CBStartup.Caption=Lancer au démarrage du système
+FSettings.CBStartMini.Caption=Démarrer minimisé
+FSettings.CBNoChkNewVer.Caption=Ne pas rechercher de mise à jour
+FSettings.LBitrate.Caption=Débit (Kbits/s)
+FSettings.LSampling.Caption=Echantillonnage (Hz)
+FSettings.LLangue.Caption=Langue
+FSettings.LDataFolder.Caption=Répertoire d'enregistrement
+FSettings.LFont.Caption=Police
+FSettings.CBFonts.Hint=Sélection de la police d'affichage du nom de la radio
+
+// Errors
+ErrLoadStr=Erreur de chargement de
+ErrOpenFile=Erreur d'ouverture de fichier
+ErrInvalidHnd=Handle invalide
+ErrInvalidDev=Périphérique invalide
+ErrTimeout=Délai dépassé
+ErrFileFormat=Format de fichier incorrect
+ErrNetConnect=Erreur de connexion Internet
+ErrBassVersion=Mauvaise version de la bibliothèque Bass
+ErrBassInit=Erreur d''initialisation de la bibiliothèque Bass
+ErrUnknown=Erreur inconnue
+ErrReading=Lecture de la radio impossible
+ErrWinVersion=Ce programme ne fonctionne pas avec cette version de Windows
+ErrNoBassPLAY=La bibliothèque Bass%s n'est pas installée.%sLecture des flux %s impossible.
+ErrNoBassEnc=La bibliothèque BassEnc%s n'est pas installée.%sEnregistrement des radios impossible au format %s.
+ErrBassEncVer=La version de la bibliothèque BassEnc est erronnée.%sEnregistrement impossible.
+ErrUnsupportedEnc=Impossible d'enregistrer, encodage %s non supporté
+ErrEncoding=Erreur d''encodage %d
+
+;Http error messages
+SErrInvalidProtocol=Protocole "%s" invalide
+SErrReadingSocket=Erreur de lecture des données à partir du socket
+SErrInvalidProtocolVersion=Version de protocole invalide en réponse: %s
+SErrInvalidStatusCode=Code de statut de réponse invalide: %s
+SErrUnexpectedResponse=Code de statut de réponse non prévu: %s
+SErrChunkTooBig=Bloc trop grand
+SErrChunkLineEndMissing=Fin de ligne du bloc manquante
+SErrMaxRedirectsReached=Nombre maximum de redirections atteint: %s
+
+;Socket error messages
+strHostNotFound=Résolution du nom d'hôte pour "%s" impossible.
+strSocketCreationFailed=Echec de la création du socket: %s
+strSocketBindFailed=Echec de liaison du socket: %s
+strSocketListenFailed=Echec de l'écoute sur le port n° %s, erreur %s
+strSocketConnectFailed=Echec de la connexion à %s
+strSocketAcceptFailed=Connexion refusée d'un client sur le socket: %s, erreur %s
+strSocketAcceptWouldBlock=La connexion pourrait bloquer le socket: %s
+strSocketIOTimeOut=Impossible de fixer le timeout E/S à %s
+strErrNoStream=Flux du socket non assigné
+
+;lazbbosver
+Home=Famille
+Professional=Entreprise
+Server=Serveur
+00000=Version inconnue
+10240=v 1507 "Juillet 2015"
+10586=v 1511 "Novembre 2015"
+14393=v 1607 "Juillet 2016 (Màj Anniversaire)"
+15063=v 1703 "Avril 2017 (Màj Createurs)"
+16299=v 1709 "Octobre 2017(Màj Fall Créateurs)"
+17134=v 1803 "Avril 2018"
+17763=v 1809 "Octobre 2018"
+18362=v 1903 "Mai 2019"
+18363=v 1909 "Novembre 2019"
+19041=v 2004 "Mai 2020"
+19042=v 20H2 "Octobre 2020"
+19043=v 21H1 "Mai 2021"
+19044=v 21H2 "Novembre 2021"
+22000=v 21H2 "Octobre 2021 Version initiale"
+
+

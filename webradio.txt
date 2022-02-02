@@ -1,0 +1,12 @@
+  WebRadio - Tuner Radio Internet - Internet Radio Tuner
+
+  Application permettant la réception des radios diffusées sur Internet.
+
+  Application to receive radios broadcasted on Internet.
+
+  Currently in alpha version, all functions are not yet implemented and some
+  crashs can occur.
+
+  bb - sdtp
+
+  Uses Un4seen Development Bass libraries (https://www.un4seen.com/)
