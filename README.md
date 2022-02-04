@@ -13,10 +13,8 @@ Play media file (wav, mp3, ogg, acc and flac)
 
 ### Installation
 
-Download the zip file webradio.zip, extract and run installer.
+[Download the zip file](https://github.com/bb84000/webradio/raw/main/webradio.zip) , extract and run installer.
 
 
 Application uses Un4seen Development Bass libraries which can be obtained at https://www.un4seen.com/:
 Minimal libraries : bass.dll and bassenc.dll
- 
- 
