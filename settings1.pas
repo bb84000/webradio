@@ -48,6 +48,10 @@ type
     FBitrate: Integer;
     fEquFreqs: array [1..9] of Integer;
     fEquEnabled: Boolean;
+    FDisplayText: TColor;
+    FDisplayBack: TColor;
+    FGenText: TColor;
+    FGenBack: TColor;
   public
 
     constructor Create (AppName: string);
@@ -74,6 +78,10 @@ type
     procedure SetEquFreqs(Index: Integer; i: Integer);
     function GetEquFreqs(Index: Integer): Integer;
     procedure SetEquEnabled(b:Boolean);
+    procedure SetDisplayText(c: TColor);
+    procedure SetDisplayBack(c: TColor);
+    procedure SetGenText(c: TColor);
+    procedure SetGenBack(c: TColor);
     function SaveXMLnode(iNode: TDOMNode): Boolean;
     function SaveToXMLfile(filename: string): Boolean;
     function LoadXMLNode(iNode: TDOMNode): Boolean;
@@ -104,6 +112,10 @@ type
     property Sampling: Integer read FSampling write SetSampling;
     property Bitrate: Integer read FBitrate write SetBitrate;
     property EquEnabled: Boolean read fEquEnabled write SetEquEnabled;
+    property DisplayText: Tcolor read FDisplayText write SetDisplayText;
+    property DisplayBack: Tcolor read FDisplayBack write SetDisplayBack;
+    property GenText: Tcolor read FGenText write SetGenText;
+    property GenBack: Tcolor read FGenBack write SetGenBack;
 end;
 
 
@@ -122,9 +134,17 @@ end;
     CBStartup: TCheckBox;
     CBHideInTaskBar: TCheckBox;
     CBFonts: TComboBox;
+    CPGenBack: TColorPicker;
+    CPDisplayText: TColorPicker;
+    CPDisplayBack: TColorPicker;
+    CPGenText: TColorPicker;
     EDataFolder: TEdit;
+    LGenBack: TLabel;
+    LDisplayText: TLabel;
     LBitrate: TLabel;
     LDataFolder: TLabel;
+    LDisplayBack: TLabel;
+    LGenText: TLabel;
     LLangue: TLabel;
     LFont: TLabel;
     LSampling: TLabel;
@@ -333,6 +353,34 @@ begin
   if Assigned(FOnChange) then FOnChange(Self);
 end;
 
+procedure TConfig.SetDisplayText(c: Tcolor);
+begin
+  if FDisplayText = c then exit;
+  FDisplayText:= c;
+  if Assigned(FOnChange) then FOnChange(Self);
+end;
+
+procedure TConfig.SetDisplayBack(c: Tcolor);
+begin
+  if FDisplayBack = c then exit;
+  FDisplayBack:= c;
+  if Assigned(FOnChange) then FOnChange(Self);
+end;
+
+procedure TConfig.SetGenText(c: Tcolor);
+begin
+  if FGenText = c then exit;
+  FGenText:= c;
+  if Assigned(FOnChange) then FOnChange(Self);
+end;
+
+procedure TConfig.SetGenBack(c: Tcolor);
+begin
+  if FGenBack = c then exit;
+  FGenBack:= c;
+  if Assigned(FOnChange) then FOnChange(Self);
+end;
+
 function TConfig.SaveXMLnode(iNode: TDOMNode): Boolean;
 var
   j: Integer;
@@ -360,6 +408,10 @@ begin
       TDOMElement(iNode).SetAttribute ('sampling', IntToStr(FSampling));
       TDOMElement(iNode).SetAttribute ('bitrate', IntToStr(FBitrate));
       TDOMElement(iNode).SetAttribute ('equenabled', BoolToString(fEquEnabled));
+      TDOMElement(iNode).SetAttribute ('displaytext', ColorToString(FDisplayText));
+      TDOMElement(iNode).SetAttribute ('displayback', ColorToString(FDisplayBack));
+      TDOMElement(iNode).SetAttribute ('gentext', ColorToString(FGenText));
+      TDOMElement(iNode).SetAttribute ('genback', ColorToString(FGenBack));
       for j:=1 to 9 do TDOMElement(iNode).SetAttribute ('equfreq'+InttoStr(j), IntToStr(FEquFreqs[j]));
 
     Result:= True;
@@ -427,6 +479,11 @@ begin
       if UpCaseAttrib='SAMPLING' then FSampling:= StringToInt(iNode.Attributes.Item[i].NodeValue);
       if UpCaseAttrib='BITRATE' then FBitrate:= StringToInt(iNode.Attributes.Item[i].NodeValue);
       if UpCaseAttrib='EQUENABLED' then FEquEnabled:= StringToBool(iNode.Attributes.Item[i].NodeValue);
+      if UpCaseAttrib='DISPLAYTEXT' then FDisplayText:= StringToColour(iNode.Attributes.Item[i].NodeValue);
+      if UpCaseAttrib='DISPLAYBACK' then FDisplayBack:= StringToColour(iNode.Attributes.Item[i].NodeValue);
+      if UpCaseAttrib='GENTEXT' then FGenText:= StringToColour(iNode.Attributes.Item[i].NodeValue);
+      if UpCaseAttrib='GENBACK' then FGenBack:= StringToColour(iNode.Attributes.Item[i].NodeValue);
+
       for j:= 1 to 9 do if UpCaseAttrib='EQUFREQ'+InttoStr(j) then fEquFreqs[j]:= StringToInt(iNode.Attributes.Item[i].NodeValue);
     result:= true;
   except
@@ -461,6 +518,10 @@ begin
   inherited;
   Settings:= TConfig.Create('progname');
   Settings.ShowBtnBar:= true;
+  Settings.DisplayBack:= clBlack;
+  Settings.FDisplayText:= clYellow;
+  Settings.GenBack:= clDefault;
+  Settings.GenText:= clDefault;
   RBWAV.Visible:= false;
   RBWAV.Enabled:= false;
   {$IFDEF WINDOWS}
@@ -469,6 +530,7 @@ begin
   {$ENDIF}
   CBFonts.Items:= Screen.Fonts;
   CBFonts.Items.Add('DotMatrix');
+
 end;
 
 procedure TFSettings.FormDestroy(Sender: TObject);

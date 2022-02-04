@@ -1,7 +1,7 @@
 {*******************************************************************************}
 { webradio1 : main unit code                                                    }
-{ bb - sdtp - january 2022                                                      }
-{                                                                               }
+{ bb - sdtp - february 2022                                                     }
+{ Using Un4seen BASS libraries www.un4seen.com                                  }
 {*******************************************************************************}
 
 unit webradio1;
@@ -18,12 +18,12 @@ Dialogs, ExtCtrls, StdCtrls, Menus, bass, basswma, bass_aac, bassenc,
 bassenc_mp3, bassenc_aac, bassenc_ogg, bassflac, Equalizer1, lazbbcontrols,
 settings1, radios1, lazbbosver, lazbbutils, lazUTF8, lazbbinifiles, registry,
 lazbbaboutupdate, lazbbautostart, LResources, ComCtrls, Buttons,
-ColorSpeedButton, UniqueInstance, fptimer, variants, BGRABitmap,
-BGRABitmapTypes, LazFileUtils;
+ColorSpeedButton, UniqueInstance, fptimer, variants,
+BGRABitmap, BGRABitmapTypes, LazFileUtils, Types;
 
 const
-  // Message identifiers used by bass library
-  //WM_INFO_UPDATE = WM_USER + 101;
+  // Message identifiers used to mimic message loop processing
+  //
   WP_Connecting = 0;
   WP_Error      = 1;
   WP_Progress   = 2;
@@ -39,7 +39,7 @@ const
   WP_Recing     = 13;
   WP_Hint       = 14;
   WP_NewVersion = 15;
-
+  BASS_ERROR_SSL= 10;
 
 type
   // Record type for messages array
@@ -81,7 +81,7 @@ type
     LRight: TLabel;
     LStatus: TLabel;
     LTag: TSCrollLabel;
-    MainMenu1: TMainMenu;
+    PMnuChooseRadio: TMenuItem;
     PTMnuMute: TMenuItem;
     PTMnuQuit: TMenuItem;
     PTMnuAbout: TMenuItem;
@@ -130,8 +130,7 @@ type
     LFrequency: TLabel;
     LStereo: TLabel;
     PMnuRadList: TMenuItem;
-    MnuChooseRadio: TMenuItem;
-    MnuDeletePreset: TMenuItem;
+    PMnuDeletePreset: TMenuItem;
     PMnuPreset: TPopupMenu;
     PMnuRadiosList: TPopupMenu;
     PPresets: TPanel;
@@ -170,8 +169,8 @@ type
     procedure MsgTimerTimer(Sender: TObject);
     procedure PMnuEqualizerClick(Sender: TObject);
     procedure PMnuRadListClick(Sender: TObject);
-    procedure MnuChooseRadioClick(Sender: TObject);
-    procedure MnuDeletePresetClick(Sender: TObject);
+    procedure PMnuChooseRadioClick(Sender: TObject);
+    procedure PMnuDeletePresetClick(Sender: TObject);
     procedure PMainClick(Sender: TObject);
     procedure PMnuAboutClick(Sender: TObject);
     procedure PMnuOpenURLClick(Sender: TObject);
@@ -185,7 +184,8 @@ type
     procedure SBMuteClick(Sender: TObject);
     procedure SBPauseClick(Sender: TObject);
     procedure SBPlayClick(Sender: TObject);
-    procedure SBPresetMouseEnter(Sender: TObject);
+    procedure SBPresetContextPopup(Sender: TObject; MousePos: TPoint;
+      var Handled: Boolean);
     procedure SBPresetClick(Sender: TObject);
     procedure SBRecordChangeBounds(Sender: TObject);
     procedure SBRecordClick(Sender: TObject);
@@ -212,6 +212,7 @@ type
     sConnectStr, sConnectedStr, sLoadStr: String;
     ErrNoBassPLAY, ErrNoBassEnc, ErrBassVersion, ErrBassInit, ErrBassEncVer: String;
     ErrUnsupportedEnc, ErrEncoding : String;
+    ErrConnection: String;
     sBufferStr: String;
     ConfigFileName, RadiosFileName: String;
     ChkVerInterval: Int64;
@@ -238,7 +239,10 @@ type
     Stopped: Boolean;
     IsRadio : Boolean;
     Recording: Boolean;
+
+    Connecting_beg: Int64;
     Recording_beg: TDateTime;
+    RecordBtnTimerCount: Int64;
     MsgTimerCount: Int64;
     Muted: Boolean;
     mp3enclib, aacenclib, oggenclib: Boolean;
@@ -249,6 +253,7 @@ type
     DMFontRes: Cardinal;
     procedure OnAppMinimize(Sender: TObject);
     procedure OnQueryendSession(var Cancel: Boolean);
+    procedure InitButtons;
     procedure Initialize;
     procedure LoadSettings(Filename: string);
     procedure PlayRadio (radio:TRadio);
@@ -266,6 +271,7 @@ type
     procedure PlayFile(Filename: string);
     procedure SetEqual(b: boolean);
     function HideOnTaskbar: boolean;
+    procedure ChangeColors;
   public
     BassWMA, BassAAC, BassFLAC, BassEnc, BassEncMP3: HPlugin;
     ID3Tag: TAG_ID3;
@@ -281,11 +287,13 @@ var
   CanalInfo: BASS_CHANNELINFO;
   FileStream:TFileStream;
   cthread: Int64 = 0;
+  error: Boolean;
   BufSize, Bitrate: Integer;
   CurRadio: TRadio;
   lparamArr: array [0..15] of sMsgRec;
+  BassErrArr: array [0..48] of String;
   fileduration: double;
-
+  // Equalizer variables
   equParam: BASS_DX8_PARAMEQ;
   CenterFreqs : array [1..9] of Integer = (62, 125, 250, 500, 1000, 2000, 4000, 8000, 16000);
   fx: array[1..9] of integer;
@@ -314,7 +322,7 @@ begin
 end;
 
 // Special Bass and callback functions
-// update stream title from metadata for mp3
+// update stream title from metadata for mp3, acc and ogg streams
 
 procedure DoMeta();
 var
@@ -322,6 +330,7 @@ var
   p: Integer;
   supp, s: String;
 begin
+
   s:= ' ';
   Case CanalInfo.cType of
       BASS_CTYPE_STREAM_WMA:
@@ -364,7 +373,7 @@ begin
   SimulateMsg(WP_Title, True, s);
 end;
 
-// Synchronisation lors du changement de méta tag
+// Synchronize when meta tag change in stream
 
 procedure MetaSync(handle: HSYNC; channel, data, user: Int64); stdcall;
 begin
@@ -413,10 +422,12 @@ var
   tagp: pchar;
   HintStr : string;
   ByteSec: Cardinal;
+  i: integer;
 const
   // Tableau des qualités OGG
   OGGQual: array [-2..10] of Integer = (32,48,64,80,96,112,128,160,192,224,256,320,500);
 begin
+  error:= false;
   HintStr:= '';
   Result:= 0;
   // close old stream
@@ -426,16 +437,19 @@ begin
        SimulateMsg(WP_Error, True, BASS_ErrorGetCode);
       exit;
     end;
-  SimulateMsg(WP_Connecting, True, Copy(url, 1, length(url)));
+
   Bitrate:= 0;
   progress := 0;
   chan := BASS_StreamCreateURL(PChar(url), 0, BASS_STREAM_STATUS, DOWNLOADPROC(@StatusProc), nil);
-  if (chan = 0) then
+  i:= BASS_ErrorGetCode();
+  if (chan = 0) or (BASS_ErrorGetCode() <> 0) then
   begin
      SimulateMsg(WP_Error, true, BASS_ErrorGetCode);
-  end
-  else
+     chan:= 0;
+     if chan <> 0 then BASS_StreamFree(chan) ;
+  end else
   begin
+    SimulateMsg(WP_Connecting, True, Copy(url, 1, length(url)));
     // Progress
     repeat
       len := BASS_StreamGetFilePosition(chan, BASS_FILEPOS_END);
@@ -578,6 +592,8 @@ begin
   cthread := 0;
 end;
 
+// Enable or disable equalizer
+
 procedure TFWebRadioMain.SetEqual(b: boolean);
 var
   i: Integer;
@@ -596,6 +612,8 @@ begin
   end;
 end;
 
+// Play an audio file
+
 procedure TFWebRadioMain.PlayFile (filename: string);
 var
   P: Pointer;
@@ -611,8 +629,7 @@ begin
      0,
      0,
      BASS_STREAM_AUTOFREE );
-   //SendMessage (win, WM_INFO_UPDATE, WP_Connecting, 0); //Stéréo ?
-   SimulateMsg(WP_Connecting, True, ' ');
+    SimulateMsg(WP_Connecting, True, ' ');
    BASS_ChannelGetInfo(Chan, CanalInfo);
    Case CanalInfo.ctype of
       BASS_CTYPE_STREAM_WMA : filtyp:= 1;
@@ -623,14 +640,11 @@ begin
       BASS_CTYPE_STREAM_WAV_FLOAT : filtyp:= 5;
    end;
    SetEqual(true);
-   //SendMessage(win, WM_INFO_UPDATE, WP_Connected, DWORD(PChar('File='+filname))); //Stéréo ?
    SimulateMsg(WP_Connected, true, filtyp);
    float_time:=BASS_ChannelBytes2Seconds(chan,BASS_ChannelGetLength(chan, BASS_POS_BYTE)); // playback duration
    len:=BASS_StreamGetFilePosition(chan,BASS_FILEPOS_END); // file length
    fileduration:= float_time;
-   //SendMessage(win, WM_INFO_UPDATE, WP_Length, len);
    bitrate:= Trunc(len/(125*float_time)+0.5); // bitrate (Kbps)
-   //SendMessage(win, WM_INFO_UPDATE, WP_BitRate, DWORD(PChar(IntToStr(Bitrate))));
    SimulateMsg(WP_BitRate, true, Bitrate);
    // todo use idv3v2
    if BASS_ChannelGetTags(chan, BASS_TAG_ID3) = nil then
@@ -649,14 +663,13 @@ begin
    end;
    CurRadio.Name:= '';
    if length(caption)< 2 then caption:= Extractfilename(filename);
-   //SendMessage(win, WM_INFO_UPDATE, WP_RadioName, DWORD(PChar(Caption)));
    SimulateMsg(WP_RadioName, true, Caption);
    BASS_ChannelPlay( chan, false);
    IsRadio:= False;
    // Set generic logi
    ImgLogo.Stretch:= true;
    ImgLogo.Picture.LoadFromLazarusResource('webradio256');
-   //If CBEqual.Checked then SetEqual (Chan);
+   SetEqual (FEqualizer.CBEqualize.Checked);
 end;
 
 { TFWebRadioMain }
@@ -742,7 +755,6 @@ begin
   begin
     PrevLeft:=self.left;
     PrevTop:= self.top;
-    //WindowState:= wsMinimized;
     PTMnuIconizeClick(self);
     Iconized:= HideOnTaskbar;
   end;
@@ -784,35 +796,13 @@ end;
 procedure TFWebRadioMain.FormActivate(Sender: TObject);
 var
   ResFnt: TResourceStream;
-  FntRes: cardinal;
   FontId: integer;
   FontCount: cardinal;
-  hdata: Pointer;
-const
-  CSIDL_FONTS = 20;
 begin
   if not Initialized then
   begin
-    // init menu and buttons images
-    CropBitmap(ILButtons, PMnuOpenRadio.Bitmap, true, 4);
-    CropBitmap(ILButtons, PMnuReadFile.Bitmap, true, 5);
-    CropBitmap(ILButtons, PMnuOpenURL.Bitmap, true, 6);
-    CropBitmap(ILButtons, PMnuEqualizer.Bitmap, true, 7);
-    CropBitmap(ILButtons, PMnuSettings.Bitmap, true, 8);
-    CropBitmap(ILButtons, PMnuRadList.Bitmap, true, 9);
-    CropBitmap(ILButtons, PMnuAbout.Bitmap, true, 10);
-    CropBitmap(ILButtons, PMnuQuit.Bitmap, true, 11);
-    CropBitmap(ILButtons, PTMnuAbout.Bitmap, true, 10);
-    CropBitmap(ILButtons, PTMnuQuit.Bitmap, true, 11);
-    CropBitmap(ILButtons, PTMnuMute.Bitmap, true, 2);
-    ILButtons.GetBitmap(4, SBOpenRadio.Glyph);;
-    ILButtons.GetBitmap(5, SBReadFile.Glyph);
-    ILButtons.GetBitmap(6, SBOpenUrl.Glyph);
-    ILButtons.GetBitmap(7, SBEqualizer.Glyph);
-    ILButtons.GetBitmap(8, SBSEtings.Glyph);;
-    ILButtons.GetBitmap(9, SBRadList.Glyph);
-    ILButtons.GetBitmap(10, SBAbout.Glyph);
-    ILButtons.GetBitmap(11, SBQuit.Glyph);
+    InitButtons;
+
     RegularHeight:= height;
     Initialize;
     //Check Update, async call to let stuff loading
@@ -834,8 +824,31 @@ begin
   Chan:= 0;
 end;
 
-
-
+procedure TFWebRadioMain.InitButtons;
+begin
+  // init menu and buttons images
+  CropBitmap(ILButtons, PMnuOpenRadio.Bitmap, true, 4);
+  CropBitmap(ILButtons, PMnuReadFile.Bitmap, true, 5);
+  CropBitmap(ILButtons, PMnuOpenURL.Bitmap, true, 6);
+  CropBitmap(ILButtons, PMnuEqualizer.Bitmap, true, 7);
+  CropBitmap(ILButtons, PMnuSettings.Bitmap, true, 8);
+  CropBitmap(ILButtons, PMnuRadList.Bitmap, true, 9);
+  CropBitmap(ILButtons, PMnuAbout.Bitmap, true, 10);
+  CropBitmap(ILButtons, PMnuQuit.Bitmap, true, 11);
+  CropBitmap(ILButtons, PTMnuAbout.Bitmap, true, 10);
+  CropBitmap(ILButtons, PTMnuQuit.Bitmap, true, 11);
+  CropBitmap(ILButtons, PTMnuMute.Bitmap, true, 2);
+  CropBitmap(ILButtons, PMnuChooseRadio.Bitmap, true, 4);
+  CropBitmap(ILButtons, PMnuDeletePreset.Bitmap, true, 14);
+  ILButtons.GetBitmap(4, SBOpenRadio.Glyph);;
+  ILButtons.GetBitmap(5, SBReadFile.Glyph);
+  ILButtons.GetBitmap(6, SBOpenUrl.Glyph);
+  ILButtons.GetBitmap(7, SBEqualizer.Glyph);
+  ILButtons.GetBitmap(8, SBSEtings.Glyph);;
+  ILButtons.GetBitmap(9, SBRadList.Glyph);
+  ILButtons.GetBitmap(10, SBAbout.Glyph);
+  ILButtons.GetBitmap(11, SBQuit.Glyph);
+end;
 
 // Initialization procedure on first form activation
 
@@ -864,7 +877,7 @@ begin
   end;
   if (not BASS_Init(-1, 44100, 0, Handle, nil)) then
   begin
-     ShowMessage(ErrBassInit);
+     ShowMessage(BassErrArr[BASS_ERROR_INIT]);
     Close;
   end;
   bass_timout:= 15000;
@@ -962,9 +975,10 @@ begin
     if TSB<> nil then SBPresetClick(TSB)
     else PlayRadio(CurRadio);
   end else PlayRadio(CurRadio);
-;
   Initialized:= true;
 end;
+
+// Load preset radios
 
 procedure TFWebRadioMain.LoadPresets;
 var
@@ -984,18 +998,34 @@ begin
         TSB.Font.Color:= clDefault;
         TSB.StateNormal.Color:= clBtnFace;
         TSB.StateHover.Color:= clDefault;
+        TSB.Hint:= tmpradio.Name;
       end else
       begin
         TSB.Font.Style:= [];
         TSB.Font.Color:= clScrollBar;
         TSB.StateNormal.Color:= clMedGray;
         TSB.StateHover.Color:= clMedGray;
+        TSB.Hint:= '';
       end;
-
     end;
-      // We found it
-   //   TSB.Visible := not TSB.Visible;
   end;
+end;
+
+// Change colors after settings change
+
+procedure TFWebRadioMain.ChangeColors;
+begin
+  LRadioName.Font.Color:= FSettings.Settings.DisplayText;
+  LStatus.Font.Color:= FSettings.Settings.DisplayText;
+  Lstereo.Font.Color:= FSettings.Settings.DisplayText;
+  LBitrate.Font.Color:= FSettings.Settings.DisplayText;
+  LFrequency.Font.Color:= FSettings.Settings.DisplayText;
+  LRecording.Font.Color:= FSettings.Settings.DisplayText;
+  LPause.Font.Color:= FSettings.Settings.DisplayText;
+  LTag.Font.Color:= FSettings.Settings.DisplayText;
+  PDisplay.Color:= FSettings.Settings.DisplayBack;
+  Color:= FSettings.Settings.GenBack;
+  PMain.Font.Color:= FSettings.Settings.GenText;
 end;
 
 procedure TFWebRadioMain.LoadSettings(Filename: string);
@@ -1058,6 +1088,7 @@ begin
   // LOad font
   if Fsettings.Settings.RadioFont <> '' then
   LRadioName.Font.Name:= Fsettings.Settings.RadioFont;
+  ChangeColors;
   Modlangue;
   SettingsChanged := false;
 end;
@@ -1129,19 +1160,41 @@ end;
 procedure TFWebRadioMain.MsgTimerTimer(Sender: TObject);
 var
   s: string;
+  i: integer;
 const
   SrtmTyp: array [1..6] of String = (' WMA',' MP3',' OGG',' AAC', ' WAV', ' FLAC');
 begin
+  if lparamArr[WP_Error].state then
+  begin
+    lparamArr[WP_Error].state:= false;
+    lparamArr[WP_Connecting].state:= false;
+    LStatus.Caption:= 'Non connecté';
+    try
+      LTag.Caption:= BassErrArr[lparamArr[WP_Error].value];
+    except         // UNknown error
+      LTag.Caption:= BassErrArr[length(BassErrArr)-1]; // We have set the unknown error in last position
+    end;
+    LRadioName.Caption:= CurRadio.name;
+    LStereo.Caption:= '';
+    LBitrate.Caption:= '';
+    LFrequency.Caption:= '';
+    LRecording.Caption:= '';
+    LPause.Caption:= '';
+    Error:= true;
+     //LTag.Caption:= IntToStr(lparamArr[WP_Error].value);//BassErrArr[lparamArr[WP_Error].value];
+     exit;
+  end;
   // WP_Connecting message replacement
   if lparamArr[WP_Connecting].state then
   begin
+    Connecting_beg:= 0;
     LStatus.Caption := sConnectStr;
     Caption:= DefaultCaption;
     Lstereo.Caption:= '';
     LBitrate.Caption:= '';
     LFrequency.Caption:= '';
     LPause.Caption:= '';
-    LTag.caption := ' ';
+    if not error then LTag.caption := ' ';
     LRecording.Caption:= '';
     FileLength:= 0;
     if length(CurRadio.Name) > 0
@@ -1188,15 +1241,17 @@ begin
   // WP_Connected message replacement
   if lparamArr[WP_Connected].state then
   begin
-  if CanalInfo.chans < 2 then LStereo.caption:= sMonoCaption else LStereo.caption:= sStereoCaption ;
-  LFrequency.Caption := IntToStr(CanalInfo.freq)+' Hz';
-  if ((lparamArr[WP_Connected].value>0) and (lparamArr[WP_Connected].value<7)) then LStatus.Caption:= sConnectedStr+SrtmTyp[lparamArr[WP_Connected].value]
-    else LStatus.Caption:= sConnectedStr;
-  end;
-  // WP_Title message replacement
+    if CanalInfo.chans < 2 then LStereo.caption:= sMonoCaption else LStereo.caption:= sStereoCaption ;
+    LFrequency.Caption := IntToStr(CanalInfo.freq)+' Hz';
+    if ((lparamArr[WP_Connected].value>0) and (lparamArr[WP_Connected].value<7)) then LStatus.Caption:= sConnectedStr+SrtmTyp[lparamArr[WP_Connected].value]
+      else LStatus.Caption:= sConnectedStr;
+  end ;
+    lparamArr[WP_Connected].state:= False;
+    // WP_Title message replacement
   if lparamArr[WP_Title].state then;
   begin
-    s:= lparamArr[WP_Title].value;
+  if error then exit;
+  s:= lparamArr[WP_Title].value;
     if length(s) > 1 then CurRadioTitle:= s //LTag.Caption:= s
     else CurRadioTitle:= ' ';//LTag.Caption:= ' ';
     if length (s) > 1 then
@@ -1204,7 +1259,7 @@ begin
       Trayradio.Hint:= Caption+#13#10+s
      //If not TrayRadio.applicationvisible then TrayRadio.BalloonHint (Caption, s);
      end else Trayradio.Hint:= Caption;
-    if not Iconized then LTag.Caption:= CurRadioTitle;
+    if (not Iconized) then LTag.Caption:= CurRadioTitle;
     lparamArr[WP_Title].state:= false;
   end ;
   // WP_Bitrate message replacement
@@ -1213,6 +1268,7 @@ begin
     LBitrate.Caption := Inttostr(int64(lparamArr[WP_Bitrate].value))+' Kb/s';
     lparamArr[WP_Bitrate].state:= false;
   end;
+  inc(MsgTimerCount);
 end;
 
 procedure TFWebRadioMain.PMnuEqualizerClick(Sender: TObject);
@@ -1241,6 +1297,8 @@ begin
 
 end;
 
+
+
 procedure TFWebRadioMain.PMnuRadListClick(Sender: TObject);
 begin
   FRadios.showmodal;
@@ -1248,7 +1306,7 @@ begin
   LoadPresets;
 end;
 
-procedure TFWebRadioMain.MnuChooseRadioClick(Sender: TObject);
+procedure TFWebRadioMain.PMnuChooseRadioClick(Sender: TObject);
 var
   Item: TMenuItem;
   i: integer;
@@ -1260,7 +1318,7 @@ begin
     Item.Name:= 'PMnuRadio'+InttoStr(i);
     Item.Caption := FRadios.Radios.GetItem(i).name;
     Item.Tag:= i;
-    if TMenuItem(SEnder).name='MnuChooseRadio' then Item.OnClick := @PMnuRadioListItemClick;
+    if TMenuItem(SEnder).name='PMnuChooseRadio' then Item.OnClick := @PMnuRadioListItemClick;
     if TSpeedButton(Sender).Name='SBChooseRadio' then Item.OnClick := @PMnuRadioListItemClick;;
     if TMenuItem(SEnder).name='PMnuOpenRadio' then Item.OnClick := @PMnuOpenRadioItemClick;
     if TMenuItem(SEnder).name='SBOpenRadio' then Item.OnClick := @PMnuOpenRadioItemClick;
@@ -1270,7 +1328,7 @@ begin
   PMnuRadiosList.PopUp;
 end;
 
-procedure TFWebRadioMain.MnuDeletePresetClick(Sender: TObject);
+procedure TFWebRadioMain.PMnuDeletePresetClick(Sender: TObject);
 begin
   FRadios.Radios.Presets[TmpPreset]:= 0;
   LoadPresets;
@@ -1400,6 +1458,28 @@ begin
   LPause.Caption:= '';
 end;
 
+procedure TFWebRadioMain.SBPresetContextPopup(Sender: TObject;
+  MousePos: TPoint; var Handled: Boolean);
+var
+  s: String;
+  i, uid: Int64;
+begin
+  s:= Copy(TColorSpeedButton(Sender).Name, 9, 2);
+  i:= StringToInt(s);
+  TmpPreset:= i;
+  uid:= FRadios.Radios.Presets[i];
+  if (uid <= 0) then
+  begin
+    PMnuDeletePreset.Enabled:= false;
+    CropBitmap(ILButtons, PMnuDeletePreset.Bitmap, false, 14);
+  end else
+  begin
+    PMnuDeletePreset.Enabled:= true;
+    CropBitmap(ILButtons, PMnuDeletePreset.Bitmap, true, 14);
+    TColorSpeedButton(Sender).Hint:= FRadios.FindbyUID(uid).name;
+  end;
+end;
+
 procedure TFWebRadioMain.SBPauseClick(Sender: TObject);
 begin
   BASS_ChannelPause(Chan);
@@ -1504,6 +1584,10 @@ begin
         break;
       end;
     end;
+    CPDisplayText.Color:= Settings.DisplayText;
+    CPDisplayBack.Color:= Settings.DisplayBack;
+    CPGenText.Color:= Settings.GenText;
+    CPGenBack.Color:=Settings.GenBack ;
     if ShowModal = mrOK then
     // set new encoding format
     begin
@@ -1535,36 +1619,19 @@ begin
         if CBFonts.ItemIndex <> oldfont then
         LRadioName.Font.Name:= CBFonts.SelText;
       except
-
       end;
       ShowBtnBar;
       TrayRadio.visible:= Settings.HideInTaskbar;   // in case of change
+      Settings.DisplayText:= CPDisplayText.Color;
+      Settings.DisplayBack:= CPDisplayBack.Color;
+      Settings.GenText:= CPGenText.Color;
+      Settings.GenBack:= CPGenBack.Color;
+      ChangeColors;
     end;
-
   end;
 end;
 
-
-
-procedure TFWebRadioMain.SBPresetMouseEnter(Sender: TObject);
-var
-  s: String;
-  i, uid: Int64;
-begin
-  s:= Copy(TColorSpeedButton(Sender).Name, 9, 2);
-  i:= StringToInt(s);
-  TmpPreset:= i;
-  uid:= FRadios.Radios.Presets[i];
-  if (uid <= 0) then
-  begin
-    TColorSpeedButton(Sender).Hint:='Nothing';
-    MnuDeletePreset.Enabled:= false;
-  end else
-  begin
-    TColorSpeedButton(Sender).Hint:= FRadios.FindbyUID(uid).name;
-    MnuDeletePreset.Enabled:= true;
-  end;
-end;
+// Launch a preset radio
 
 procedure TFWebRadioMain.SBPresetClick(Sender: TObject);
 var
@@ -1580,13 +1647,12 @@ begin
   if CurRadio.uid > 0 then
   begin
     LTag.Caption:= ' ';
+    LStatus.Caption:= sConnectStr;
     PlayRadio(Curradio);
     LoadPresets;
     CurPreset:= TColorSpeedButton(SEnder);
     CurPreset.Font.Color:= clRed;
-
   end;
-
 end;
 
 procedure TFWebRadioMain.SBRecordChangeBounds(Sender: TObject);
@@ -1665,7 +1731,7 @@ begin
     SBPause.Enabled:= false;
     Recording:= true;
     RecordBtnTimer.Enabled:= true;
-    MsgTimerCount:= 0;
+    RecordBtnTimerCount:= 0;
   end else
   begin
     ILButtons.GetBitmap(0, SBRecord.Glyph);
@@ -1681,8 +1747,8 @@ end;
 
 procedure TFWebRadioMain.RecordBtnTimerTimer(Sender: TObject);
 begin
-   ILButtons.GetBitmap(MsgTimerCount mod 2, SBRecord.Glyph);
-  inc(MsgTimerCount);
+   ILButtons.GetBitmap(RecordBtnTimerCount mod 2, SBRecord.Glyph);
+  inc(RecordBtnTimerCount);
 end;
 
 procedure TFWebRadioMain.SBMuteClick(Sender: TObject);
@@ -1850,6 +1916,7 @@ begin
   Lposition.Caption:= '';
   fileduration:= 0;
   LTag.Caption:= ' ';
+  LStatus.Caption:= sConnectStr;
   // Resize radio logo and fit it in place
   try
     // Load image
@@ -1898,7 +1965,8 @@ begin
     //  Curradio.order:= 0;
     //  CurRadio.name:='';
     //  CurRadio.Url:= url;
-      cthread := BeginThread(nil, 0, TThreadFunc(@OpenURL), PChar(url), 0, ThreadId);
+
+     cthread := BeginThread(nil, 0, TThreadFunc(@OpenURL), PChar(url), 0, ThreadId);
      SBRecord.Enabled:= true;
   end;
 end;
@@ -1974,7 +2042,7 @@ begin
   With LangFile do
     begin
       // Form
-      DefaultCaption:= ReadString(LangStr, 'Caption', Caption);
+      DefaultCaption:= ReadString(LangStr, 'DefaultCaption', Caption);
       OKBtn:= ReadString(LangStr, 'OKBtn','OK');
       YesBtn:=ReadString(LangStr,'YesBtn','Oui');
       NoBtn:=ReadString(LangStr,'NoBtn','Non');
@@ -2047,15 +2115,6 @@ begin
       sUpdateAlertBox:=ReadString(LangStr,'sUpdateAlertBox','Version actuelle: %sUne nouvelle version %s est disponible. Cliquer pour la télécharger');
       sNoLongerChkUpdates:=ReadString(LangStr,'sNoLongerChkUpdates','Ne plus rechercher les mises à jour');
 
-      // Errors
-      ErrBassVersion:= ReadString(LangStr, 'ErrBassVersion','Mauvaise version de BASS.DLL');
-      ErrBassInit:= ReadString(LangStr, 'ErrBassInit', 'Erreur d''initialisation de la bibiliothèque Bass');
-      ErrNoBassPLAY:=  ReadString(LangStr, 'ErrNoBassPLAY','La bibliothèque Bass%s n''est pas installée.%sLecture des flux %s impossible.');
-      ErrNoBassEnc:=  ReadString(LangStr, 'ErrNoBassEnc','La bibliothèque BassEnc%s n''est pas installée.%sEnregistrement impossible au format %s.');
-      ErrBassEncVer:= ReadString(LangStr, 'ErrNoBassEncVer','La version de la bibliothèque BassEnc est erronnée.%sEnregistrement impossible.');
-      ErrUnsupportedEnc:= ReadString(LangStr, 'ErrUnsupportedEnc', 'Impossible d''enregistrer, encodage %s non supporté');
-      ErrEncoding:= ReadString(LangStr, 'ErrEncoding', 'Erreur d''encodage %d');
-
       // Settings form
       FSettings.Caption:= ReadString(LangStr, 'FSettings.Caption', FSettings.Caption);
       FSettings.BtnCancel.Caption:= CancelBtn;
@@ -2072,7 +2131,8 @@ begin
       FSettings.LDataFolder.Caption:= ReadString(LangStr, 'FSettings.LDataFolder.Caption', FSettings.LDataFolder.Caption);
       FSettings.LFont.Caption:= ReadString(LangStr, 'FSettings.LFont.Caption', FSettings.LFont.Caption);
       FSettings.CBFonts.Hint:= ReadString(LangStr, 'FSettings.CBFonts.Hint',FSettings.CBFonts.Hint);
-
+      FSettings.CPDisplayText.Caption:= ReadString(LangStr, 'FSettings.CPDisplayText.Caption', FSettings.CPDisplayText.Caption);
+      FSettings.CPDisplayBack.Caption:= ReadString(LangStr, 'FSettings.CPDisplayBack.Caption', FSettings.CPDisplayBack.Caption);
 
       // Radios form
       FRadios.Caption:= ReadString(LangStr, 'FRadios.Caption', FRadios.Caption);
@@ -2099,8 +2159,37 @@ begin
       FEqualizer.BtnCancel.Caption:= CancelBtn;
       FEqualizer.BtnOK.Caption:= OKBtn;
 
-     { ErrLoadStr:= ReadString(LangStr, 'ErrLoadStr', 'Erreur de chargement de');
-      ErrOpenFile:= ReadString(LangStr, 'ErrLoadStr', 'Erreur d''ouverture de fichier');
+            // Errors
+      ErrBassVersion:= ReadString(LangStr, 'ErrBassVersion','Mauvaise version de BASS.DLL');
+
+      BassErrArr[BASS_OK]:= 'OK';         //0
+      BassErrArr[BASS_ERROR_MEM]:= ReadString(LangStr, 'BASS_ERROR_MEM', 'Erreur mémoire');
+      BassErrArr[BASS_ERROR_FILEOPEN]:= ReadString(LangStr, 'BASS_ERROR_FILEOPEN', 'Erreur d''ouverture du fichier ou du flux');
+      BassErrArr[BASS_ERROR_DRIVER]:= ReadString(LangStr, 'BASS_ERROR_DRIVER', 'Erreur de driver');
+      BassErrArr[BASS_ERROR_BUFLOST]:= ReadString(LangStr, 'BASS_ERROR_BUFLOST', 'Erreur de mémoire tampon');
+      BassErrArr[BASS_ERROR_HANDLE]:= ReadString(LangStr, 'BASS_ERROR_HANDLE', 'Erreur de handle');
+      BassErrArr[BASS_ERROR_FORMAT]:= ReadString(LangStr, 'BASS_ERROR_FORMAT', 'Erreur de format d''échantillonnage');
+      BassErrArr[BASS_ERROR_POSITION ]:= ReadString(LangStr, 'BASS_ERROR_POSITION ', 'Erreur de position');
+      BassErrArr[BASS_ERROR_INIT]:= ReadString(LangStr, 'BASS_ERROR_INIT', 'Erreur d''initialisation de la bibiliothèque Bass');
+
+      BassErrArr[BASS_ERROR_START]:= ReadString(LangStr, 'BASS_ERROR_START', 'Erreur de démarrage');
+      BassErrArr[BASS_ERROR_SSL]:= ReadString(LangStr, 'BASS_ERROR_SSL', 'SSL non installé');
+      BassErrArr[BASS_ERROR_ALREADY]:= ReadString(LangStr, 'BASS_ERROR_ALREADY', 'Fonction déjà en cours d''utilisation');
+
+      BassErrArr[BASS_ERROR_TIMEOUT]:= ReadString(LangStr, 'BASS_ERROR_TIMEOUT', 'Délai maximum dépassé');
+
+      BassErrArr[length(BassErrArr)-1]:= ReadString(LangStr, 'BASS_ERROR_UNKNOWN', 'Erreur inconnue');
+
+      ErrNoBassPLAY:=  ReadString(LangStr, 'ErrNoBassPLAY','La bibliothèque Bass%s n''est pas installée.%sLecture des flux %s impossible.');
+      ErrNoBassEnc:=  ReadString(LangStr, 'ErrNoBassEnc','La bibliothèque BassEnc%s n''est pas installée.%sEnregistrement impossible au format %s.');
+      ErrBassEncVer:= ReadString(LangStr, 'ErrNoBassEncVer','La version de la bibliothèque BassEnc est erronnée.%sEnregistrement impossible.');
+      ErrUnsupportedEnc:= ReadString(LangStr, 'ErrUnsupportedEnc', 'Impossible d''enregistrer, encodage %s non supporté');
+      ErrEncoding:= ReadString(LangStr, 'ErrEncoding', 'Erreur d''encodage %d');
+      ErrConnection:= ReadString(LangStr, 'ErrConnection', 'Erreur de connexion');
+      //1
+        {  ErrOpenFile:= ReadString(LangStr, 'ErrLoadStr', 'Erreur d''ouverture de fichier');
+  ErrLoadStr:= ReadString(LangStr, 'ErrLoadStr', 'Erreur de chargement de');
+
       ErrInvalidHnd:= ReadString(LangStr, 'ErrInvalidHnd', 'Handle invalide');
       ErrInvalidDev:= ReadString(LangStr, 'ErrInvalidDev','Périphérique invalide');
       ErrTimeout:= ReadString(LangStr, 'ErrTimeout','Délai dépassé');

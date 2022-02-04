@@ -13,7 +13,7 @@
 [en]
 ;General
 Language=English
-Caption=Web radio tuner
+DefaultCaption=Web radio tuner
 OKBtn=OK
 YesBtn=Yes
 NoBtn=No
@@ -96,6 +96,9 @@ FSettings.LLangue.Caption=Language
 FSettings.LDataFolder.Caption=Recording folder
 FSettings.LFont.Caption=Font
 FSettings.CBFonts.Hint=Select the font for radio name display
+FSettings.CPDisplayText.Caption=Display text
+FSettings.CPDisplayBack.Caption=Display background
+
 ; Equalizer
 
 FEqualizer.Caption=Parametric equalizer
@@ -103,15 +106,31 @@ FEqualizer.CBEqualize.Caption=Enable the equalizer
 FEqualizer.LReset.Caption=Reset levels
 
 ;Errors
+
+BASS_ERROR_MEM=There is insufficient memory
+BASS_ERROR_FILEOPEN=Cannot open file or stream
+BASS_ERROR_DRIVER=Driver error
+BASS_ERROR_BUFLOST=Buffer error
+BASS_ERROR_HANDLE=Invalid handle
+BASS_ERROR_FORMAT=The sample format is not supported
+BASS_ERROR_POSITION=Position error
+BASS_ERROR_INIT=BASS library initialization error
+BASS_ERROR_START=The output is paused/stopped
+BASS_ERROR_SSL=SSL/HTTPS support is not available
+
+BASS_ERROR_ALREADY=Invalid or not linked to handle channel
+
+BASS_ERROR_TIMEOUT=The sample's minimum time gap has not yet passed since the last channel was created.
+
+BASS_ERROR_UNKNOWN=Unknown error
+
 ErrLoadStr=Erreur loading
-ErrOpenFile=Open file error
 ErrInvalidHnd=Invalid handle
 ErrInvalidDev=Invalide device
 ErrTimeout=Timeout
-ErrFileFormat=Incorrect file format
+
 ErrNetConnect=Internet connection error
 ErrBassVersion=Wrong version of BASS.DLL
-ErrBassInit=Bass library initialization error
 ErrUnknown=Unknown error
 ErrReading=Unable to play radio
 ErrWinVersion=The program cannot operate with this Windows' version
@@ -120,7 +139,7 @@ ErrNoBassEnc=The BassEnc%s library is not installed.%sCannot record in %s the pl
 ErrBassEncVer=The BassEncode library version is wrong. %s Recording is impossible.
 ErrUnsupportedEnc=Cannot record, %s encoding not supported
 ErrEncoding=Encoding error # %d
-
+ErrConnection=Connection error
 
 ;Http error messages
 SErrInvalidProtocol=Invalid protocol "%s"
@@ -167,7 +186,7 @@ Server=Server
 [fr]
 ;General
 Language=Français
-Caption=Tuner radio Web
+DefaultCaption=Tuner radio Web
 OKBtn=OK
 YesBtn=Oui
 NoBtn=Non
@@ -256,17 +275,36 @@ FSettings.LLangue.Caption=Langue
 FSettings.LDataFolder.Caption=Répertoire d'enregistrement
 FSettings.LFont.Caption=Police
 FSettings.CBFonts.Hint=Sélection de la police d'affichage du nom de la radio
+FSettings.CPDisplayText.Caption=Texte de l'afficheur
+FSettings.CPDisplayBack.Caption=Fond de l'afficheur
 
 // Errors
+BASS_ERROR_MEM=Mémoire insuffisante
+BASS_ERROR_FILEOPEN=Ouverture du fichier ou du flux impossible
+BASS_ERROR_DRIVER=Erreur de driver
+BASS_ERROR_BUFLOST=Erreur de mémoire tampon
+BASS_ERROR_HANDLE=Handle invalide
+BASS_ERROR_FORMAT=Format d'échantillonnage non supporté
+BASS_ERROR_POSITION=Erreur de position
+BASS_ERROR_INIT=Erreur d'initialisation de la bibiliothèque BASS
+BASS_ERROR_START=La lecture est en pause ou arrêtée
+BASS_ERROR_SSL=Le suppport de SSL/HTTPS n'est pas disponible
+
+BASS_ERROR_ALREADY=Canal invalide ou non lié au handle
+
+BASS_ERROR_TIMEOUT=Le délai minimum est dépassé depuis la création du canal
+
+BASS_ERROR_UNKNOWN=Erreur inconnue
+
 ErrLoadStr=Erreur de chargement de
-ErrOpenFile=Erreur d'ouverture de fichier
+
 ErrInvalidHnd=Handle invalide
 ErrInvalidDev=Périphérique invalide
 ErrTimeout=Délai dépassé
-ErrFileFormat=Format de fichier incorrect
+
 ErrNetConnect=Erreur de connexion Internet
 ErrBassVersion=Mauvaise version de la bibliothèque Bass
-ErrBassInit=Erreur d''initialisation de la bibiliothèque Bass
+ErrBassInit=Erreur d'initialisation de la bibiliothèque Bass
 ErrUnknown=Erreur inconnue
 ErrReading=Lecture de la radio impossible
 ErrWinVersion=Ce programme ne fonctionne pas avec cette version de Windows
@@ -274,7 +312,8 @@ ErrNoBassPLAY=La bibliothèque Bass%s n'est pas installée.%sLecture des flux %s
 ErrNoBassEnc=La bibliothèque BassEnc%s n'est pas installée.%sEnregistrement des radios impossible au format %s.
 ErrBassEncVer=La version de la bibliothèque BassEnc est erronnée.%sEnregistrement impossible.
 ErrUnsupportedEnc=Impossible d'enregistrer, encodage %s non supporté
-ErrEncoding=Erreur d''encodage %d
+ErrEncoding=Erreur d'encodage %d
+ErrConnection=Erreur de connexion
 
 ;Http error messages
 SErrInvalidProtocol=Protocole "%s" invalide

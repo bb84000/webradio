@@ -6,7 +6,9 @@ USER LICENCE
 
 This software can be used fee of charge for a non commercial use.
 
+The software uses some Un4seen BASS libraries: www.un4seen.com
+
 Software source is available at : https://github.com/bb84000/webradio
 
-Contact: www.sdtp.com
+Contact: open an issue on Github at the above address
 

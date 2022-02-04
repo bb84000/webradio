@@ -1,26 +1,26 @@
 object FSettings: TFSettings
   Left = 877
-  Height = 372
+  Height = 487
   Top = 301
-  Width = 550
+  Width = 559
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'Préférences de Webradio'
-  ClientHeight = 372
-  ClientWidth = 550
+  ClientHeight = 487
+  ClientWidth = 559
   OnCreate = FormCreate
   Position = poMainFormCenter
   LCLVersion = '2.2.0.4'
   object PWinVer: TPanel
     Left = 0
     Height = 30
-    Top = 342
-    Width = 550
+    Top = 457
+    Width = 559
     Align = alBottom
     BevelInner = bvLowered
     BevelOuter = bvNone
     ClientHeight = 30
-    ClientWidth = 550
+    ClientWidth = 559
     TabOrder = 0
     object LOSVer: TLabel
       Left = 8
@@ -34,13 +34,13 @@ object FSettings: TFSettings
   object PButtons: TPanel
     Left = 0
     Height = 48
-    Top = 294
-    Width = 550
+    Top = 409
+    Width = 559
     Align = alBottom
     BevelInner = bvLowered
     BevelOuter = bvNone
     ClientHeight = 48
-    ClientWidth = 550
+    ClientWidth = 559
     TabOrder = 1
     object BtnOK: TBitBtn
       Left = 192
@@ -67,24 +67,24 @@ object FSettings: TFSettings
   end
   object PSystem: TPanel
     Left = 0
-    Height = 294
+    Height = 409
     Top = 0
-    Width = 550
+    Width = 559
     Align = alClient
-    ClientHeight = 294
-    ClientWidth = 550
+    ClientHeight = 409
+    ClientWidth = 559
     TabOrder = 2
     object TPSystem: TTitlePanel
-      Left = 16
-      Height = 132
+      Left = 15
+      Height = 176
       Top = 8
-      Width = 517
+      Width = 530
       Alignment = taLeftJustify
       BorderLine = bsSingle
       BorderColor = clActiveBorder
       Caption = 'Système'
-      ClientHeight = 132
-      ClientWidth = 517
+      ClientHeight = 176
+      ClientWidth = 530
       TabOrder = 0
       OnClick = TPSystemClick
       object CBSavSizePos: TCheckBox
@@ -144,10 +144,10 @@ object FSettings: TFSettings
         TabOrder = 5
       end
       object CBLangue: TComboBox
-        Left = 65
+        Left = 88
         Height = 23
-        Top = 96
-        Width = 176
+        Top = 91
+        Width = 152
         ItemHeight = 15
         TabOrder = 6
         Text = 'CBLangue'
@@ -155,7 +155,7 @@ object FSettings: TFSettings
       object LLangue: TLabel
         Left = 8
         Height = 15
-        Top = 98
+        Top = 95
         Width = 55
         AutoSize = False
         Caption = 'Langue'
@@ -163,17 +163,17 @@ object FSettings: TFSettings
       object LFont: TLabel
         Left = 260
         Height = 15
-        Top = 98
-        Width = 40
+        Top = 95
+        Width = 105
         AutoSize = False
-        Caption = 'Police'
+        Caption = 'Police de l''afficheur'
       end
       object CBFonts: TComboBox
-        Left = 304
+        Left = 369
         Height = 23
         Hint = 'Sélectionner la police d''affichage du nom de la radio'
-        Top = 96
-        Width = 205
+        Top = 91
+        Width = 152
         ItemHeight = 15
         ParentShowHint = False
         ShowHint = True
@@ -181,11 +181,87 @@ object FSettings: TFSettings
         TabOrder = 7
         Text = 'CBFonts'
       end
+      object CPDisplayText: TColorPicker
+        Left = 114
+        Height = 21
+        Top = 118
+        Width = 128
+        ItemHeight = 15
+        ItemWidth = 0
+        Color = clYellow
+        MnuCopyCaption = '&Copy'
+        MnuPasteCaption = '&Paste'
+        TabOrder = 8
+      end
+      object LDisplayText: TLabel
+        Left = 8
+        Height = 15
+        Top = 120
+        Width = 102
+        Caption = 'Texte de l'' afficheur'
+      end
+      object LDisplayBack: TLabel
+        Left = 260
+        Height = 15
+        Top = 120
+        Width = 99
+        Caption = 'Fond de l''afficheur'
+      end
+      object CPDisplayBack: TColorPicker
+        Left = 392
+        Height = 21
+        Top = 118
+        Width = 128
+        ItemHeight = 15
+        ItemWidth = 0
+        Color = clBlack
+        MnuCopyCaption = '&Copy'
+        MnuPasteCaption = '&Paste'
+        TabOrder = 9
+      end
+      object LGenText: TLabel
+        Left = 8
+        Height = 15
+        Top = 145
+        Width = 69
+        Caption = 'Texte général'
+      end
+      object CPGenText: TColorPicker
+        Left = 114
+        Height = 21
+        Top = 144
+        Width = 128
+        ItemHeight = 15
+        ItemWidth = 0
+        Color = clDefault
+        MnuCopyCaption = '&Copy'
+        MnuPasteCaption = '&Paste'
+        TabOrder = 10
+      end
+      object LGenBack: TLabel
+        Left = 260
+        Height = 15
+        Top = 145
+        Width = 69
+        Caption = 'Fond général'
+      end
+      object CPGenBack: TColorPicker
+        Left = 392
+        Height = 21
+        Top = 144
+        Width = 128
+        ItemHeight = 15
+        ItemWidth = 0
+        Color = clDefault
+        MnuCopyCaption = '&Copy'
+        MnuPasteCaption = '&Paste'
+        TabOrder = 11
+      end
     end
     object TPEncode: TTitlePanel
-      Left = 16
+      Left = 15
       Height = 128
-      Top = 152
+      Top = 248
       Width = 517
       Alignment = taLeftJustify
       BorderLine = bsSingle
@@ -295,7 +371,7 @@ object FSettings: TFSettings
         Caption = 'Répertoire d''enregistrement'
       end
       object EDataFolder: TEdit
-        Left = 157
+        Left = 160
         Height = 23
         Top = 88
         Width = 325
@@ -381,6 +457,6 @@ object FSettings: TFSettings
   end
   object SDDataFolder: TSelectDirectoryDialog
     Left = 488
-    Top = 160
+    Top = 352
   end
 end

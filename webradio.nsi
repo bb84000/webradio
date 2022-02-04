@@ -130,8 +130,8 @@ Section "" ;No components page, name is not important
     ;!getdllversion  "${source_dir}\mailsinboxwin64.exe" expv_
      StrCpy "$prg_to_inst" "$INSTDIR\webradiowin64.exe"
      ;StrCpy "$prg_to_del" "$INSTDIR\webradiowin32.exe"
-     File  "${source_dir}\plugins\x64\bass.dll"
-     File  "${source_dir}\plugins\x64\bassenc.dll"
+     File  "${lazarus_dir}\Bass\x64\bass.dll"
+     File  "${lazarus_dir}\Bass\x64\bassenc.dll"
      CreateDirectory "$INSTDIR\plugins"
      SetOutPath "$INSTDIR\plugins"
      File  "${source_dir}\plugins\x64\bass_aac.dll"

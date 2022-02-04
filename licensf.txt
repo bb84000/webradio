@@ -5,6 +5,8 @@ L'utilisateur emploie le programme à ses propres risques. Effectuez une sauvegar
 LICENCE D'UTILISATION
 Le logiciel peut être utilisé librement dans le cadre d'une utilisation non commerciale.
 
+Le logiciel utilise des bibliothèques Un4seen BASS : www.un4seen.com
+
 Les sources de ce logiciel sont disponibles à : https://github.com/bb84000/webradio
 
-Contact: www.sdtp.com
+Contact: Ouvrir un commentaire sur GitHub à l'adresse ci-dessus
