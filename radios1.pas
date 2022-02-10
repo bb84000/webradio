@@ -428,7 +428,7 @@ begin
       add(K);
     finally
       chNode := chNode.NextSibling;
-      K:= nil;
+      //K:= nil;
     end;
   end;
   result:= true;
@@ -464,6 +464,7 @@ end;
 
 procedure TFRadios.FormDestroy(Sender: TObject);
 begin
+  inherited;
   if assigned (Radios) then Radios.Free;
 end;
 

@@ -41,6 +41,21 @@ const
   WP_NewVersion = 15;
   BASS_ERROR_SSL= 10;
 
+  // HLS definitions (copied from BASSHLS.H)
+  BASS_SYNC_HLS_SEGMENT= $10300;
+  BASS_TAG_HLS_EXTINF  = $14000;
+
+
+  WMA_STRM= 1;
+  MP3_STRM= 2;
+  OGG_STRM= 3;
+  AAC_STRM= 4;
+  WAV_STRM= 5;
+  FLAC_STRM= 6;
+  UNK_STRM= 7;
+
+  SrtmTyp: array [WMA_STRM..UNK_STRM] of String = ('WMA',' MP3',' OGG',' AAC', ' WAV', ' FLAC', ' UNK');
+
 type
   // Record type for messages array
   sMsgRec = record
@@ -62,6 +77,34 @@ type
  WAVEFORMATEX    = _WAVEFORMATEX;
  PWAVEFORMATEX   = ^_WAVEFORMATEX;
 
+ // TIcyTag structure
+ TIcyTag = packed Record
+   HTTPResponse: String;
+   //server: string;    // Server:
+   date: String;   // Date:
+   content_type: string;  //content-type: audio/mpeg
+   //cache_control: string; // Cache-Control:
+   //expires: string;  // Expires:
+   //pragma: String;  // Pragma:
+   //Access_Control_Allow_Origin: string;                // Access-Control-Allow-Origin
+   //Access_Control_Allow_Headers: string;
+   //Access_Control_Allow_Methods: string;
+   //Connection: string; // Connection:
+   //notice1: string; //icy-notice1: This stream requires Winamp
+   //notice2: string; //icy-notice2: SHOUTcast Distributed Network Audio Server/Linux v1.9.5
+   name: string;    //icy-name: RadioABF.net - Paris Electro Spirit Live From FRANCE
+   genre: string;   //icy-genre: Techno House Electronic
+   url: string;     //icy-url: http://www.radioabf.net/
+   description: string; // icy-description:
+   pub: string;  //icy-pub: 1
+   metaint: Integer; //icy-metaint: 32768
+   bitrate: Integer; //icy-br: 160
+   audio_info: string; // ice-audio-info:ice-samplerate=44100;ice-quality=4,00;ice-channels=2
+   samplerate: Integer;
+   channels: Integer;
+   text: String;
+ end;
+
   { int64 or longint type for Application.QueueAsyncCall }
   {$IFDEF CPU32}
     iDays= LongInt;
@@ -81,6 +124,7 @@ type
     LRight: TLabel;
     LStatus: TLabel;
     LTag: TSCrollLabel;
+    PMnuHelp: TMenuItem;
     PMnuChooseRadio: TMenuItem;
     PTMnuMute: TMenuItem;
     PTMnuQuit: TMenuItem;
@@ -94,12 +138,14 @@ type
     PBLength: TProgressBar;
     SBQuit: TSpeedButton;
     SBMute: TSpeedButton;
+    SBHelp: TSpeedButton;
     SBSEtings: TSpeedButton;
     SBOpenUrl: TSpeedButton;
     SBAbout: TSpeedButton;
     SBReadFile: TSpeedButton;
     SBEqualizer: TSpeedButton;
     SBRadList: TSpeedButton;
+    LRadioName: TSCrollLabel;
     Separator1: TMenuItem;
     Separator2: TMenuItem;
     Separator3: TMenuItem;
@@ -140,7 +186,6 @@ type
     PMnuMain: TPopupMenu;
     PDisplay: TPanel;
     PMain: TPanel;
-    LRadioName: TSCrollLabel;
     SBPreset9: TColorSpeedButton;
     SBPreset8: TColorSpeedButton;
     SBPreset7: TColorSpeedButton;
@@ -181,6 +226,7 @@ type
     procedure PMnuTrayPopup(Sender: TObject);
     procedure PTMnuIconizeClick(Sender: TObject);
     procedure RecordBtnTimerTimer(Sender: TObject);
+    procedure SBHelpClick(Sender: TObject);
     procedure SBMuteClick(Sender: TObject);
     procedure SBPauseClick(Sender: TObject);
     procedure SBPlayClick(Sender: TObject);
@@ -199,6 +245,7 @@ type
     OS, OSTarget, CRLF: string;
     CompileDateTime: TDateTime;
     UserPath, UserAppsDataPath: string;
+    MusicPath: String;
     WRExecPath:  String;
     LangStr: string;
     ProgName: String;
@@ -209,8 +256,8 @@ type
     version: String;
     WebRadioAppsData: String;
     OKBtn, YesBtn, NoBtn, CancelBtn: string;
-    sConnectStr, sConnectedStr, sLoadStr: String;
-    ErrNoBassPLAY, ErrNoBassEnc, ErrBassVersion, ErrBassInit, ErrBassEncVer: String;
+    sConnectStr, sConnectedStr, sNotConnectedStr, sLoadStr: String;
+    ErrNoBassPLAY, ErrNoBassEnc, ErrBassVersion, ErrBassEncVer: String;
     ErrUnsupportedEnc, ErrEncoding : String;
     ErrConnection: String;
     sBufferStr: String;
@@ -239,7 +286,7 @@ type
     Stopped: Boolean;
     IsRadio : Boolean;
     Recording: Boolean;
-
+    sUse64bit: String;
     Connecting_beg: Int64;
     Recording_beg: TDateTime;
     RecordBtnTimerCount: Int64;
@@ -251,6 +298,10 @@ type
     CurRadioTitle: string;
     FontDir: String;
     DMFontRes: Cardinal;
+    ResFnt: TResourceStream;
+    FontId: integer;
+    FontCount: cardinal;
+
     procedure OnAppMinimize(Sender: TObject);
     procedure OnQueryendSession(var Cancel: Boolean);
     procedure InitButtons;
@@ -297,6 +348,7 @@ var
   equParam: BASS_DX8_PARAMEQ;
   CenterFreqs : array [1..9] of Integer = (62, 125, 250, 500, 1000, 2000, 4000, 8000, 16000);
   fx: array[1..9] of integer;
+  IcyTag: TIcyTag;
 
   function AddFontMemResourceEx(pbFont: Pointer; cbFont: DWORD; pdv: Pointer; pcFonts: LPDWORD): LongWord; stdcall;
     external 'gdi32.dll' Name 'AddFontMemResourceEx';
@@ -321,6 +373,78 @@ begin
   lparamArr[MsgId].value:= l_param;
 end;
 
+//Convert Pchar tags to strings as we can
+// easily concatenate several tags (ie in wma and ogg streams)
+
+function TagToStrings (tag: Pchar): String;
+begin
+  result:= '';
+  while (tag^ <> #0) do
+  begin
+    result:= result+Copy(tag, 1, MaxInt)+LineEnding;
+    tag := tag + Length(tag) + 1;
+  end;
+end;
+
+// parse shoutcast and icecast header informations
+
+function GetIcyTag(sTag: String): TIcyTag;
+var
+  OGGQual: array [-2..10] of Integer = (32,48,64,80,96,112,128,160,192,224,256,320,500);
+  AudioInf: array of String;
+  s: string;
+  i: integer;
+  strlist: TStringList;
+begin
+  result:= default(TIcyTag);
+  if length(sTag)= 0 then exit;
+  result.text:= sTag;
+  strList:= TstringList.Create;
+  strList.Text:= sTag;
+  for i:= 0 to strlist.Count-1 do
+  begin
+    s:= strlist.Strings[i];
+    if (Copy(s, 1, 9) = 'icy-name:') then result.name:= Copy(s, 10, MaxInt);
+    if (Copy(s, 1, 7) = 'icy-br:') then
+    try
+      result.Bitrate:= StrToInt(Copy(s, 8, MaxInt));
+    except
+    end;
+    // OGG quality
+    if (UpperCase(Copy(s, 1, 14)) = 'ICY-BR:QUALITY') then
+    try
+      Bitrate:= OGGQual[Round(StrToFloat(Copy(s, 15, MaxInt)))];
+    except
+    end;
+    if (Copy(s, 1, 15) = 'ice-audio-info:') then result.audio_info:= Copy(s, 16, MaxInt);
+    // WMA bitrate
+    if copy(s, 1, 8) = 'Bitrate=' then   // to exclude 'CurrentBitrate=', 'OptimalBitrate='
+    try
+      Result.Bitrate := round (strToInt(copy(s, 9, MaxInt)) / 1024);
+    except
+    end;
+  end;
+  // Parse OGG audio info (ice-audio-info:channel=2;quality=0.3;samplerate:=44100;bitrate=128)
+  if assigned(strlist) then strlist.free;;
+  if (length(result.audio_info)>0) then
+  try
+    AudioInf:= (result.audio_info).Split(';');
+    if length(AudioInf)>0 then
+    begin
+      for i:=0 to length(AudioInf)-1 do
+      begin
+        if (Copy(UpperCase(AudioInf[i]), 1, 7))='QUALITY' then
+        begin
+          s:= Copy(AudioInf[i], 9, MaxInt);
+          if Copy(s, 1, 2)='0.' then s:= Copy(AudioInf[i], 11, MaxInt);   // Old wauli
+          Result.Bitrate:= OGGQual[Round(StrToFloat(s))];
+        end;
+      end;
+    end;
+  except
+  end;
+end;
+
 // Special Bass and callback functions
 // update stream title from metadata for mp3, acc and ogg streams
 
@@ -328,61 +452,76 @@ procedure DoMeta();
 var
   meta: PChar;
   p: Integer;
-  supp, s: String;
+  supp, s, s1: String;
 begin
-
-  s:= ' ';
-  Case CanalInfo.cType of
-      BASS_CTYPE_STREAM_WMA:
+  // (Shoutcast: MP3, AAC, HLS)
+  meta:= BASS_ChannelGetTags(Chan, BASS_TAG_META);
+  if (meta <> nil) then
+   begin
+     supp:= UpperCase(meta);;
+     p := Pos('STREAMTITLE=', supp);
+     if (p = 0) then Exit;
+     p := p + 13;
+     s:= Copy(meta, p, Pos(';', meta) - p - 1);
+  end else
+  // Try to get other Tags
+  begin
+    meta:= BASS_ChannelGetTags(chan, BASS_TAG_OGG);
+    if meta <> nil then
+    begin
+      // get Icecast/OGG tags
+      supp:= UpperCase(meta);
+      p:= Pos('ARTIST=', supp);
+      if p > 0 then
       begin
-        meta:= BASS_ChannelGetTags(Chan, BASS_TAG_WMA_META);
+        p := p + 7;
+        s:=  Copy(meta, p, length(meta)-7);
+      end;
+      p := Pos('TITLE=', supp);
+      if p > 0 then
+      begin
+        p := p + 6;
+        s1:=  Copy(meta, p, length(meta)-6);
+      end;
+      if length(s+s1)= 0 then exit;
+      if (length(s)>0) and (length(s1) > 0) then s:= s+' - '+s1
+      else s:= s+s1;
+     end else
+     // try WMA tags
+     begin
+       meta:= BASS_ChannelGetTags(Chan, BASS_TAG_WMA_META);
         if meta <> nil then
         begin
           p := Pos('TEXT=', meta);
           if (p = 0) then Exit;
           p:= p+5;
           s:= Copy(meta, p, MaxInt);
+        end else
+        // Try HLS tags
+        begin
+           meta:= BASS_ChannelGetTags(chan, BASS_TAG_HLS_EXTINF);
+	   if meta <> nil then
+           begin  // got HLS segment info
+             p:= Pos(',', meta);
+             if (p = 0) then exit;
+             s:= Copy(meta, p+1, length(meta)-1);
+           end;
         end;
-      end;
-     BASS_CTYPE_STREAM_MP3, BASS_CTYPE_STREAM_AAC:
-     begin
-       meta := BASS_ChannelGetTags(chan, BASS_TAG_META);
-       if (meta <> nil) then
-       begin
-         supp:= UpperCase(meta);;
-         p := Pos('STREAMTITLE=', supp);
-         if (p = 0) then Exit;
-         p := p + 13;
-         s:= Copy(meta, p, Pos(';', meta) - p - 1);
-        end ;
-      end;
-     BASS_CTYPE_STREAM_OGG:
-     begin
-       meta:=BASS_ChannelGetTags(chan,BASS_TAG_OGG);
-       if (meta <> nil) then
-       begin
-         supp:= UpperCase(meta);
-         p := Pos('TITLE=', supp);
-         if (p = 0) then Exit;
-         p := p + 6;
-         s:=  Copy(meta, p, length(meta)-6);
-       end ;
-      end;
-      else exit;
-  end;
+     end;
+  end ;
   SimulateMsg(WP_Title, True, s);
 end;
 
 // Synchronize when meta tag change in stream
 
-procedure MetaSync(handle: HSYNC; channel, data, user: Int64); stdcall;
+procedure MetaSync(handle: HSYNC; channel, data, user: DWORD); stdcall;
 begin
   DoMeta();
 end;
 
 // Procedure de download et de détection du statut
 
-procedure StatusProc(buffer: Pointer; len, user: Int64); stdcall;
+procedure StatusProc(buffer: Pointer; len, user: DWORD); stdcall;
 var
   Buff : array [0..127] of Char;
   i: integer;
@@ -417,19 +556,18 @@ end;
 function OpenURL(url: String): Integer;
 var
   icy: PChar;
-  ogg: PChar;
   Len, Progress: Int64;
-  tagp: pchar;
+  ptag: pchar;
+  stag: String;
   HintStr : string;
   ByteSec: Cardinal;
-  i: integer;
-const
-  // Tableau des qualités OGG
-  OGGQual: array [-2..10] of Integer = (32,48,64,80,96,112,128,160,192,224,256,320,500);
+  Strm_Type: integer;
+  stag1: string;
 begin
   error:= false;
   HintStr:= '';
   Result:= 0;
+  SimulateMsg(WP_Title, true, ' ');
   // close old stream
   if Chan > 0 then
     if not BASS_StreamFree(chan) then
@@ -437,11 +575,10 @@ begin
        SimulateMsg(WP_Error, True, BASS_ErrorGetCode);
       exit;
     end;
-
   Bitrate:= 0;
   progress := 0;
   chan := BASS_StreamCreateURL(PChar(url), 0, BASS_STREAM_STATUS, DOWNLOADPROC(@StatusProc), nil);
-  i:= BASS_ErrorGetCode();
+
   if (chan = 0) or (BASS_ErrorGetCode() <> 0) then
   begin
      SimulateMsg(WP_Error, true, BASS_ErrorGetCode);
@@ -461,123 +598,42 @@ begin
       SimulateMsg(WP_Progress, true, progress);
     until progress > 75;
     // Infos sur le flux
-    BASS_ChannelGetInfo(chan, CanalInfo);
+BASS_ChannelGetInfo(chan, CanalInfo);
     ByteSec:= BASS_ChannelSeconds2Bytes(Chan, 1);
-
+    SimulateMsg(WP_RadioName, true, '');
+    // Get icy tag
+    icy := BASS_ChannelGetTags(chan, BASS_TAG_ICY);
+    if (icy = nil) then icy := BASS_ChannelGetTags(chan, BASS_TAG_HTTP); // no ICY tags, try HTTP
     Case CanalInfo.ctype of
       BASS_CTYPE_STREAM_WMA:
         begin
-          SimulateMsg(WP_RadioName, true, '');
-          TagP := BASS_ChannelGetTags(Chan, BASS_TAG_WMA);
-          if TagP <> nil then
-
-            while StrLen(TagP) > 0 do
-            begin
-               HintStr := HintStr+Copy(TagP, 1, MaxInt)+#13#10;
-               if copy(TagP, 1, 8) = 'Bitrate=' then   // to exclude 'CurrentBitrate=', 'OptimalBitrate='
-               begin
-                 try
-                   Bitrate := round (strToInt(copy(TagP, 9, MaxInt)) / 1024);
-                 except
-                   Bitrate:= 0;
-                 end;
-                 //break;
-               end;
-               inc(TagP, StrLen(TagP) + 1);
-            end;
-
-          SimulateMsg(WP_Connected, true, 1);
-          BASS_ChannelSetSync(chan, BASS_SYNC_WMA_META, 0, SYNCPROC(@MetaSync), nil);
+          ptag:= BASS_ChannelGetTags(Chan, BASS_TAG_WMA);
+          if (ptag <> nil) then stag1:= TagToStrings(ptag);
+          Strm_Type:= WMA_STRM;
         end;
-      BASS_CTYPE_STREAM_MP3:
-        begin
-          SimulateMsg(WP_RadioName, true, '');
-          // get the broadcast name and bitrate
-          icy := BASS_ChannelGetTags(chan, BASS_TAG_ICY);
-          if (icy = nil) then
-             icy := BASS_ChannelGetTags(chan, BASS_TAG_HTTP); // no ICY tags, try HTTP
-
-          if (icy <> nil) then
-            while (icy^ <> #0) do
-            begin
-              HintStr := HintStr+Copy(icy, 1, MaxInt)+#13#10;
-              if (Copy(icy, 1, 9) = 'icy-name:') then
-              begin
-                SimulateMsg(WP_RadioName, true, Copy(icy, 10, MaxInt) );
-              end
-              else if (Copy(icy, 1, 7) = 'icy-br:') then
-                   try
-                     Bitrate:= StrToInt(Copy(icy, 8, MaxInt));
-                   except
-                     BitRate:= 0;
-
-                   end;
-              icy := icy + Length(icy) + 1;
-            end;
-          SimulateMsg(WP_Connected, true, 2);
-           BASS_ChannelSetSync(chan, BASS_SYNC_META, 0, SYNCPROC(@MetaSync), nil);
-        end;
+      BASS_CTYPE_STREAM_MP3: Strm_Type:= MP3_STRM;
+      BASS_CTYPE_STREAM_AAC: Strm_Type:= AAC_STRM ;
       BASS_CTYPE_STREAM_OGG:
         begin
-          SimulateMsg(WP_RadioName, true, '');
-          // get the broadcast name and bitrate
-          //ogg:= BASS_ChannelGetTags(chan, BASS_TAG_OGG);
-          icy := BASS_ChannelGetTags(chan, BASS_TAG_ICY);
-          if (icy = nil) then
-             icy := BASS_ChannelGetTags(chan, BASS_TAG_HTTP); // no ICY tags, try HTTP
-          if (icy <> nil) then
-            while (icy^ <> #0) do
-            begin
-              HintStr := HintStr+Copy(icy, 1, MaxInt)+#13#10;
-              if (Copy(icy, 1, 9) = 'icy-name:') then
-              begin
-                SimulateMsg(WP_RadioName, true, Copy(icy, 10, MaxInt));
-              end
-              //else if (Copy(icy, 1, 7) = 'icy-br:Quality') then
-              else if (Copy(icy, 1, 7) = 'icy-br:') then
-                   try
-                     if (Copy(icy, 1, 14) = 'icy-br:Quality') then
-                     begin
-                       Len:= Round(StrToFloat(Copy(icy, 15, MaxInt)));
-                       Bitrate:= OGGQual[len];
-                     end else Bitrate:= StrToInt(Copy(icy, 8, MaxInt));
-                   except
-                     BitRate:= 0;
-                   end;
-              icy := icy + Length(icy) + 1;
-            end;
-           SimulateMsg(WP_Connected, true, 3);
-           BASS_ChannelSetSync(chan, BASS_SYNC_META, 0, SYNCPROC(@MetaSync), nil);
-        end;
-      BASS_CTYPE_STREAM_AAC:
-        begin
-          SimulateMsg(WP_RadioName, true,  '');
-          // get the broadcast name and bitrate
-          icy := BASS_ChannelGetTags(chan, BASS_TAG_ICY);
-          if (icy = nil) then
-             icy := BASS_ChannelGetTags(chan, BASS_TAG_HTTP); // no ICY tags, try HTTP
-
-          if (icy <> nil) then
-            while (icy^ <> #0) do
-            begin
-              HintStr := HintStr+Copy(icy, 1, MaxInt)+#13#10;
-              if (Copy(icy, 1, 9) = 'icy-name:') then
-              begin
-                SimulateMsg(WP_RadioName, true, Copy(icy, 10, MaxInt));
-              end
-              else if (Copy(icy, 1, 7) = 'icy-br:') then
-                   try
-                     Bitrate:= StrToInt(Copy(icy, 8, MaxInt));
-                   except
-                     BitRate:= 0;
-
-                   end;
-              icy := icy + Length(icy) + 1;
-            end;
-           SimulateMsg(WP_Connected, true, 4);
-           BASS_ChannelSetSync(chan, BASS_SYNC_META, 0, SYNCPROC(@MetaSync), nil);
+          pTag := BASS_ChannelGetTags(chan, BASS_TAG_OGG);
+          if (ptag <> nil) then stag1:= TagToStrings(ptag);
+          Strm_Type:= OGG_STRM;
         end;
     end;
+    if (icy <> nil) then
+    begin
+      sTag:= TagToStrings(icy);
+      // if there is another tag add it to icy
+      if length(stag1)>0 then sTag:= sTag+sTag1;
+      IcyTag:= GetIcyTag(stag);
+      HintStr:= IcyTag.text;
+      SimulateMsg(WP_RadioName, true, IcyTag.name);
+      BitRate:= IcyTag.bitrate;
+    end;
+
+    SimulateMsg(WP_Connected, true, Strm_Type);
+    if Strm_Type=WMA_STRM then BASS_ChannelSetSync(chan, BASS_SYNC_WMA_META, 0, SYNCPROC(@MetaSync), nil)
+    else BASS_ChannelSetSync(chan, BASS_SYNC_META, 0, SYNCPROC(@MetaSync), nil); ;
     if Bitrate = 0 then Bitrate:= (ByteSec*745) div 1024000 ;
     SimulateMsg(WP_BitRate, True, Bitrate);
     SimulateMsg(WP_Hint, True, HintStr);
@@ -587,7 +643,7 @@ begin
     SimulateMsg(WP_Length, true, len);
     // play it!
     BASS_ChannelPlay(chan, FALSE);
-    FWebRadioMain.SetEqual(true);
+    //FWebRadioMain.SetEqual(true);
   end;
   cthread := 0;
 end;
@@ -678,7 +734,20 @@ procedure TFWebRadioMain.FormCreate(Sender: TObject);
 var
   s: String;
 begin
+  // install memory font DotMatrix
+  {$IFDEF WINDOWS}
+    FontDir:= GetTempDir(false);
+    FontId := Screen.Fonts.IndexOf('DotMatrix');
+    if FontId < 0 then
+    begin
+      ResFnt := TResourceStream.Create(hInstance, 'DOTMATRIX', RT_RCDATA);
+      DMFontRes:= AddFontMemResourceEx(ResFnt.Memory, ResFnt.Size, nil, @FontCount);
+      PostMessage(HWND_BROADCAST, WM_FONTCHANGE, 0, 0) ;
+      Application.ProcessMessages;
+   end;
+    {$ENDIF}
   inherited;
+
   // Variables initialization
   CanClose:= false;
   // Flag needed to execute once some processes in Form activation
@@ -693,10 +762,17 @@ begin
   WRExecPath:=ExtractFilePath(Application.ExeName);
   UserPath := GetUserDir;
   UserAppsDataPath := UserPath;
+  MusicPath:= Userpath+PathDelim+'Music'+PathDelim;
+  If not DirectoryExists(MusicPath) then
+  MusicPath:= '';
   {$IFDEF Linux}
     OS := 'Linux';
     CRLF := #10;
     LangStr := GetEnvironmentVariable('LANG');
+    // Music folder
+    MusicPath:= UserPath+PathDelim+Music+PathDelim;
+    if not DirectoryExists(MusicPath) then
+    MusicPath:= '';
     x := pos('.', LangStr);
     LangStr := Copy(LangStr, 0, 2);
     wxbitsrun := 0;
@@ -794,10 +870,6 @@ end;
 
 
 procedure TFWebRadioMain.FormActivate(Sender: TObject);
-var
-  ResFnt: TResourceStream;
-  FontId: integer;
-  FontCount: cardinal;
 begin
   if not Initialized then
   begin
@@ -807,18 +879,7 @@ begin
     Initialize;
     //Check Update, async call to let stuff loading
     Application.QueueAsyncCall(@CheckUpdate, ChkVerInterval);
-    // install memory font DotMatrix
-    {$IFDEF WINDOWS}
-       FontDir:= GetTempDir(false);
-       FontId := Screen.Fonts.IndexOf('DotMatrix');
-       if FontId < 0 then
-       begin
-         ResFnt := TResourceStream.Create(hInstance, 'DOTMATRIX', RT_RCDATA);
-         DMFontRes:= AddFontMemResourceEx(ResFnt.Memory, ResFnt.Size, nil, @FontCount);
-         PostMessage(HWND_BROADCAST, WM_FONTCHANGE, 0, 0) ;
-         Application.ProcessMessages;
-       end;
-    {$ENDIF}
+
   end;
   // Initialisation du flux à zéro
   Chan:= 0;
@@ -835,6 +896,7 @@ begin
   CropBitmap(ILButtons, PMnuRadList.Bitmap, true, 9);
   CropBitmap(ILButtons, PMnuAbout.Bitmap, true, 10);
   CropBitmap(ILButtons, PMnuQuit.Bitmap, true, 11);
+  CropBitmap(ILButtons, PMnuHelp.Bitmap, true, 15);
   CropBitmap(ILButtons, PTMnuAbout.Bitmap, true, 10);
   CropBitmap(ILButtons, PTMnuQuit.Bitmap, true, 11);
   CropBitmap(ILButtons, PTMnuMute.Bitmap, true, 2);
@@ -846,6 +908,7 @@ begin
   ILButtons.GetBitmap(7, SBEqualizer.Glyph);
   ILButtons.GetBitmap(8, SBSEtings.Glyph);;
   ILButtons.GetBitmap(9, SBRadList.Glyph);
+  ILButtons.GetBitmap(15, SBHelp.Glyph);
   ILButtons.GetBitmap(10, SBAbout.Glyph);
   ILButtons.GetBitmap(11, SBQuit.Glyph);
 end;
@@ -868,22 +931,6 @@ begin
   ConfigFileName:= WebRadioAppsData+'settings.xml';
   RadiosFileName:= WebRadioAppsData+'wradios.xml';
   FSettings.Settings.LangStr:= LangStr;
-
-  // Test version de Bass.DLL
-  if (HIWORD(BASS_GetVersion) <> BASSVERSION) then
-  begin
-    ShowMessage(ErrBassVersion);
-    Close;
-  end;
-  if (not BASS_Init(-1, 44100, 0, Handle, nil)) then
-  begin
-     ShowMessage(BassErrArr[BASS_ERROR_INIT]);
-    Close;
-  end;
-  bass_timout:= 15000;
-  BASS_SetConfig(BASS_CONFIG_NET_TIMEOUT, bass_timout);
-  BASS_SetConfig(BASS_CONFIG_NET_PLAYLIST, 1); // enable playlist processing
-  BASS_SetConfig(BASS_CONFIG_NET_PREBUF, 0); // minimize automatic pre-buffering, so we can do it (and display it) instead
   // Check inifile with URLs, if not present, then use default
   IniFile:= TBbInifile.Create('webradio.ini');
   AboutBox.ChkVerURL := IniFile.ReadString('urls', 'ChkVerURL','https://github.com/bb84000/webradio/releases/latest');
@@ -902,7 +949,26 @@ begin
   if Assigned(IniFile) then IniFile.free;
   LoadSettings(ConfigFileName);
   ModLangue;
+  if (Pos('64', OSVersion.Architecture)>0) and (OsTarget='32 bits') then
+    MsgDlg(Caption, sUse64bit, mtInformation,  [mbOK], [OKBtn]);
   ShowBtnBar;
+
+  // Test version de Bass.DLL
+  if (HIWORD(BASS_GetVersion) <> BASSVERSION) then
+  begin
+    ShowMessage(ErrBassVersion);
+    Close;
+  end;
+  if (not BASS_Init(-1, 44100, 0, Handle, nil)) then
+  begin
+     ShowMessage(BassErrArr[BASS_ERROR_INIT]);
+    Close;
+  end;
+  bass_timout:= 15000;
+  BASS_SetConfig(BASS_CONFIG_NET_TIMEOUT, bass_timout);
+  BASS_SetConfig(BASS_CONFIG_NET_PLAYLIST, 1); // enable playlist processing
+  BASS_SetConfig(BASS_CONFIG_NET_PREBUF, 0); // minimize automatic pre-buffering, so we can do it (and display it) instead
+
   // in case startup was done after a session end
   if FSettings.Settings.Restart then
   begin
@@ -1086,6 +1152,8 @@ begin
     if length(Settings.Encoding) = 0 then Settings.Encoding:= 'WAV';
   end;
   // LOad font
+  If (FSettings.Settings.DataFolder='') and (MusicPath <> '') then
+  FSettings.Settings.DataFolder:= MusicPath;
   if Fsettings.Settings.RadioFont <> '' then
   LRadioName.Font.Name:= Fsettings.Settings.RadioFont;
   ChangeColors;
@@ -1160,7 +1228,6 @@ end;
 procedure TFWebRadioMain.MsgTimerTimer(Sender: TObject);
 var
   s: string;
-  i: integer;
 const
   SrtmTyp: array [1..6] of String = (' WMA',' MP3',' OGG',' AAC', ' WAV', ' FLAC');
 begin
@@ -1212,7 +1279,7 @@ begin
       Caption:= CurRadio.Name;
       s:= lparamArr[WP_RadioName].value;
       if length(s)< 2 then s:= Caption;
-      LRadioName.Caption:=  UTF8ToAnsi(s);
+      LRadioName.Caption:= TrimLeft(UTF8ToAnsi(s));
     end else
     begin
       Caption:= lparamArr[WP_RadioName].value;
@@ -1267,6 +1334,11 @@ begin
   begin
     LBitrate.Caption := Inttostr(int64(lparamArr[WP_Bitrate].value))+' Kb/s';
     lparamArr[WP_Bitrate].state:= false;
+  end;
+  if lparamArr[WP_Hint].state then
+  begin
+    LRadioName.Hint:= lparamArr[WP_Hint].value;
+    lparamArr[WP_Hint].state:= False;
   end;
   inc(MsgTimerCount);
 end;
@@ -1397,14 +1469,13 @@ procedure TFWebRadioMain.PMnuOpenURLClick(Sender: TObject);
 var
  s: string;
 begin
-
-  s:= InputBox(DefaultCaption, sEnterUrl, '');
-
+  s:= InputDlg(DefaultCaption, sEnterUrl, '', OKBtn, CancelBtn, 0 );
   if length(s) > 0 then
   try
     CurRadio.Name:='';
     Curradio.uid:= 0;
     Curradio.url:= s;
+    Curradio.favicon:='';
     PlayRadio(CurRadio);
     FSettings.Settings.LastUrl:= s;
     FSettings.Settings.LastRadio:= 0;
@@ -1548,6 +1619,7 @@ begin
         begin
           LangFound := True;
           FSettings.CBLangue.ItemIndex:= i;
+          oldlng:= i;
         end;
       end;
     end;
@@ -1614,7 +1686,7 @@ begin
       Settings.DataFolder:= EDataFolder.text;
       if not DirectoryExists(Settings.DataFolder) then CreateDir(Settings.DataFolder);
       Settings.LangStr := LangNums.Strings[CBLangue.ItemIndex];
-      if (CBLangue.ItemIndex<>oldlng) then ModLangue;
+      if (CBLangue.ItemIndex<> oldlng) then ModLangue;
       try
         if CBFonts.ItemIndex <> oldfont then
         LRadioName.Font.Name:= CBFonts.SelText;
@@ -1749,6 +1821,11 @@ procedure TFWebRadioMain.RecordBtnTimerTimer(Sender: TObject);
 begin
    ILButtons.GetBitmap(RecordBtnTimerCount mod 2, SBRecord.Glyph);
   inc(RecordBtnTimerCount);
+end;
+
+procedure TFWebRadioMain.SBHelpClick(Sender: TObject);
+begin
+  OpenDocument(HelpFile);
 end;
 
 procedure TFWebRadioMain.SBMuteClick(Sender: TObject);
@@ -1896,6 +1973,7 @@ begin
     PTMnuIconizeClick(sender);
     CloseAction := caNone;
   end;
+
 end;
 
 
@@ -2041,7 +2119,7 @@ begin
   AboutBox.LVersion.Hint:= OSVersion.VerDetail;
   With LangFile do
     begin
-      // Form
+       // Form
       DefaultCaption:= ReadString(LangStr, 'DefaultCaption', Caption);
       OKBtn:= ReadString(LangStr, 'OKBtn','OK');
       YesBtn:=ReadString(LangStr,'YesBtn','Oui');
@@ -2067,9 +2145,11 @@ begin
       SBRecord.Hint:= sRecordingHint;
       sConnectStr:= ReadString(LangStr, 'sConnectStr', 'Connexion...');
       sConnectedStr:= ReadString(LangStr, 'sConnectedStr', 'Connecté');
+      sNotConnectedStr:= ReadString(LangStr, 'sNotConnectedStr', 'Non connecté');
       sLoadStr:=  ReadString(LangStr, 'sLoadStr', 'Chargement de');
       sBufferStr:= ReadString(LangStr, 'sBufferStr', 'Buffering...');
       sEnterUrl:= ReadString(LangStr, 'sEnterUrl', sEnterUrl);
+      sUse64bit:=ReadString(LangStr,'Use64bit','Utilisez la version 64 bits de ce programme');
 
       //Menus and buttons
       PMnuOpenRadio.Caption:= ReadString(LangStr, 'PMnuOpenRadio.Caption', PMnuOpenRadio.Caption);;
@@ -2078,6 +2158,7 @@ begin
       PMnuEqualizer.Caption:= ReadString(LangStr, 'PMnuEqualizer.Caption', PMnuEqualizer.Caption);
       PMnuSettings.Caption:= ReadString(LangStr, 'PMnuSettings.Caption', PMnuSettings.Caption);
       PMnuRadList.Caption:= ReadString(LangStr, 'PMnuRadList.Caption', PMnuRadList.Caption);
+      PMnuHelp.Caption:= ReadString(LangStr, 'PMnuHelp.Caption', PMnuHelp.Caption);
       PMnuAbout.Caption:= ReadString(LangStr, 'PMnuAbout.Caption', PMnuAbout.Caption);
       PMnuQuit.Caption:= ReadString(LangStr, 'PMnuQuit.Caption', PMnuQuit.Caption);
       PTMnuRestore.Caption:= ReadString(LangStr, 'PTMnuRestore.Caption', PTMnuRestore.Caption);
@@ -2098,8 +2179,8 @@ begin
       Aboutbox.Caption:= Format(ReadString(LangStr,'Aboutbox.Caption','A propos du %s'), [DefaultCaption]);
       AboutBox.sLastUpdateSearch:=ReadString(LangStr,'AboutBox.LastUpdateSearch','Dernière recherche de mise à jour');
       AboutBox.sUpdateAvailable:=ReadString(LangStr,'AboutBox.UpdateAvailable','Nouvelle version %s disponible');
-      AboutBox.sNoUpdateAvailable:=ReadString(LangStr,'AboutBox.NoUpdateAvailable','Courriels en attente est à jour');
-    
+      AboutBox.sNoUpdateAvailable:=ReadString(LangStr,'AboutBox.NoUpdateAvailable','Le Tuner radio Web est à jour');
+
       AboutBox.LProductName.Caption:= DefaultCaption;
       AboutBox.LProgPage.Caption:= ReadString(LangStr,'AboutBox.LProgPage.Caption', AboutBox.LProgPage.Caption);
       //AboutBox.UrlProgSite:= ReadString(LangStr,'AboutBox.UrlProgSite','https://github.com/bb84000/mailsinbox/wiki/Accueil');
@@ -2110,6 +2191,7 @@ begin
         if AboutBox.NewVersion then AboutBox.LUpdate.Caption:= Format(AboutBox.sUpdateAvailable, [AboutBox.LastVersion])
         else AboutBox.LUpdate.Caption:= AboutBox.sNoUpdateAvailable;
       end;
+      HelpFile:= WRExecPath+'help'+PathDelim+ReadString(LangStr,'HelpFile', 'webradio.html');
 
       // Alert
       sUpdateAlertBox:=ReadString(LangStr,'sUpdateAlertBox','Version actuelle: %sUne nouvelle version %s est disponible. Cliquer pour la télécharger');
@@ -2131,8 +2213,11 @@ begin
       FSettings.LDataFolder.Caption:= ReadString(LangStr, 'FSettings.LDataFolder.Caption', FSettings.LDataFolder.Caption);
       FSettings.LFont.Caption:= ReadString(LangStr, 'FSettings.LFont.Caption', FSettings.LFont.Caption);
       FSettings.CBFonts.Hint:= ReadString(LangStr, 'FSettings.CBFonts.Hint',FSettings.CBFonts.Hint);
+      FSettings.TPColors.Caption:= ReadString(LangStr, 'FSettings.TPColors.Caption', FSettings.TPColors.Caption);
       FSettings.CPDisplayText.Caption:= ReadString(LangStr, 'FSettings.CPDisplayText.Caption', FSettings.CPDisplayText.Caption);
       FSettings.CPDisplayBack.Caption:= ReadString(LangStr, 'FSettings.CPDisplayBack.Caption', FSettings.CPDisplayBack.Caption);
+      FSettings.sMnuCopy:= ReadString(LangStr, 'FSettings.sMnuCopy', 'Copier');
+      FSettings.sMnuPaste:= ReadString(LangStr, 'FSettings.sMnuPaste', 'Coller');
 
       // Radios form
       FRadios.Caption:= ReadString(LangStr, 'FRadios.Caption', FRadios.Caption);
@@ -2159,7 +2244,7 @@ begin
       FEqualizer.BtnCancel.Caption:= CancelBtn;
       FEqualizer.BtnOK.Caption:= OKBtn;
 
-            // Errors
+            // BASS Errors
       ErrBassVersion:= ReadString(LangStr, 'ErrBassVersion','Mauvaise version de BASS.DLL');
 
       BassErrArr[BASS_OK]:= 'OK';         //0
@@ -2168,16 +2253,38 @@ begin
       BassErrArr[BASS_ERROR_DRIVER]:= ReadString(LangStr, 'BASS_ERROR_DRIVER', 'Erreur de driver');
       BassErrArr[BASS_ERROR_BUFLOST]:= ReadString(LangStr, 'BASS_ERROR_BUFLOST', 'Erreur de mémoire tampon');
       BassErrArr[BASS_ERROR_HANDLE]:= ReadString(LangStr, 'BASS_ERROR_HANDLE', 'Erreur de handle');
-      BassErrArr[BASS_ERROR_FORMAT]:= ReadString(LangStr, 'BASS_ERROR_FORMAT', 'Erreur de format d''échantillonnage');
+      BassErrArr[BASS_ERROR_FORMAT]:= ReadString(LangStr, 'BASS_ERROR_FORMAT', 'Erreur de format d''échantillon');
       BassErrArr[BASS_ERROR_POSITION ]:= ReadString(LangStr, 'BASS_ERROR_POSITION ', 'Erreur de position');
       BassErrArr[BASS_ERROR_INIT]:= ReadString(LangStr, 'BASS_ERROR_INIT', 'Erreur d''initialisation de la bibiliothèque Bass');
-
       BassErrArr[BASS_ERROR_START]:= ReadString(LangStr, 'BASS_ERROR_START', 'Erreur de démarrage');
       BassErrArr[BASS_ERROR_SSL]:= ReadString(LangStr, 'BASS_ERROR_SSL', 'SSL non installé');
       BassErrArr[BASS_ERROR_ALREADY]:= ReadString(LangStr, 'BASS_ERROR_ALREADY', 'Fonction déjà en cours d''utilisation');
-
+      BassErrArr[BASS_ERROR_NOTAUDIO]:= ReadString(LangStr, 'BASS_ERROR_NOTAUDIO', 'Le fichier ne contient pas d''audio'); //The file does not contain audio,
+      BassErrArr[BASS_ERROR_NOCHAN]:= ReadString(LangStr, 'BASS_ERROR_NOCHAN', 'L''échantillon n''a pas de canal libre');  //The sample has no free channels
+      BassErrArr[BASS_ERROR_ILLTYPE]:= ReadString(LangStr, 'BASS_ERROR_ILLTYPE', 'L''élément n''est pas valide');
+      BassErrArr[BASS_ERROR_ILLPARAM]:= ReadString(LangStr, 'BASS_ERROR_ILLPARAM', 'Le paramètre n''est pas valide');
+      BassErrArr[BASS_ERROR_NO3D]:= ReadString(LangStr, 'BASS_ERROR_NO3D', 'Fonctionenment 3D non suppporté'); //The channel does not have 3D functionality
+      BassErrArr[BASS_ERROR_NOEAX]:= ReadString(LangStr, 'BASS_ERROR_NOEAX', 'Fonctionnement EAX non supporté');
+      BassErrArr[BASS_ERROR_DEVICE]:= ReadString(LangStr, 'BASS_ERROR_DEVICE', 'Périphérique invalide');
+      BassErrArr[BASS_ERROR_NOPLAY]:= ReadString(LangStr, 'BASS_ERROR_NOPLAY', 'Le canal n''est pas en cours de lecture'); //The channel is not playing
+      BassErrArr[BASS_ERROR_FREQ]:= ReadString(LangStr, 'BASS_ERROR_FREQ', 'Erreur de fréquence');
+      BassErrArr[BASS_ERROR_NOTFILE]:= ReadString(LangStr, 'BASS_ERROR_NOTFILE', 'Le fichier ne contient pas de flux');
+      BassErrArr[BASS_ERROR_NOHW]:= ReadString(LangStr, 'BASS_ERROR_NOHW', 'Matériel non trouvé');
+      BassErrArr[BASS_ERROR_EMPTY]:= ReadString(LangStr, 'BASS_ERROR_EMPTY', 'Le fichier ne contient pas de données d''échantillonnage');
+      BassErrArr[BASS_ERROR_NONET]:= ReadString(LangStr, 'BASS_ERROR_NONET', 'Pas de connexion Internet');
+      BassErrArr[BASS_ERROR_CREATE]:= ReadString(LangStr, 'BASS_ERROR_CREATE', 'Le fichier audio n''a pas pu être créé'); //The PCM file could not be created.
+      BassErrArr[BASS_ERROR_NOFX]:= ReadString(LangStr, 'BASS_ERROR_NOFX', 'L''effet demandé est indisponible'); //The specified DX8 effect is unavailable
+      BassErrArr[BASS_ERROR_NOTAVAIL]:= ReadString(LangStr, 'BASS_ERROR_NOTAVAIL', 'Elélent non disponible');
+      BassErrArr[BASS_ERROR_DECODE]:= ReadString(LangStr, 'BASS_ERROR_DECODE', 'Le canal de décodage ne peut pas être lu'); //The channel is not playable; it is a "decoding channel".
+      BassErrArr[BASS_ERROR_DX]:= ReadString(LangStr, 'BASS_ERROR_DX', 'Mauvaise version de DX)');
       BassErrArr[BASS_ERROR_TIMEOUT]:= ReadString(LangStr, 'BASS_ERROR_TIMEOUT', 'Délai maximum dépassé');
-
+      BassErrArr[BASS_ERROR_FILEFORM]:= ReadString(LangStr, 'BASS_ERROR_FILEFORM', 'Format de fichier invalide');
+      BassErrArr[BASS_ERROR_SPEAKER]:= ReadString(LangStr, 'BASS_ERROR_SPEAKER', 'Les paramètres de haut parleur sont invalides');  //  The specified SPEAKER flags are invalid
+      BassErrArr[BASS_ERROR_VERSION]:= ReadString(LangStr, 'BASS_ERROR_VERSION', 'Le plugin nécessite une version différente de BASS'); //The plugin requires a different BASS version
+      BassErrArr[BASS_ERROR_CODEC]:= ReadString(LangStr, 'BASS_ERROR_CODEC', 'Codec non disponible');
+      BassErrArr[BASS_ERROR_ENDED]:= ReadString(LangStr, 'BASS_ERROR_ENDED', 'Le canal a atteint la fin');//   The channel has reached the end
+      BassErrArr[BASS_ERROR_BUSY]:= ReadString(LangStr, 'BASS_ERROR_BUSY', 'L''élément est utilisé'); // The deviece is busy
+      BassErrArr[BASS_ERROR_UNSTREAMABLE]:= ReadString(LangStr, 'BASS_ERROR_UNSTREAMABLE', 'Impossible de créer un flux');
       BassErrArr[length(BassErrArr)-1]:= ReadString(LangStr, 'BASS_ERROR_UNKNOWN', 'Erreur inconnue');
 
       ErrNoBassPLAY:=  ReadString(LangStr, 'ErrNoBassPLAY','La bibliothèque Bass%s n''est pas installée.%sLecture des flux %s impossible.');
@@ -2186,54 +2293,8 @@ begin
       ErrUnsupportedEnc:= ReadString(LangStr, 'ErrUnsupportedEnc', 'Impossible d''enregistrer, encodage %s non supporté');
       ErrEncoding:= ReadString(LangStr, 'ErrEncoding', 'Erreur d''encodage %d');
       ErrConnection:= ReadString(LangStr, 'ErrConnection', 'Erreur de connexion');
-      //1
-        {  ErrOpenFile:= ReadString(LangStr, 'ErrLoadStr', 'Erreur d''ouverture de fichier');
-  ErrLoadStr:= ReadString(LangStr, 'ErrLoadStr', 'Erreur de chargement de');
 
-      ErrInvalidHnd:= ReadString(LangStr, 'ErrInvalidHnd', 'Handle invalide');
-      ErrInvalidDev:= ReadString(LangStr, 'ErrInvalidDev','Périphérique invalide');
-      ErrTimeout:= ReadString(LangStr, 'ErrTimeout','Délai dépassé');
-      ErrFileFormat:= ReadString(LangStr, 'ErrFileFormat','Format de fichier incorrect');
-      ErrNetConnect:= ReadString(LangStr, 'ErrNetConnect','Erreur de connexion Internet');
-      ErrUnknown:= ReadString(LangStr, 'ErrUnknown','Erreur inconnue');
-      ErrReading:= ReadString(LangStr, 'ErrReading','Lecture de la radio impossible');
-
-      ModPrsetCaption:=  ReadString(LangStr, 'ModPrsetCaption','Modifier');
-      DelPrsetCaption:=  ReadString(LangStr, 'DelPrsetCaption','Supprimer');
-      AddPrsetCaption:=  ReadString(LangStr, 'AddPrsetCaption','Ajouter');
-      EnterModPrset:=  ReadString(LangStr, 'EnterModPrset', 'Mofifier le preset');
-      EnterDelPrset:=  ReadString(LangStr, 'EnterDelPrset', 'Effacer le preset %sLa radio sera ajoutée en fin de liste');
-      EnterAddPrset:= ReadString(LangStr, 'EnterAddPrset', 'Ajouter le preset');
-      EnterUrl:= ReadString(LangStr, 'EnterUrl', 'Entrez un Url');
-
-
-      LRecordCaption:= ReadString(LangStr, 'LRecordCaption', 'Enregistrement');
-      CBEqual.Caption:= ReadString(LangStr, 'CBEqualCaption', CBEqual.Caption);
-      WebRadioMain.Hint:= ReadString(LangStr, 'WebRadioMainHint', WebRadioMain.Hint);
-      CBEqual.Hint:= ReadString(LangStr, 'CBEqualHint', CBEqual.Hint);
-      EqualBox.Hint:=  ReadString(LangStr, 'EqualBoxHint', EqualBox.Hint);
-
-      StartRecBtnHint:= ReadString(LangStr, 'StartRecBtnHint', 'Démarrer l''enregistrement');
-      StopRecBtnHint:= ReadString(LangStr, 'StopRecBtnHint', 'Arrêter l''enregistrement');
-      RecBtn.Hint:= StartRecBtnHint;
-      OptionMain.LUrlPing.Caption:= ReadString(LangStr, 'OMLUrlPingCaption', 'Url de test de connexion');
-      OptionMain.LFontRadio.Caption:= ReadString(LangStr, 'OMLFontRadioCaption', 'Police d''affichage de la radio');
-      OptionMain.LRecFolder.Caption:= ReadString(LangStr, 'OMLRecFolderCaption', 'Répertoire d''enregistrement');
-      OptionMain.CBNoChkNewVer.Caption:= ReadString(LangStr, 'OMCBNoChkNewVerCaption','Ne pas vérifier de nouvelle version');
-      OptionMain.EPingUrl.Hint:= ReadString(LangStr, 'OMEPingUrlHint','Entrer une valeur vide pour désactiver le test de connexion Internet');
-      OptionMain.ERecPath.Hint:= ReadString(LangStr, 'OMERecPathHint','Entrer une valeur vide pour utiliser le répertoire par défaut (Ma Musique\Webradio)');
-      OptionMain.LLanguage.Caption:= ReadString(LangStr, 'OMLLanguageCaption','Langue');
-      OptionMain.SG1.Cells[0, 0]:= ReadString(LangStr, 'OMSGOrder','Ordre');
-      OptionMain.SG1.Cells[1, 0]:= ReadString(LangStr, 'OMSGName', 'Nom');
-      OptionMain.SG1.Cells[2, 0]:= ReadString(LangStr,'OMSGUrl', 'Url');
-      OptionMain.SG1.Cells[3, 0]:= ReadString(LangStr,'OMSGComment', 'Commentaire');
-      OMModifyMnu:= ReadString(LangStr,'OMModifyMnu', 'Modifier');
-      OMDeleteMnu:= ReadString(LangStr,'OMDeleteMnu', 'Effacer');
-      OptionMain.AddMnu.Caption:=ReadString(LangStr,'OMAddMnu', 'Ajouter');
-      OMHautMnu:= ReadString(LangStr,'OMHautMnu', 'Haut');
-      OMBasMnu:= ReadString(LangStr,'OMBasMnu', 'Bas');
-      OMWarning:= ReadString(LangStr,'OMWarning', 'Avertissement');    }
-          // HTTP Error messages
+    // HTTP Error messages
     HttpErrMsgNames[0] := ReadString(LangStr,'SErrInvalidProtocol','Protocole "%s" invalide');
     HttpErrMsgNames[1] := ReadString(LangStr,'SErrReadingSocket','Erreur de lecture des données à partir du socket');
     HttpErrMsgNames[2] := ReadString(LangStr,'SErrInvalidProtocolVersion','Version de protocole invalide en réponse: %s');
@@ -2252,8 +2313,6 @@ begin
     HttpErrMsgNames[14]:=ReadString(LangStr,'strSocketAcceptWouldBlock','La connexion pourrait bloquer le socket: %s');
     HttpErrMsgNames[15]:=ReadString(LangStr,'strSocketIOTimeOut','Impossible de fixer le timeout E/S à %s');
     HttpErrMsgNames[16]:=ReadString(LangStr,'strErrNoStream','Flux du socket non assigné');
-
-
     end;
 end;
 

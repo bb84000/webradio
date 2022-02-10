@@ -43,3 +43,9 @@ Version 0.6.0.3 - 04/02/2022
 - Added change of colors settings
 - optimized some functions
 - improved error detection and information
+
+Version 0.7.0.0 - 10/02/2022
+- Changed callback functions to support other stream types
+- Improved Icy tag parsing and simplified OpenUrl procedure
+- Added help file (french)
+- Added 32bit version

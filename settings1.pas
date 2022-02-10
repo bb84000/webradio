@@ -134,16 +134,16 @@ end;
     CBStartup: TCheckBox;
     CBHideInTaskBar: TCheckBox;
     CBFonts: TComboBox;
-    CPGenBack: TColorPicker;
-    CPDisplayText: TColorPicker;
     CPDisplayBack: TColorPicker;
+    CPDisplayText: TColorPicker;
+    CPGenBack: TColorPicker;
     CPGenText: TColorPicker;
     EDataFolder: TEdit;
-    LGenBack: TLabel;
-    LDisplayText: TLabel;
     LBitrate: TLabel;
     LDataFolder: TLabel;
     LDisplayBack: TLabel;
+    LDisplayText: TLabel;
+    LGenBack: TLabel;
     LGenText: TLabel;
     LLangue: TLabel;
     LFont: TLabel;
@@ -158,21 +158,22 @@ end;
     RBOGG: TRadioButton;
     SBDatafolder: TSpeedButton;
     SDDataFolder: TSelectDirectoryDialog;
+    TPColors: TTitlePanel;
     TPEncode: TTitlePanel;
     TPSystem: TTitlePanel;
-    procedure CBBitrateChange(Sender: TObject);
     procedure CBStartupChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure RBEnCodingChange(Sender: TObject);
     procedure SBDatafolderClick(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
-    procedure TPSystemClick(Sender: TObject);
   private
 
   public
     Settings: TConfig;
-
+    sMnuCopy: string;
+    sMnuPaste: string;
   end;
 
 var
@@ -538,6 +539,11 @@ begin
   //if assigned (Settings) then Settings.free;
 end;
 
+procedure TFSettings.FormShow(Sender: TObject);
+begin
+
+end;
+
 procedure TFSettings.RBEnCodingChange(Sender: TObject);
 begin
   if RBMP3.checked or RBOGG.checked then
@@ -566,26 +572,27 @@ begin
 end;
 
 procedure TFSettings.SpeedButton1Click(Sender: TObject);
+var
+  TCP: TColorPicker;
+  i: Integer;
+const
+  TCPArr: array of string = ('CPDisplayText', 'CPDisplayBack', 'CPGenText', 'CPGenBack');
 begin
-
-end;
-
-procedure TFSettings.TPSystemClick(Sender: TObject);
-begin
-
+  for i:= 0 to length(TCPArr)-1 do
+  begin
+    TCP:= FindComponent('CPDisplayText') as TColorPicker;
+    if TCP<>nil then
+    begin
+      TCP.MnuCopyCaption:= sMnuCopy;
+      TCP.MnuPasteCaption:= sMnuPaste;
+    end;
+  end;
 end;
 
 procedure TFSettings.CBStartupChange(Sender: TObject);
 begin
   //CBMinimized.Enabled:= CBStartup.Checked;
 end;
-
-procedure TFSettings.CBBitrateChange(Sender: TObject);
-begin
-
-end;
-
-
 
 end.
 

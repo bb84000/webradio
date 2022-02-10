@@ -96,6 +96,11 @@
   ; Language string for remove old install
   LangString Remove_Old ${LANG_ENGLISH} "Install will remove a previous installation."
   LangString Remove_Old ${LANG_FRENCH} "Install va supprimer une ancienne installation."
+  
+  ;Wrong OS: 32 bit
+   LangString Error_32b ${LANG_ENGLISH} "The program cannot install on 32bit OS."
+   LangString Error_32b ${LANG_FRENCH} "Ce programme en peut pas être installé sur un OS 32 bits."
+  
 
   !define MUI_LANGDLL_WINDOWTITLE "$(LangDialog_Title)"
   !define MUI_LANGDLL_INFO "$(LangDialog_Text)"
@@ -127,20 +132,19 @@ Section "" ;No components page, name is not important
   Var /GLOBAL prg_to_del
 
   ${If} ${RunningX64}  ; change registry entries and install dir for 64 bit
-    ;!getdllversion  "${source_dir}\mailsinboxwin64.exe" expv_
      StrCpy "$prg_to_inst" "$INSTDIR\webradiowin64.exe"
-     ;StrCpy "$prg_to_del" "$INSTDIR\webradiowin32.exe"
+     StrCpy "$prg_to_del" "$INSTDIR\webradiowin32.exe"
      File  "${lazarus_dir}\Bass\x64\bass.dll"
      File  "${lazarus_dir}\Bass\x64\bassenc.dll"
      CreateDirectory "$INSTDIR\plugins"
      SetOutPath "$INSTDIR\plugins"
-     File  "${source_dir}\plugins\x64\bass_aac.dll"
-     File  "${source_dir}\plugins\x64\bassflac.dll"
-     File  "${source_dir}\plugins\x64\basswma.dll"
-     File  "${source_dir}\plugins\x64\bassenc_aac.dll"
+     File  "${lazarus_dir}\Bass\x64\bass_aac.dll"
+     File  "${lazarus_dir}\Bass\x64\bassflac.dll"
+     File  "${lazarus_dir}\Bass\x64\basswma.dll"
+     File  "${lazarus_dir}\Bass\x64\bassenc_aac.dll"
      ;File  "${source_dir}\plugins\x64\bassenc_flac.dll"
-     File  "${source_dir}\plugins\x64\bassenc_mp3.dll"
-     File  "${source_dir}\plugins\x64\bassenc_ogg.dll"
+     File  "${lazarus_dir}\Bass\x64\bassenc_mp3.dll"
+     File  "${lazarus_dir}\Bass\x64\bassenc_ogg.dll"
 
      ;IfFileExists "$WINDIR\sysnative\libeay32.dll" ssl_lib64_found ssl_lib64_not_found
      ;ssl_lib64_not_found:
@@ -149,9 +153,18 @@ Section "" ;No components page, name is not important
      ;  File "${lazarus_dir}\openssl\OpenSSL License.txt"
      ;ssl_lib64_found:
   ${Else}
-     ;!getdllversion  "${source_dir}\mailsinboxwin32.exe" expv_
-     ;StrCpy "$prg_to_inst" "$INSTDIR\mailsinboxwin32.exe"
-     ;StrCpy "$prg_to_del" "$INSTDIR\webradiowin64.exe"
+     StrCpy "$prg_to_inst" "$INSTDIR\webradiowin32.exe"
+     StrCpy "$prg_to_del" "$INSTDIR\webradiowin64.exe"
+     CreateDirectory "$INSTDIR\plugins"
+     SetOutPath "$INSTDIR\plugins"
+     File  "${lazarus_dir}\Bass\bass_aac.dll"
+     File  "${lazarus_dir}\Bass\bassflac.dll"
+     File  "${lazarus_dir}\Bass\basswma.dll"
+     File  "${lazarus_dir}\Bass\bassenc_aac.dll"
+     ;File  "${source_dir}\plugins\x64\bassenc_flac.dll"
+     File  "${lazarus_dir}\Bass\bassenc_mp3.dll"
+     File  "${lazarus_dir}\Bass\bassenc_ogg.dll"
+
      ;IfFileExists "$WINDIR\system32\libeay32.dll" ssl_lib32_found ssl_lib32_not_found
      ;ssl_lib32_not_found:
      ;  File "${lazarus_dir}\openssl\win32\libeay32.dll"
@@ -162,7 +175,6 @@ Section "" ;No components page, name is not important
    SetOutPath "$INSTDIR"  ; Dans le cas ou on n'aurait pas pu fermer l'application
    Delete /REBOOTOK "$INSTDIR\webradio.exe"
    File "${source_dir}\webradiowin64.exe"
-  ;File "${source_dir}\mailsinboxwin32.exe"
    File "${source_dir}\licensf.txt"
    File "${source_dir}\license.txt"
    File "${source_dir}\history.txt"
@@ -265,7 +277,7 @@ Function .onInit
     FindProcDLL::FindProc "$INSTDIR\webradio.exe"
   ${EndWhile}
   ; See if there is old program
-  ReadRegStr $R0 HKLM "SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\newwebradio" "UninstallString"
+  ReadRegStr $R0 HKLM "SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\webradio" "UninstallString"
    ${If} $R0 == ""
         Goto Done
    ${EndIf}

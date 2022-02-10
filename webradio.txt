@@ -4,7 +4,7 @@
 
   Application to receive radios broadcasted on Internet.
 
-  Currently in alpha version, all functions are not yet implemented and some
+  Currently in beta version, all functions are not yet implemented and some
   crashs can occur.
 
   bb - sdtp

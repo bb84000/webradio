@@ -40,7 +40,9 @@ sConnectStr=Connecting...
 sLoadStr=Loading
 sBufferStr=Buffering...
 sConnectedStr=Connected
+sNotConnectedStr=Not connected
 sEnterUrl=Enter a radio's URL
+sUse64bit=Use the 64bit version of the program
 
 ;Menus
 PMnuOpenRadio.Caption=Open radio in the list
@@ -49,6 +51,7 @@ PMnuOpenURL.Caption=Open radio Url
 PMnuEqualizer.Caption=Equalizer
 PMnuSettings.Caption=Options
 PMnuRadList.Caption=Radios list
+PMnuHelp.Caption=Help
 PMnuAbout.Caption=About Web radio tuner
 PMnuQuit.Caption=Quit
 PTMnuRestore.Caption=Restore
@@ -58,7 +61,7 @@ PTMnuIconize.Caption=Minimize
 Aboutbox.Caption=About %s
 AboutBox.LUpdate.Caption=Search update
 AboutBox.UpdateAvailable=New version %s available. Click to download it
-AboutBox.NoUpdateAvailable=MailsInBox is up to date.
+AboutBox.NoUpdateAvailable=Web radio Tuner is up to date.
 AboutBox.LastUpdateSearch=Last update check
 AboutBox.LProgPage.Caption=Program home page
 AboutBox.UrlProgSite=https://github.com/bb84000/webradio/wiki
@@ -98,6 +101,9 @@ FSettings.LFont.Caption=Font
 FSettings.CBFonts.Hint=Select the font for radio name display
 FSettings.CPDisplayText.Caption=Display text
 FSettings.CPDisplayBack.Caption=Display background
+FSettings.TPColors.Caption=Colors
+FSettings.sMnuCopy=Copy
+FSettings.sMnuPaste=Paste
 
 ; Equalizer
 
@@ -117,11 +123,33 @@ BASS_ERROR_POSITION=Position error
 BASS_ERROR_INIT=BASS library initialization error
 BASS_ERROR_START=The output is paused/stopped
 BASS_ERROR_SSL=SSL/HTTPS support is not available
-
 BASS_ERROR_ALREADY=Invalid or not linked to handle channel
-
+BASS_ERROR_NOTAUDIO=The file does not contain audio,
+BASS_ERROR_NOCHAN=The sample has no free channels
+BASS_ERROR_ILLTYPE=Invalid element
+BASS_ERROR_ILLPARAM=Invalid parameter
+BASS_ERROR_NO3D=The channel does not have 3D functionality
+BASS_ERROR_NOEAX=EAX functionality not supported
+BASS_ERROR_DEVICE=INvalid device
+BASS_ERROR_NOPLAY=The channel is not playing
+BASS_ERROR_FREQ=Frequency error
+BASS_ERROR_NOTFILE=The file does'nt contain stream
+BASS_ERROR_NOHW=Hardware not found
+BASS_ERROR_EMPTY=The file does'nt contain sample data
+BASS_ERROR_NONET=No Internet connection
+BASS_ERROR_CREATE=The audio file could not be created.
+BASS_ERROR_NOFX=The specified DX8 effect is unavailable
+BASS_ERROR_NOTAVAIL=Elemlent not available
+BASS_ERROR_DECODE=The channel is not playable; it is a "decoding channel".
+BASS_ERROR_DX=Wrong DX8 version
 BASS_ERROR_TIMEOUT=The sample's minimum time gap has not yet passed since the last channel was created.
-
+BASS_ERROR_FILEFORM=Invalid file format
+BASS_ERROR_SPEAKER=The specified SPEAKER flags are invalid
+BASS_ERROR_VERSION=The plugin requires a different BASS version
+BASS_ERROR_CODEC=Codec not available
+BASS_ERROR_ENDED=The channel has reached the end
+BASS_ERROR_BUSY=The deviece is busy
+BASS_ERROR_UNSTREAMABLE=Cannote create stream
 BASS_ERROR_UNKNOWN=Unknown error
 
 ErrLoadStr=Erreur loading
@@ -213,7 +241,9 @@ sConnectStr=Connexion...
 sLoadStr=Chargement de
 sBufferStr=Mise en buffer...
 sConnectedStr=Connecté
+sNotConnectedStr=Non connecté
 sEnterUrl=Saisir l'URL d'une radio
+sUse64bit=Utilisez la version 64 bits de ce programme
 
 ;Menus
 PMnuOpenRadio.Caption=Ouvrir une radio dans la liste
@@ -222,6 +252,7 @@ PMnuOpenURL.Caption=Ouvrir un Url de radio
 PMnuEqualizer.Caption=Egaliseur
 PMnuReadFile.Caption=Lire un fichier audio
 PMnuSettings.Caption=Préférences
+PMnuHelp.Caption=Aide
 PMnuAbout.Caption=A propos du Tuner radio web
 PMnuQuit.Caption=Quitter
 PTMnuRestore.Caption=Restaurer
@@ -231,7 +262,7 @@ PTMnuIconize.Caption=Réduire
 Aboutbox.Caption=A propos de Radio Web
 AboutBox.LUpdate.Caption=Recherche de mise à jour
 AboutBox.UpdateAvailable=Nouvelle version %s disponible. Cliquer pour la télécharger
-AboutBox.NoUpdateAvailable=Courriels en attente est à jour.
+AboutBox.NoUpdateAvailable=Le Tuner radio Web est à jour.
 AboutBox.LastUpdateSearch=Dernière recherche de mise à jour
 AboutBox.LProgPage.Caption=Page d'accueil du programme
 AboutBox.UrlProgSite=https://github.com/bb84000/webradio/wiki/Accueil
@@ -277,6 +308,9 @@ FSettings.LFont.Caption=Police
 FSettings.CBFonts.Hint=Sélection de la police d'affichage du nom de la radio
 FSettings.CPDisplayText.Caption=Texte de l'afficheur
 FSettings.CPDisplayBack.Caption=Fond de l'afficheur
+FSettings.TPColors.Caption=Couleurs
+FSettings.sMnuCopy=Copier
+FSettings.sMnuPaste=Coller
 
 // Errors
 BASS_ERROR_MEM=Mémoire insuffisante
@@ -289,9 +323,25 @@ BASS_ERROR_POSITION=Erreur de position
 BASS_ERROR_INIT=Erreur d'initialisation de la bibiliothèque BASS
 BASS_ERROR_START=La lecture est en pause ou arrêtée
 BASS_ERROR_SSL=Le suppport de SSL/HTTPS n'est pas disponible
-
 BASS_ERROR_ALREADY=Canal invalide ou non lié au handle
-
+BASS_ERROR_NOTAUDIO=Le fichier ne contient pas d'audio
+BASS_ERROR_NOCHAN=L'échantillon n'a pas de canal libre
+BASS_ERROR_ILLTYPE=L'élément n'est pas valide
+BASS_ERROR_ILLPARAM=Le paramètre n'est pas valide
+BASS_ERROR_NO3D=Fonctionenment 3D non suppporté
+BASS_ERROR_NOEAX=Fonctionnement EAX non supporté
+BASS_ERROR_DEVICE=Périphérique invalide
+BASS_ERROR_NOPLAY=Le canal n'est pas en cours de lecture
+BASS_ERROR_FREQ=Erreur de fréquence
+BASS_ERROR_NOTFILE=Le fichier ne contient pas de flux
+BASS_ERROR_NOHW=Matériel non trouvé
+BASS_ERROR_EMPTY=Le fichier ne contient pas de données d'échantillonnage
+BASS_ERROR_NONET=Pas de connexion Internet
+BASS_ERROR_CREATE=Le fichier audio n'a pas pu être créé
+BASS_ERROR_NOFX=L'effet demandé est indisponible
+BASS_ERROR_NOTAVAIL=Elément non disponible
+BASS_ERROR_DECODE=Le canal de décodage ne peut pas être lu
+BASS_ERROR_DX=Mauvaise version de DX
 BASS_ERROR_TIMEOUT=Le délai minimum est dépassé depuis la création du canal
 
 BASS_ERROR_UNKNOWN=Erreur inconnue
