@@ -46,15 +46,25 @@ const
   BASS_TAG_HLS_EXTINF  = $14000;
 
 
-  WMA_STRM= 1;
-  MP3_STRM= 2;
-  OGG_STRM= 3;
-  AAC_STRM= 4;
-  WAV_STRM= 5;
-  FLAC_STRM= 6;
-  UNK_STRM= 7;
+  // Stream identifiers (different from Bass ctype
+  WMA_STRM= 1;   // BASS_CTYPE_STREAM_WMA = $10300;
+  WMA_MP3_STRM= 2;  //  BASS_CTYPE_STREAM_WMA_MP3  = $10301;
+  MP3_STRM= 3;   // BASS_CTYPE_STREAM_MP3 = $10005;
+  OGG_STRM= 4;   // BASS_CTYPE_STREAM_OGG = $10002;
+  AAC_STRM= 5;   // BASS_CTYPE_STREAM_AAC = $10b00;
+  MP4_STRM= 6;   // BASS_CTYPE_STREAM_MP4 = $10b01;
+  WAV_STRM= 7;   // BASS_CTYPE_STREAM_WAV = $40000;
+  FLAC_STRM= 8;  //BASS_CTYPE_STREAM_FLAC = $10900; BASS_CTYPE_STREAM_FLAC_OGG    = $10901;
+  UNK_STRM= 9;
 
-  SrtmTyp: array [WMA_STRM..UNK_STRM] of String = ('WMA',' MP3',' OGG',' AAC', ' WAV', ' FLAC', ' UNK');
+  // Correpondance between Bass streams IDF and names
+  StreamName: array [WMA_STRM..UNK_STRM] of String = (' WMA',' WMA-MP3', ' MP3',' OGG',' AAC', ' MP4', ' WAV', ' FLAC', ' UNK');
+  StreamTypes: array of array [0..1] of Integer =
+              ((BASS_CTYPE_STREAM_WMA, WMA_STRM), (BASS_CTYPE_STREAM_WMA_MP3, WMA_MP3_STRM),
+               (BASS_CTYPE_STREAM_MP3, MP3_STRM), (BASS_CTYPE_STREAM_OGG, OGG_STRM),
+               (BASS_CTYPE_STREAM_AAC, AAC_STRM), (BASS_CTYPE_STREAM_MP4, MP4_STRM),
+               (BASS_CTYPE_STREAM_WAV, WAV_STRM), (BASS_CTYPE_STREAM_FLAC, FLAC_STRM),
+               (-1, UNK_STRM));
 
 type
   // Record type for messages array
@@ -298,7 +308,8 @@ type
     CurRadioTitle: string;
     FontDir: String;
     DMFontRes: Cardinal;
-    ResFnt: TResourceStream;
+    //ResFnt: TResourceStream;
+    ResFnt: TLazarusResourceStream;
     FontId: integer;
     FontCount: cardinal;
 
@@ -373,6 +384,21 @@ begin
   lparamArr[MsgId].value:= l_param;
 end;
 
+// Convert CanalInfo.Ctype to webradio stream type
+
+function GetStreamType(cType: DWORD): Integer;
+var
+  i: integer;
+begin
+  result:= -1;
+  for i:=0 to high(StreamTypes) do
+    if StreamTypes[i,0]=cType then
+    begin
+      result:= StreamTypes[i,1];
+      break;
+    end;
+end;
+
 //Convert Pchar tags to strings as we can
 // easily concatenate several tags (ie in wma and ogg streams)
 
@@ -431,7 +457,7 @@ begin
     AudioInf:= (result.audio_info).Split(';');
     if length(AudioInf)>0 then
     begin
-      for i:=0 to length(AudioInf)-1 do
+      for i:=0 to high(AudioInf) do
       begin
         if (Copy(UpperCase(AudioInf[i]), 1, 7))='QUALITY' then
         begin
@@ -527,7 +553,7 @@ var
   i: integer;
 begin
   //Initialze buffer
-  for i:= 0 to length(Buff)-1 do Buff[i]:= char(0);
+  for i:= 0 to high(Buff) do Buff[i]:= char(0);
   // Copy tag in a buffer
   Move(FWebRadioMain.ID3Tag, Buff, SizeOf(Buff));
   //FileStreamStuff
@@ -598,26 +624,23 @@ begin
       SimulateMsg(WP_Progress, true, progress);
     until progress > 75;
     // Infos sur le flux
-BASS_ChannelGetInfo(chan, CanalInfo);
+    BASS_ChannelGetInfo(chan, CanalInfo);
+    Strm_Type:= GetStreamType(CanalInfo.ctype);   // Convert to Webradio stream type
     ByteSec:= BASS_ChannelSeconds2Bytes(Chan, 1);
     SimulateMsg(WP_RadioName, true, '');
     // Get icy tag
     icy := BASS_ChannelGetTags(chan, BASS_TAG_ICY);
     if (icy = nil) then icy := BASS_ChannelGetTags(chan, BASS_TAG_HTTP); // no ICY tags, try HTTP
-    Case CanalInfo.ctype of
-      BASS_CTYPE_STREAM_WMA:
+    Case Strm_Type of
+      WMA_STRM, WMA_MP3_STRM:
         begin
           ptag:= BASS_ChannelGetTags(Chan, BASS_TAG_WMA);
           if (ptag <> nil) then stag1:= TagToStrings(ptag);
-          Strm_Type:= WMA_STRM;
         end;
-      BASS_CTYPE_STREAM_MP3: Strm_Type:= MP3_STRM;
-      BASS_CTYPE_STREAM_AAC: Strm_Type:= AAC_STRM ;
-      BASS_CTYPE_STREAM_OGG:
+      OGG_STRM:
         begin
           pTag := BASS_ChannelGetTags(chan, BASS_TAG_OGG);
           if (ptag <> nil) then stag1:= TagToStrings(ptag);
-          Strm_Type:= OGG_STRM;
         end;
     end;
     if (icy <> nil) then
@@ -654,7 +677,7 @@ procedure TFWebRadioMain.SetEqual(b: boolean);
 var
   i: Integer;
 begin
-  For i:= 1 to 9 do
+  For i:= 1 to high(fx) do
   begin
     if b then
     begin
@@ -734,20 +757,20 @@ procedure TFWebRadioMain.FormCreate(Sender: TObject);
 var
   s: String;
 begin
-  // install memory font DotMatrix
+  // install memory font DotMatrix at the beginning of process
   {$IFDEF WINDOWS}
     FontDir:= GetTempDir(false);
     FontId := Screen.Fonts.IndexOf('DotMatrix');
     if FontId < 0 then
     begin
-      ResFnt := TResourceStream.Create(hInstance, 'DOTMATRIX', RT_RCDATA);
+      ResFnt:= TLazarusResourceStream.Create('DotMatrix', nil);    // Uses Lazarus Resource instead of "Windows" resource
+      //ResFnt := TResourceStream.Create(hInstance, 'DOTMATRIX', RT_RCDATA);
       DMFontRes:= AddFontMemResourceEx(ResFnt.Memory, ResFnt.Size, nil, @FontCount);
       PostMessage(HWND_BROADCAST, WM_FONTCHANGE, 0, 0) ;
       Application.ProcessMessages;
    end;
     {$ENDIF}
   inherited;
-
   // Variables initialization
   CanClose:= false;
   // Flag needed to execute once some processes in Form activation
@@ -816,10 +839,13 @@ end;
 
 procedure TFWebRadioMain.FormDestroy(Sender: TObject);
 begin
-  if assigned(FileStream) then FileStream.free;
-  if cthread <> 0 then cthread:= 0;
-  if assigned(LangFile) then FreeAndNil(LangFile);
-  if assigned(LangNums) then FreeAndNil(LangNums)
+  try
+    if assigned(FileStream) then FileStream.free;
+    if cthread <> 0 then cthread:= 0;
+    if assigned(LangFile) then FreeAndNil(LangFile);
+    if assigned(LangNums) then FreeAndNil(LangNums)
+  except
+  end;
 end;
 
 // Intercept minimize system system command to correct
@@ -1228,8 +1254,8 @@ end;
 procedure TFWebRadioMain.MsgTimerTimer(Sender: TObject);
 var
   s: string;
-const
-  SrtmTyp: array [1..6] of String = (' WMA',' MP3',' OGG',' AAC', ' WAV', ' FLAC');
+//const
+//  SrtmTyp: array [1..6] of String = (' WMA',' MP3',' OGG',' AAC', ' WAV', ' FLAC');
 begin
   if lparamArr[WP_Error].state then
   begin
@@ -1310,7 +1336,7 @@ begin
   begin
     if CanalInfo.chans < 2 then LStereo.caption:= sMonoCaption else LStereo.caption:= sStereoCaption ;
     LFrequency.Caption := IntToStr(CanalInfo.freq)+' Hz';
-    if ((lparamArr[WP_Connected].value>0) and (lparamArr[WP_Connected].value<7)) then LStatus.Caption:= sConnectedStr+SrtmTyp[lparamArr[WP_Connected].value]
+    if ((lparamArr[WP_Connected].value>0) and (lparamArr[WP_Connected].value<=UNK_STRM)) then LStatus.Caption:= sConnectedStr+StreamName[lparamArr[WP_Connected].value]
       else LStatus.Caption:= sConnectedStr;
   end ;
     lparamArr[WP_Connected].state:= False;
@@ -1956,7 +1982,10 @@ begin
     BASS_Free;
     if RadiosChanged or (FSettings.Settings.version='') then SaveConfig(All) else
     if SettingsChanged then  SaveConfig(Setting) ;
-    if chan <> 0 then BASS_StreamFree(chan);
+    try
+      if chan <> 0 then BASS_StreamFree(chan);
+    except
+    end;
     MsgTimer.Enabled:= false;
     VuTimer.Enabled:= false;
     RecordBtnTimer.Enabled:= false;
@@ -1966,6 +1995,9 @@ begin
        PostMessage(HWND_BROADCAST, WM_FONTCHANGE, 0, 0) ;
        Application.ProcessMessages;
     {$ENDIF}
+    if mp3enclib then Unload_bassencmp3dll;
+    if aacenclib then Unload_bassencaacdll;
+    if oggenclib then Unload_bassencoggdll;
     Application.ProcessMessages;
 
   end else
@@ -2207,6 +2239,8 @@ begin
       FSettings.CBStartup.Caption:= ReadString(LangStr, 'FSettings.CBStartup.Caption', FSettings.CBStartup.Caption);
       FSettings.CBStartMini.Caption:= ReadString(LangStr, 'FSettings.CBStartMini.Caption', FSettings.CBStartMini.Caption);
       FSettings.CBNoChkNewVer.Caption:= ReadString(LangStr, 'FSettings.CBNoChkNewVer.Caption', FSettings.CBNoChkNewVer.Caption);
+      FSettings.CBHideInTaskBar.Caption:= ReadString(LangStr, 'FSettings.CBHideInTaskBar.Caption', FSettings.CBHideInTaskBar.Caption);
+      FSettings.CBShowBtnBar.Caption:= ReadString(LangStr, 'FSettings.CBShowBtnBar.Caption', FSettings.CBShowBtnBar.Caption);;
       FSettings.LBitrate.Caption:= ReadString(LangStr, 'FSettings.LBitrate.Caption', FSettings.LBitrate.Caption);
       FSettings.LSampling.Caption:= ReadString(LangStr, 'FSettings.LSampling.Caption', FSettings.LSampling.Caption);
       FSettings.LLangue.Caption:= ReadString(LangStr, 'FSettings.LLangue.Caption', FSettings.LLangue.Caption);
@@ -2214,8 +2248,10 @@ begin
       FSettings.LFont.Caption:= ReadString(LangStr, 'FSettings.LFont.Caption', FSettings.LFont.Caption);
       FSettings.CBFonts.Hint:= ReadString(LangStr, 'FSettings.CBFonts.Hint',FSettings.CBFonts.Hint);
       FSettings.TPColors.Caption:= ReadString(LangStr, 'FSettings.TPColors.Caption', FSettings.TPColors.Caption);
-      FSettings.CPDisplayText.Caption:= ReadString(LangStr, 'FSettings.CPDisplayText.Caption', FSettings.CPDisplayText.Caption);
-      FSettings.CPDisplayBack.Caption:= ReadString(LangStr, 'FSettings.CPDisplayBack.Caption', FSettings.CPDisplayBack.Caption);
+      FSettings.LDisplayText.Caption:= ReadString(LangStr, 'FSettings.LDisplayText.Caption', FSettings.LDisplayText.Caption);
+      FSettings.LDisplayBack.Caption:= ReadString(LangStr, 'FSettings.LDisplayBack.Caption', FSettings.LDisplayBack.Caption);
+      FSettings.LGenText.Caption:= ReadString(LangStr, 'FSettings.LGenText.Caption', FSettings.LGenText.Caption);
+      FSettings.LGenBack.Caption:= ReadString(LangStr, 'FSettings.LGenBack.Caption', FSettings.LGenBack.Caption);
       FSettings.sMnuCopy:= ReadString(LangStr, 'FSettings.sMnuCopy', 'Copier');
       FSettings.sMnuPaste:= ReadString(LangStr, 'FSettings.sMnuPaste', 'Coller');
 

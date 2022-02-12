@@ -49,3 +49,8 @@ Version 0.7.0.0 - 10/02/2022
 - Improved Icy tag parsing and simplified OpenUrl procedure
 - Added help file (french)
 - Added 32bit version
+
+Version 0.7.0.1 - 12/02/2022
+- Added recognition of MP4 stream
+- Changed installation which didn't isntall properly 32bit version
+

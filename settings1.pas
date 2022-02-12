@@ -413,7 +413,7 @@ begin
       TDOMElement(iNode).SetAttribute ('displayback', ColorToString(FDisplayBack));
       TDOMElement(iNode).SetAttribute ('gentext', ColorToString(FGenText));
       TDOMElement(iNode).SetAttribute ('genback', ColorToString(FGenBack));
-      for j:=1 to 9 do TDOMElement(iNode).SetAttribute ('equfreq'+InttoStr(j), IntToStr(FEquFreqs[j]));
+      for j:=1 to high(FEquFreqs) do TDOMElement(iNode).SetAttribute ('equfreq'+InttoStr(j), IntToStr(FEquFreqs[j]));
 
     Result:= True;
   except
@@ -458,34 +458,32 @@ begin
   for i:= 0 to iNode.Attributes.Length-1 do
   try
     UpCaseAttrib:=UpperCase(iNode.Attributes.Item[i].NodeName);
-
-      if UpCaseAttrib='VERSION' then FVersion:= iNode.Attributes.Item[i].NodeValue;
-      if UpCaseAttrib='LASTVERSION' then FLastVersion:= iNode.Attributes.Item[i].NodeValue;
-      if UpCaseAttrib='SAVSIZEPOS' then FSavSizePos:= StringToBool(iNode.Attributes.Item[i].NodeValue);
-      if UpCaseAttrib='WSTATE' then  FWState:= iNode.Attributes.Item[i].NodeValue;
-      if UpCaseAttrib='LASTUPDCHK' then FLastUpdChk:= StringToTimeDate(iNode.Attributes.Item[i].NodeValue,'dd/mm/yyyy hh:nn:ss');
-      if UpCaseAttrib='NOCHKNEWVER' then FNoChkNewVer:= StringToBool(iNode.Attributes.Item[i].NodeValue);
-      if UpCaseAttrib='STARTUP' then FStartup:= StringToBool(iNode.Attributes.Item[i].NodeValue);
-      if UpCaseAttrib='STARTMINI' then FStartMini:= StringToBool(iNode.Attributes.Item[i].NodeValue);
-      if UpCaseAttrib='HIDEINTASKBAR' then FHideInTaskbar:= StringToBool(iNode.Attributes.Item[i].NodeValue);
-      if UpCaseAttrib='SHOWBTNBAR' then FShowBtnBar:= StringToBool(iNode.Attributes.Item[i].NodeValue);
-      if UpCaseAttrib='RESTART' then FRestart:= StringToBool(iNode.Attributes.Item[i].NodeValue);
-      if UpCaseAttrib='LANGSTR' then FLangStr:= iNode.Attributes.Item[i].NodeValue;
-      if UpCaseAttrib='RADIOFONT' then FRadioFont:= iNode.Attributes.Item[i].NodeValue;
-      if UpCaseAttrib='DATAFOLDER' then FDataFolder:= iNode.Attributes.Item[i].NodeValue;
-      if UpCaseAttrib='LASTRADIO' then FLastRadio:= StringToInt(iNode.Attributes.Item[i].NodeValue);
-      if UpCaseAttrib='LASTURL' then FLastUrl:= iNode.Attributes.Item[i].NodeValue;
-      if UpCaseAttrib='LASTVOLUME' then FLastVolume:= StringToInt(iNode.Attributes.Item[i].NodeValue);
-      if UpCaseAttrib='ENCODING' then FEncoding:= iNode.Attributes.Item[i].NodeValue;
-      if UpCaseAttrib='SAMPLING' then FSampling:= StringToInt(iNode.Attributes.Item[i].NodeValue);
-      if UpCaseAttrib='BITRATE' then FBitrate:= StringToInt(iNode.Attributes.Item[i].NodeValue);
-      if UpCaseAttrib='EQUENABLED' then FEquEnabled:= StringToBool(iNode.Attributes.Item[i].NodeValue);
-      if UpCaseAttrib='DISPLAYTEXT' then FDisplayText:= StringToColour(iNode.Attributes.Item[i].NodeValue);
-      if UpCaseAttrib='DISPLAYBACK' then FDisplayBack:= StringToColour(iNode.Attributes.Item[i].NodeValue);
-      if UpCaseAttrib='GENTEXT' then FGenText:= StringToColour(iNode.Attributes.Item[i].NodeValue);
-      if UpCaseAttrib='GENBACK' then FGenBack:= StringToColour(iNode.Attributes.Item[i].NodeValue);
-
-      for j:= 1 to 9 do if UpCaseAttrib='EQUFREQ'+InttoStr(j) then fEquFreqs[j]:= StringToInt(iNode.Attributes.Item[i].NodeValue);
+    if UpCaseAttrib='VERSION' then FVersion:= iNode.Attributes.Item[i].NodeValue;
+    if UpCaseAttrib='LASTVERSION' then FLastVersion:= iNode.Attributes.Item[i].NodeValue;
+    if UpCaseAttrib='SAVSIZEPOS' then FSavSizePos:= StringToBool(iNode.Attributes.Item[i].NodeValue);
+    if UpCaseAttrib='WSTATE' then  FWState:= iNode.Attributes.Item[i].NodeValue;
+    if UpCaseAttrib='LASTUPDCHK' then FLastUpdChk:= StringToTimeDate(iNode.Attributes.Item[i].NodeValue,'dd/mm/yyyy hh:nn:ss');
+    if UpCaseAttrib='NOCHKNEWVER' then FNoChkNewVer:= StringToBool(iNode.Attributes.Item[i].NodeValue);
+    if UpCaseAttrib='STARTUP' then FStartup:= StringToBool(iNode.Attributes.Item[i].NodeValue);
+    if UpCaseAttrib='STARTMINI' then FStartMini:= StringToBool(iNode.Attributes.Item[i].NodeValue);
+    if UpCaseAttrib='HIDEINTASKBAR' then FHideInTaskbar:= StringToBool(iNode.Attributes.Item[i].NodeValue);
+    if UpCaseAttrib='SHOWBTNBAR' then FShowBtnBar:= StringToBool(iNode.Attributes.Item[i].NodeValue);
+    if UpCaseAttrib='RESTART' then FRestart:= StringToBool(iNode.Attributes.Item[i].NodeValue);
+    if UpCaseAttrib='LANGSTR' then FLangStr:= iNode.Attributes.Item[i].NodeValue;
+    if UpCaseAttrib='RADIOFONT' then FRadioFont:= iNode.Attributes.Item[i].NodeValue;
+    if UpCaseAttrib='DATAFOLDER' then FDataFolder:= iNode.Attributes.Item[i].NodeValue;
+    if UpCaseAttrib='LASTRADIO' then FLastRadio:= StringToInt(iNode.Attributes.Item[i].NodeValue);
+    if UpCaseAttrib='LASTURL' then FLastUrl:= iNode.Attributes.Item[i].NodeValue;
+    if UpCaseAttrib='LASTVOLUME' then FLastVolume:= StringToInt(iNode.Attributes.Item[i].NodeValue);
+    if UpCaseAttrib='ENCODING' then FEncoding:= iNode.Attributes.Item[i].NodeValue;
+    if UpCaseAttrib='SAMPLING' then FSampling:= StringToInt(iNode.Attributes.Item[i].NodeValue);
+    if UpCaseAttrib='BITRATE' then FBitrate:= StringToInt(iNode.Attributes.Item[i].NodeValue);
+    if UpCaseAttrib='EQUENABLED' then FEquEnabled:= StringToBool(iNode.Attributes.Item[i].NodeValue);
+    if UpCaseAttrib='DISPLAYTEXT' then FDisplayText:= StringToColour(iNode.Attributes.Item[i].NodeValue);
+    if UpCaseAttrib='DISPLAYBACK' then FDisplayBack:= StringToColour(iNode.Attributes.Item[i].NodeValue);
+    if UpCaseAttrib='GENTEXT' then FGenText:= StringToColour(iNode.Attributes.Item[i].NodeValue);
+    if UpCaseAttrib='GENBACK' then FGenBack:= StringToColour(iNode.Attributes.Item[i].NodeValue);
+    for j:= 1 to high(fEquFreqs) do if UpCaseAttrib='EQUFREQ'+InttoStr(j) then fEquFreqs[j]:= StringToInt(iNode.Attributes.Item[i].NodeValue);
     result:= true;
   except
     Result:= False;

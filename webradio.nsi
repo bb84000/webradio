@@ -15,7 +15,8 @@
   OutFile "InstallWebradio.exe"
   !define lazarus_dir "C:\Users\Bernard\Documents\Lazarus"
   !define source_dir "${lazarus_dir}\webradio"
-  
+
+
   RequestExecutionLevel admin
   
   ;Windows vista.. 10 manifest
@@ -28,6 +29,10 @@
   ; The default installation directory
   InstallDir "$PROGRAMFILES\NewWebRadio"
 
+  var exe_to_inst       ; "32.exe" or "64.exe"
+  var exe_to_del
+  var dll_to_inst       ; "32.dll" or "64.dll"
+  var dll_to_del
 ;--------------------------------
 ; Interface Settings
 
@@ -118,7 +123,6 @@
    
   ; Change nsis brand line
   BrandingText "$(ProgramDescStr) version ${FileVersion} - bb - sdtp"
-  
 
 ; The stuff to install
 Section "" ;No components page, name is not important
@@ -128,63 +132,82 @@ Section "" ;No components page, name is not important
  ${If} ${RunningX64}
     SetRegView 64    ; change registry entries and install dir for 64 bit
   ${EndIf}
-  Var /GLOBAL prg_to_inst
-  Var /GLOBAL prg_to_del
+
+  ;Copy all files, files whhich have the same name in 32 and 64 bit are copied
+  ; with 64 or 32 in their name, the renamed
+  File  "${source_dir}\webradiowin64.exe"
+  File  "${source_dir}\webradiowin32.exe"
+  File "/oname=bass64.dll" "${lazarus_dir}\Bass\x64\bass.dll"
+  File "/oname=bassenc64.dll" "${lazarus_dir}\Bass\x64\bassenc.dll"
+  File "/oname=bass32.dll" "${lazarus_dir}\Bass\bass.dll"
+  File "/oname=bassenc32.dll" "${lazarus_dir}\Bass\bass.dll"
+  ; Install plugins
+  CreateDirectory "$INSTDIR\plugins"
+  SetOutPath "$INSTDIR\plugins"
+  File "/oname=bass_aac64.dll" "${lazarus_dir}\Bass\x64\bass_aac.dll"
+  File "/oname=basswma64.dll" "${lazarus_dir}\Bass\x64\basswma.dll"
+  File "/oname=bassflac64.dll" "${lazarus_dir}\Bass\x64\bassflac.dll"
+  File "/oname=bassenc_mp364.dll" "${lazarus_dir}\Bass\x64\bassenc_mp3.dll"
+  File "/oname=bassenc_aac64.dll" "${lazarus_dir}\Bass\x64\bassenc_aac.dll"
+  File "/oname=bassenc_ogg64.dll" "${lazarus_dir}\Bass\x64\bassenc_ogg.dll"
+  File "/oname=bass_aac32.dll" "${lazarus_dir}\Bass\bass_aac.dll"
+  File "/oname=basswma32.dll" "${lazarus_dir}\Bass\basswma.dll"
+  File "/oname=bassflac32.dll" "${lazarus_dir}\Bass\bassflac.dll"
+  File "/oname=bassenc_mp332.dll" "${lazarus_dir}\Bass\bassenc_mp3.dll"
+  File "/oname=bassenc_aac32.dll" "${lazarus_dir}\Bass\bassenc_aac.dll"
+  File "/oname=bassenc_ogg32.dll" "${lazarus_dir}\Bass\bassenc_ogg.dll"
+
 
   ${If} ${RunningX64}  ; change registry entries and install dir for 64 bit
-     StrCpy "$prg_to_inst" "$INSTDIR\webradiowin64.exe"
-     StrCpy "$prg_to_del" "$INSTDIR\webradiowin32.exe"
-     File  "${lazarus_dir}\Bass\x64\bass.dll"
-     File  "${lazarus_dir}\Bass\x64\bassenc.dll"
-     CreateDirectory "$INSTDIR\plugins"
-     SetOutPath "$INSTDIR\plugins"
-     File  "${lazarus_dir}\Bass\x64\bass_aac.dll"
-     File  "${lazarus_dir}\Bass\x64\bassflac.dll"
-     File  "${lazarus_dir}\Bass\x64\basswma.dll"
-     File  "${lazarus_dir}\Bass\x64\bassenc_aac.dll"
-     ;File  "${source_dir}\plugins\x64\bassenc_flac.dll"
-     File  "${lazarus_dir}\Bass\x64\bassenc_mp3.dll"
-     File  "${lazarus_dir}\Bass\x64\bassenc_ogg.dll"
-
-     ;IfFileExists "$WINDIR\sysnative\libeay32.dll" ssl_lib64_found ssl_lib64_not_found
-     ;ssl_lib64_not_found:
-     ;  File "${lazarus_dir}\openssl\win64\libeay32.dll"
-     ;  File "${lazarus_dir}\openssl\win64\ssleay32.dll"
-     ;  File "${lazarus_dir}\openssl\OpenSSL License.txt"
-     ;ssl_lib64_found:
+     StrCpy $exe_to_inst "64.exe"
+     StrCpy $dll_to_inst "64.dll"
+     StrCpy $exe_to_del "32.exe"
+     StrCpy $dll_to_del "32.dll"
   ${Else}
-     StrCpy "$prg_to_inst" "$INSTDIR\webradiowin32.exe"
-     StrCpy "$prg_to_del" "$INSTDIR\webradiowin64.exe"
-     CreateDirectory "$INSTDIR\plugins"
-     SetOutPath "$INSTDIR\plugins"
-     File  "${lazarus_dir}\Bass\bass_aac.dll"
-     File  "${lazarus_dir}\Bass\bassflac.dll"
-     File  "${lazarus_dir}\Bass\basswma.dll"
-     File  "${lazarus_dir}\Bass\bassenc_aac.dll"
-     ;File  "${source_dir}\plugins\x64\bassenc_flac.dll"
-     File  "${lazarus_dir}\Bass\bassenc_mp3.dll"
-     File  "${lazarus_dir}\Bass\bassenc_ogg.dll"
-
-     ;IfFileExists "$WINDIR\system32\libeay32.dll" ssl_lib32_found ssl_lib32_not_found
-     ;ssl_lib32_not_found:
-     ;  File "${lazarus_dir}\openssl\win32\libeay32.dll"
-     ;  File "${lazarus_dir}\openssl\win32\ssleay32.dll"
-     ;  File "${lazarus_dir}\openssl\OpenSSL License.txt"
-     ;ssl_lib32_found:
-   ${EndIf}
-   SetOutPath "$INSTDIR"  ; Dans le cas ou on n'aurait pas pu fermer l'application
-   Delete /REBOOTOK "$INSTDIR\webradio.exe"
-   File "${source_dir}\webradiowin64.exe"
-   File "${source_dir}\licensf.txt"
-   File "${source_dir}\license.txt"
-   File "${source_dir}\history.txt"
-   File "${source_dir}\webradio.txt"
-   File "${source_dir}\webradio.lng"
-   File "${source_dir}\webradio.ini"
-    ;File /r "${source_dir}\help"
-  Rename /REBOOTOK "$prg_to_inst" "$INSTDIR\webradio.exe"
-  Delete /REBOOTOK "$prg_to_del"
-
+     StrCpy $exe_to_inst "32.exe"
+     StrCpy $dll_to_inst "32.dll"
+     StrCpy $exe_to_del "64.exe"
+     StrCpy $dll_to_del "64.dll"
+  ${EndIf}
+  SetOutPath "$INSTDIR"
+  ; Delete old files if they exist as we can not rename if the file exists
+  Delete /REBOOTOK "$INSTDIR\webradio.exe"
+  Delete /REBOOTOK "$INSTDIR\bass.dll"
+  Delete /REBOOTOK "$INSTDIR\bassenc.dll"
+  Delete /REBOOTOK "$INSTDIR\plugins\bass_aac.dll"
+  Delete /REBOOTOK "$INSTDIR\plugins\basswma.dll"
+  Delete /REBOOTOK "$INSTDIR\plugins\bassflac.dll"
+  Delete /REBOOTOK "$INSTDIR\plugins\bassenc_mp3.dll"
+  Delete /REBOOTOK "$INSTDIR\plugins\bassenc_aac.dll"
+  Delete /REBOOTOK "$INSTDIR\plugins\bassenc_ogg.dll"
+  ; Rename 32 or 64 files
+  Rename /REBOOTOK "$INSTDIR\webradiowin$exe_to_inst" "$INSTDIR\webradio.exe"
+  Rename /REBOOTOK "$INSTDIR\bass$dll_to_inst" "$INSTDIR\bass.dll"
+  Rename /REBOOTOK "$INSTDIR\bassenc$dll_to_inst" "$INSTDIR\bassenc.dll"
+  Rename /REBOOTOK "$INSTDIR\plugins\bass_aac$dll_to_inst" "$INSTDIR\plugins\bass_aac.dll"
+  Rename /REBOOTOK "$INSTDIR\plugins\basswma$dll_to_inst" "$INSTDIR\plugins\basswma.dll"
+  Rename /REBOOTOK "$INSTDIR\plugins\bassflac$dll_to_inst" "$INSTDIR\plugins\bassflac.dll"
+  Rename /REBOOTOK "$INSTDIR\plugins\bassenc_mp3$dll_to_inst" "$INSTDIR\plugins\bassenc_mp3.dll"
+  Rename /REBOOTOK "$INSTDIR\plugins\bassenc_aac$dll_to_inst" "$INSTDIR\plugins\bassenc_aac.dll"
+  Rename /REBOOTOK "$INSTDIR\plugins\bassenc_ogg$dll_to_inst" "$INSTDIR\plugins\bassenc_ogg.dll"
+  ; delete non used files
+  Delete "$INSTDIR\webradiowin$exe_to_del"
+  Delete "$INSTDIR\bass$dll_to_del"
+  Delete "$INSTDIR\bassenc$dll_to_del"
+  Delete "$INSTDIR\plugins\bass_aac$dll_to_del"
+  Delete "$INSTDIR\plugins\basswma$dll_to_del"
+  Delete "$INSTDIR\plugins\bassflac$dll_to_del"
+  Delete "$INSTDIR\plugins\bassenc_mp3$dll_to_del"
+  Delete "$INSTDIR\plugins\bassenc_aac$dll_to_del"
+  Delete "$INSTDIR\plugins\bassenc_ogg$dll_to_del"
+  ; Install other files
+  File "${source_dir}\licensf.txt"
+  File "${source_dir}\license.txt"
+  File "${source_dir}\history.txt"
+  File "${source_dir}\webradio.txt"
+  File "${source_dir}\webradio.lng"
+  File "${source_dir}\webradio.ini"
+  File /r "${source_dir}\help"
   ; write out uninstaller
   WriteUninstaller "$INSTDIR\uninst.exe"
   ; Get install folder size
@@ -227,15 +250,15 @@ Delete "$INSTDIR\history.txt"
 Delete "$INSTDIR\webradio.txt"
 Delete "$INSTDIR\webradio.lng"
 Delete "$INSTDIR\webradio.ini"
-Delete "$INSTDIR\bass.dll"
-Delete "$INSTDIR\bassenc.dll"
+Delete /REBOOTOK "$INSTDIR\bass.dll"
+Delete /REBOOTOK "$INSTDIR\bassenc.dll"
 ;Delete "$INSTDIR\libeay32.dll"
 ;Delete "$INSTDIR\ssleay32.dll"
 Delete "$INSTDIR\licensf.txt"
 Delete "$INSTDIR\license.txt"
 ;Delete "$INSTDIR\OpenSSL License.txt"
 Delete "$INSTDIR\uninst.exe"
-;RMDir /r "$INSTDIR\help"
+RMDir /r "$INSTDIR\help"
 RMDir /r "$INSTDIR\plugins"
 ; remove shortcuts, if any.
   Delete  "$SMPROGRAMS\NewWebradio\$(ProgramLnkStr)"

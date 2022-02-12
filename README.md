@@ -9,12 +9,12 @@ Play radio from a list (You have to create it with radio name, url and logo)<br>
 Up to 20 presets<br>
 Play radio url<br>
 Record playing radio (wav, mp3, ogg, acc)<br>
-Play media file (wav, mp3, ogg, acc and flac)
+Play media file (wav, mp3, ogg, acc)
 
 ### Installation
 
 [Download the zip file](https://github.com/bb84000/webradio/raw/main/webradio.zip) , extract and run installer.
 
-
-Application uses Un4seen Development Bass libraries which can be obtained at https://www.un4seen.com/:
+Open source program, usage is free<br>
+Application uses Un4seen Development Bass libraries which can be obtained at https://www.un4seen.com/.<br>
 Minimal libraries : bass.dll and bassenc.dll

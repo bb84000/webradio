@@ -13,14 +13,12 @@
         <DpiAware Value="True"/>
       </XPManifest>
       <Icon Value="0"/>
-      <Resources Count="1">
-        <Resource_0 FileName="DotMatrix.ttf" Type="RCDATA" ResourceName="DOTMATRIX"/>
-      </Resources>
     </General>
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <MinorVersionNr Value="7"/>
-      <StringTable CompanyName="sdtp - bb95" FileDescription="Tuner radio web - Web radio tuner" InternalName="WebRadio" LegalCopyright="sdtp - bb95" LegalTrademarks="sdtp - bb95" OriginalFilename="WebRadio.exe" ProductName="WebRadio" ProductVersion="0.7.0.0"/>
+      <BuildNr Value="1"/>
+      <StringTable CompanyName="sdtp - bb95" FileDescription="Tuner radio web - Web radio tuner" InternalName="WebRadio" LegalCopyright="sdtp - bb95" LegalTrademarks="sdtp - bb95" OriginalFilename="WebRadio.exe" ProductName="WebRadio" ProductVersion="0.7.0.1"/>
     </VersionInfo>
     <BuildModes>
       <Item Name="Default" Default="True"/>

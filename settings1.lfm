@@ -395,8 +395,8 @@ object FSettings: TFSettings
         Left = 8
         Height = 15
         Top = 21
-        Width = 102
-        Caption = 'Texte de l'' afficheur'
+        Width = 99
+        Caption = 'Texte de l''afficheur'
       end
       object CPDisplayText: TColorPicker
         Left = 130
@@ -449,7 +449,7 @@ object FSettings: TFSettings
         TabOrder = 2
       end
       object LGenBack: TLabel
-        Left = 264
+        Left = 270
         Height = 15
         Top = 46
         Width = 69

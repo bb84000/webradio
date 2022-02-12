@@ -3,5 +3,8 @@ lib/**
 plugins/**
 *.dll
 webradiowin64.exe
+webradiowin32.exe
 InstallWebradio.exe
 DotMatrix.ttf
+webradiowiki.txt
+webradiowiki_fr.txt

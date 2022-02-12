@@ -165,7 +165,7 @@ begin
   ResComp[cdcOrder]:= NumericCompare(Entry1^.Order, Entry2^.Order);
 
   R := 0;
-  for J := 0 to 4 do
+  for J := 0 to high(ClesTri) do
   begin
     if ResComp[ClesTri[J]] <> 0 then
      begin
