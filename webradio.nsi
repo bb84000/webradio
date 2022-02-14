@@ -29,10 +29,13 @@
   ; The default installation directory
   InstallDir "$PROGRAMFILES\NewWebRadio"
 
+  ; Variables to properly manage X64 or X32
   var exe_to_inst       ; "32.exe" or "64.exe"
   var exe_to_del
   var dll_to_inst       ; "32.dll" or "64.dll"
   var dll_to_del
+  var instnewfolder     ; if old Delphi 32 bits version, instrall 32 bit new version in another folder
+  var instfolder
 ;--------------------------------
 ; Interface Settings
 
@@ -48,6 +51,7 @@
   !define MUI_FINISHPAGE_SHOWREADME
   !define MUI_FINISHPAGE_SHOWREADME_TEXT "$(Check_box)"
   !define MUI_FINISHPAGE_SHOWREADME_FUNCTION inst_shortcut
+  !define MUI_FINISHPAGE_SHOWREADME_NOTCHECKED
 ; Pages
 
   !insertmacro MUI_PAGE_WELCOME
@@ -284,13 +288,19 @@ Function inst_shortcut
 FunctionEnd
 
 Function .onInit
+
   ; !insertmacro MUI_LANGDLL_DISPLAY
   ${If} ${RunningX64}
     SetRegView 64    ; change registry entries and install dir for 64 bit
-    StrCpy "$INSTDIR" "$PROGRAMFILES64\newwebradio"
+    ; no conflict as the old program is in x86 folder
+    StrCpy "$instnewfolder" "$PROGRAMFILES64\webradio";
+    StrCpy "$instfolder" "$PROGRAMFILES64\webradio";
   ${Else}
-
+    ; new folder is different, don't break old program if it is installed
+    StrCpy "$instnewfolder" "$PROGRAMFILES\newwebradio";
+    StrCpy "$instfolder" ,"$PROGRAMFILES\webradio";
   ${EndIf}
+  
   SetShellVarContext all
   ; Close all apps instance
   FindProcDLL::FindProc "$INSTDIR\webradio.exe"
@@ -299,14 +309,21 @@ Function .onInit
     FindProcDLL::WaitProcEnd "$INSTDIR\webradio.exe" -1
     FindProcDLL::FindProc "$INSTDIR\webradio.exe"
   ${EndWhile}
+  StrCpy "$INSTDIR" "$instfolder"
   ; See if there is old program
   ReadRegStr $R0 HKLM "SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\webradio" "UninstallString"
+  ${If} ${RunningX64}
+    SetRegView 64    ; change registry entries and install dir for 64 bit
+  ${EndIf}
    ${If} $R0 == ""
+        StrCpy $INSTDIR "$instfolder"
         Goto Done
    ${EndIf}
    MessageBox MB_YESNO "$(Remove_Old)" IDYES true IDNO false
    true:
+      StrCpy $INSTDIR "$instfolder"
       ExecWait $R0
   false:
+     StrCpy $INSTDIR "$instnewfolder"
   Done:
 FunctionEnd

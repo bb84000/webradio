@@ -54,3 +54,10 @@ Version 0.7.0.1 - 12/02/2022
 - Added recognition of MP4 stream
 - Changed installation which didn't isntall properly 32bit version
 
+Version 0.7.0.2 - 14/02/2022
+- Corrected code : radio name or url not displayed during connecting phase
+- Some missing translations added
+- Installation refined : avoid conflict on 32 systems with old Delphi webradio
+- Changed display: radio name is the one given by the user when creating the radio in list
+  The name transmitted by the statuionb si displayed bezlow (if any)
+- Added native format recording feature (without re-encoding)

@@ -377,6 +377,15 @@ object FSettings: TFSettings
         NumGlyphs = 2
         OnClick = SBDatafolderClick
       end
+      object RBNATIVE: TRadioButton
+        Left = 260
+        Height = 19
+        Top = 24
+        Width = 52
+        Caption = 'NATIF'
+        OnChange = RBEnCodingChange
+        TabOrder = 7
+      end
     end
     object TPColors: TTitlePanel
       Left = 15

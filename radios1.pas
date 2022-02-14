@@ -516,7 +516,8 @@ begin
   EName.ReadOnly:= true;
   EUrl.ReadOnly:= true;
   EComment.ReadOnly:= true;
-  EFavicon.ReadOnly:= true;
+  EFavicon.ShowHint:= false;
+  SBFavicon.Enabled:= false;
 end;
 
 procedure TFRadios.FormShow(Sender: TObject);
@@ -580,7 +581,9 @@ begin
   EName.ReadOnly:= false;
   EUrl.ReadOnly:= false;
   EComment.ReadOnly:= false;
-  EFavicon.ReadOnly:= false;
+  EFavicon.ReadOnly:= true;
+  EFavicon.ShowHint:= true;
+  SBFavicon.enabled:= true;
 end;
 
 

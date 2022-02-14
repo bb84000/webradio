@@ -48,6 +48,7 @@ object FRadios: TFRadios
       Height = 23
       Top = 86
       Width = 296
+      ParentShowHint = False
       ReadOnly = True
       TabOrder = 0
     end
@@ -63,6 +64,7 @@ object FRadios: TFRadios
       Height = 23
       Top = 116
       Width = 296
+      ParentShowHint = False
       ReadOnly = True
       TabOrder = 1
     end
@@ -83,9 +85,12 @@ object FRadios: TFRadios
     object EFavicon: TEdit
       Left = 92
       Height = 23
+      Hint = 'Cliquez sur le bouton à droite de ce champ pour sélectionner une image'
       Top = 146
       Width = 270
+      ParentShowHint = False
       ReadOnly = True
+      ShowHint = True
       TabOrder = 2
     end
     object EName: TEdit
@@ -93,6 +98,7 @@ object FRadios: TFRadios
       Height = 23
       Top = 56
       Width = 296
+      ParentShowHint = False
       ReadOnly = True
       TabOrder = 3
     end

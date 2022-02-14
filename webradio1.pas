@@ -45,7 +45,6 @@ const
   BASS_SYNC_HLS_SEGMENT= $10300;
   BASS_TAG_HLS_EXTINF  = $14000;
 
-
   // Stream identifiers (different from Bass ctype
   WMA_STRM= 1;   // BASS_CTYPE_STREAM_WMA = $10300;
   WMA_MP3_STRM= 2;  //  BASS_CTYPE_STREAM_WMA_MP3  = $10301;
@@ -83,7 +82,6 @@ type
                          wBitsPerSample: WORD;
                          cbSize: WORD;
  End;
-
  WAVEFORMATEX    = _WAVEFORMATEX;
  PWAVEFORMATEX   = ^_WAVEFORMATEX;
 
@@ -156,6 +154,7 @@ type
     SBEqualizer: TSpeedButton;
     SBRadList: TSpeedButton;
     LRadioName: TSCrollLabel;
+    LRadioIcyName: TSCrollLabel;
     Separator1: TMenuItem;
     Separator2: TMenuItem;
     Separator3: TMenuItem;
@@ -226,7 +225,6 @@ type
     procedure PMnuRadListClick(Sender: TObject);
     procedure PMnuChooseRadioClick(Sender: TObject);
     procedure PMnuDeletePresetClick(Sender: TObject);
-    procedure PMainClick(Sender: TObject);
     procedure PMnuAboutClick(Sender: TObject);
     procedure PMnuOpenURLClick(Sender: TObject);
     procedure PMnuQuitClick(Sender: TObject);
@@ -266,6 +264,7 @@ type
     version: String;
     WebRadioAppsData: String;
     OKBtn, YesBtn, NoBtn, CancelBtn: string;
+    sMnuDeletePreset: string;
     sConnectStr, sConnectedStr, sNotConnectedStr, sLoadStr: String;
     ErrNoBassPLAY, ErrNoBassEnc, ErrBassVersion, ErrBassEncVer: String;
     ErrUnsupportedEnc, ErrEncoding : String;
@@ -281,6 +280,8 @@ type
     sMuteMenu, sMutedMenu: String;
     sEnterUrl: String;
     sRecordingHint, sStopRecordingHint: String;
+    sNoradio: String;
+    sNopreset: string;
     HttpErrMsgNames: array [0..16] of string;
     PrevTop, PrevLeft: integer;
     SettingsChanged, RadiosChanged: Boolean;
@@ -336,7 +337,7 @@ type
     procedure ChangeColors;
   public
     BassWMA, BassAAC, BassFLAC, BassEnc, BassEncMP3: HPlugin;
-    ID3Tag: TAG_ID3;
+
     StreamSave:boolean;
     mp3file: String;
     DefaultCaption: String;
@@ -360,6 +361,7 @@ var
   CenterFreqs : array [1..9] of Integer = (62, 125, 250, 500, 1000, 2000, 4000, 8000, 16000);
   fx: array[1..9] of integer;
   IcyTag: TIcyTag;
+  ID3Tag: TAG_ID3;
 
   function AddFontMemResourceEx(pbFont: Pointer; cbFont: DWORD; pdv: Pointer; pcFonts: LPDWORD): LongWord; stdcall;
     external 'gdi32.dll' Name 'AddFontMemResourceEx';
@@ -403,12 +405,16 @@ end;
 // easily concatenate several tags (ie in wma and ogg streams)
 
 function TagToStrings (tag: Pchar): String;
+var
+  i: integer;
 begin
+  i:= 0;
   result:= '';
-  while (tag^ <> #0) do
+  while (tag^<>#0) and (i<100) do
   begin
     result:= result+Copy(tag, 1, MaxInt)+LineEnding;
     tag := tag + Length(tag) + 1;
+    inc(i);  // avoid infinite loop
   end;
 end;
 
@@ -555,7 +561,7 @@ begin
   //Initialze buffer
   for i:= 0 to high(Buff) do Buff[i]:= char(0);
   // Copy tag in a buffer
-  Move(FWebRadioMain.ID3Tag, Buff, SizeOf(Buff));
+  Move(ID3Tag, Buff, SizeOf(Buff));
   //FileStreamStuff
   if FWebRadioMain.StreamSave then
   begin
@@ -612,7 +618,7 @@ begin
      if chan <> 0 then BASS_StreamFree(chan) ;
   end else
   begin
-    SimulateMsg(WP_Connecting, True, Copy(url, 1, length(url)));
+     SimulateMsg(WP_Connecting, True, CurRadio.name); //SimulateMsg(WP_Connecting, True, Copy(url, 1, length(url)));
     // Progress
     repeat
       len := BASS_StreamGetFilePosition(chan, BASS_FILEPOS_END);
@@ -653,7 +659,6 @@ begin
       SimulateMsg(WP_RadioName, true, IcyTag.name);
       BitRate:= IcyTag.bitrate;
     end;
-
     SimulateMsg(WP_Connected, true, Strm_Type);
     if Strm_Type=WMA_STRM then BASS_ChannelSetSync(chan, BASS_SYNC_WMA_META, 0, SYNCPROC(@MetaSync), nil)
     else BASS_ChannelSetSync(chan, BASS_SYNC_META, 0, SYNCPROC(@MetaSync), nil); ;
@@ -708,7 +713,7 @@ begin
      0,
      0,
      BASS_STREAM_AUTOFREE );
-    SimulateMsg(WP_Connecting, True, ' ');
+    SimulateMsg(WP_Connecting, True, filename);
    BASS_ChannelGetInfo(Chan, CanalInfo);
    Case CanalInfo.ctype of
       BASS_CTYPE_STREAM_WMA : filtyp:= 1;
@@ -900,12 +905,10 @@ begin
   if not Initialized then
   begin
     InitButtons;
-
     RegularHeight:= height;
     Initialize;
     //Check Update, async call to let stuff loading
     Application.QueueAsyncCall(@CheckUpdate, ChkVerInterval);
-
   end;
   // Initialisation du flux à zéro
   Chan:= 0;
@@ -975,6 +978,8 @@ begin
   if Assigned(IniFile) then IniFile.free;
   LoadSettings(ConfigFileName);
   ModLangue;
+  LRadioName.Caption:= sNoradio;
+  LRadioIcyName.Caption:= ' ';
   if (Pos('64', OSVersion.Architecture)>0) and (OsTarget='32 bits') then
     MsgDlg(Caption, sUse64bit, mtInformation,  [mbOK], [OKBtn]);
   ShowBtnBar;
@@ -994,7 +999,6 @@ begin
   BASS_SetConfig(BASS_CONFIG_NET_TIMEOUT, bass_timout);
   BASS_SetConfig(BASS_CONFIG_NET_PLAYLIST, 1); // enable playlist processing
   BASS_SetConfig(BASS_CONFIG_NET_PREBUF, 0); // minimize automatic pre-buffering, so we can do it (and display it) instead
-
   // in case startup was done after a session end
   if FSettings.Settings.Restart then
   begin
@@ -1097,7 +1101,7 @@ begin
         TSB.Font.Color:= clScrollBar;
         TSB.StateNormal.Color:= clMedGray;
         TSB.StateHover.Color:= clMedGray;
-        TSB.Hint:= '';
+        TSB.Hint:= sNopreset;
       end;
     end;
   end;
@@ -1108,6 +1112,7 @@ end;
 procedure TFWebRadioMain.ChangeColors;
 begin
   LRadioName.Font.Color:= FSettings.Settings.DisplayText;
+  LRadioIcyName.Font.Color:= FSettings.Settings.DisplayText;
   LStatus.Font.Color:= FSettings.Settings.DisplayText;
   Lstereo.Font.Color:= FSettings.Settings.DisplayText;
   LBitrate.Font.Color:= FSettings.Settings.DisplayText;
@@ -1294,36 +1299,30 @@ begin
     then s:= sLoadStr+' '+CurRadio.Name
     else s:= sLoadStr+' '+lparamArr[WP_Connecting].value;
     LRadioName.Caption:= (s);
+    LRadioIcyName.Caption:= ' ';
     lparamArr[WP_Connecting].state:= False;
   end;
   // WP_Radioname message replacement
   if lparamArr[WP_RadioName].state then
   begin
     // Radio preset
-    if length(CurRadio.Name) > 0 then
+    if length(CurRadio.Name) > 1 then
     begin
       Caption:= CurRadio.Name;
+      LRadioName.Caption:= Caption;
       s:= lparamArr[WP_RadioName].value;
-      if length(s)< 2 then s:= Caption;
-      LRadioName.Caption:= TrimLeft(UTF8ToAnsi(s));
+      if length(s)< 2 then s:= ' '; //Caption;
+      LRadioIcyName.Caption:= TrimLeft(UTF8ToAnsi(s));
     end else
     begin
       Caption:= lparamArr[WP_RadioName].value;
       if length(caption) =0 then Caption:= CurRadio.url;
       LRadioName.Caption:= Caption;
+      LRadioIcyName.Caption:= ' ';
    end;
    Application.Title:= Caption ;
    TrayRadio.Hint:= Caption;
-          //LastUrl:= CurRadio.url;
-          //PauseBtn.Enabled:= True;
-          //StopBtn.Enabled:= ;
-          //PlayBtn.Enabled:= False;
-          //RecBtn.Enabled:= True;
-          //Recording:= False;
-          //Paused:= False;
-          //Stopped:= False;
-    //b_radioname:= false
-    lparamArr[WP_RadioName].state := false;
+   lparamArr[WP_RadioName].state := false;
   end;
   // WP_Progress message replacement
   if lparamArr[WP_Progress].state then
@@ -1392,15 +1391,11 @@ begin
   end;
   SetEqual(false);
   if FSettings.Settings.EquEnabled then SetEqual(true);
-
 end;
-
-
 
 procedure TFWebRadioMain.PMnuRadListClick(Sender: TObject);
 begin
   FRadios.showmodal;
-
   LoadPresets;
 end;
 
@@ -1430,11 +1425,6 @@ procedure TFWebRadioMain.PMnuDeletePresetClick(Sender: TObject);
 begin
   FRadios.Radios.Presets[TmpPreset]:= 0;
   LoadPresets;
-end;
-
-procedure TFWebRadioMain.PMainClick(Sender: TObject);
-begin
-
 end;
 
 procedure TFWebRadioMain.PMnuOpenRadioItemClick(Sender: TObject);
@@ -1498,7 +1488,7 @@ begin
   s:= InputDlg(DefaultCaption, sEnterUrl, '', OKBtn, CancelBtn, 0 );
   if length(s) > 0 then
   try
-    CurRadio.Name:='';
+    CurRadio.Name:=s;
     Curradio.uid:= 0;
     Curradio.url:= s;
     Curradio.favicon:='';
@@ -1527,11 +1517,8 @@ begin
     SBRecord.Enabled:= false;
     SBStop.Enabled:= true;
     SBPause.Enabled:= true;
-
   end;
 end;
-
-
 
 procedure TFWebRadioMain.SBStopClick(Sender: TObject);
 begin
@@ -1567,11 +1554,12 @@ begin
   uid:= FRadios.Radios.Presets[i];
   if (uid <= 0) then
   begin
-    PMnuDeletePreset.Enabled:= false;
+    PMnuDeletePreset.visible:= false;
     CropBitmap(ILButtons, PMnuDeletePreset.Bitmap, false, 14);
   end else
   begin
-    PMnuDeletePreset.Enabled:= true;
+    PMnuDeletePreset.visible:= true;
+    PMnuDeletePreset.Caption:= Format(sMnuDeletePreset, [TmpPreset]);
     CropBitmap(ILButtons, PMnuDeletePreset.Bitmap, true, 14);
     TColorSpeedButton(Sender).Hint:= FRadios.FindbyUID(uid).name;
   end;
@@ -1595,25 +1583,10 @@ begin
   begin
     PnlTop.Visible:= true;
     Height:= RegularHeight;
-        {
-
-
-    FMinHeight:= BarsHeight+GetSystemMetrics(SM_CYCAPTION)+142;
-    Settings.HideBars:= False;
-    PnlTop.Visible:= True;
-    PnlStatus.Visible:= True;
-    PMnuHideBars.Caption:= SMnuMaskBars;
-    Height:= HideBarsheight+BarsHeight;}
   end else
   begin
     PnlTop.Visible:= False;
     Height:= RegularHeight-PnlTop.Height ;
-    {FMinHeight:= GetSystemMetrics(SM_CYCAPTION)+142;
-    Settings.HideBars:= True;
-
-    PnlStatus.Visible:= False;
-    PMnuHideBars.Caption:= SMnuShowBars;
-    Height:= ShowBarsHeight-BarsHeight;}
   end;
 end;
 
@@ -1693,6 +1666,7 @@ begin
       if RBOGG.Checked then Settings.Encoding:= 'OGG';
       if RBAAC.Checked then Settings.Encoding:= 'AAC';
       if RBWAV.Checked then Settings.Encoding:= 'WAV';
+      if RBNATIVE.Checked then Settings.Encoding:= 'NATIVE';
       try
         Settings.Sampling:= StringToInt(CBSampling.Items[CBSampling.ItemIndex]);
       except
@@ -1767,6 +1741,8 @@ var
   recSampling: string;
   TRB: TRadioButton;
   acmformlen: DWORD = 0;
+  NativeExt: string;
+  p: integer;
 begin
   RecType:= FSettings.Settings.Encoding;
   TRB:= FSettings.FindComponent('RB'+RecType) as TRadioButton;
@@ -1822,6 +1798,22 @@ begin
         exit;
       end  ;
     end;
+    If RECTYPE='NATIVE' then
+    begin
+      ID3Tag:= Default(TAG_ID3);
+      p:= pos(' ', LStatus.Caption);
+      if p>0 then NativeExt:= Copy(LStatus.Caption, p+1, 4)
+      else NativeExt:= 'RECTYPE';
+      if UpperCase(NativeExt)='MP3' then
+      begin
+        ID3Tag.id:= 'TAG';
+        ID3Tag.title:= copy(CurRadio.Name, 1, 30);
+        ID3Tag.artist:= 'WebRadio - bb - sdtp';
+      end;
+      mp3file:= FSEttings.Settings.DataFolder+CurRadio.Name+FormatDateTime('_d_mm_yy_hh_nn_ss', Now)+'.'+NativeExt;
+      filename:= StringReplace(filename, ' ', '_', [rfReplaceAll] );
+      StreamSave:= true;
+    end;
     BASS_ChannelPlay(chan, False); // start the channel encoding
     LRecording.Caption:= sRecordingCaption+' '+rectype;
     Recording_beg:= now;
@@ -1832,7 +1824,8 @@ begin
     RecordBtnTimerCount:= 0;
   end else
   begin
-    ILButtons.GetBitmap(0, SBRecord.Glyph);
+  StreamSave:= false;;
+  ILButtons.GetBitmap(0, SBRecord.Glyph);
     BASS_Encode_Stop (chan);
     LRecording.Caption:= '';
     SBRecord.Hint:= sRecordingHint;
@@ -1873,7 +1866,6 @@ begin
     PTMnuMute.Caption:= sMutedMenu;
     Muted:= True;
   end;
-
 end;
 
 procedure TFWebRadioMain.TBVolumeChange(Sender: TObject);
@@ -1913,8 +1905,6 @@ begin
   Iconized:= HideOnTaskbar;
 end;
 
-
-
 procedure TFWebRadioMain.VuTimerTimer(Sender: TObject);
 var
   level: Int64;
@@ -1931,7 +1921,7 @@ begin
      begin
        // Playing file
        PBLength.Position:= Trunc(100*float_time/fileduration) ;
-       Lposition.Caption:= TimeToStr(float_time/86400)+' / '+TimeToStr(fileduration/86400); //Format('%d / %d s', [trunc(Float_time), Trunc(fileduration)]);
+       Lposition.Caption:= TimeToStr(float_time/86400)+' / '+TimeToStr(fileduration/86400);
      end else
     begin
       // Playing radio: current position since radio plays or recording radio : recording time
@@ -1940,12 +1930,7 @@ begin
     end;
   except
   end;
-
 end;
-
-
-
-
 
 procedure TFWebRadioMain.SettingsOnStateChange(Sender: TObject);
 begin
@@ -2005,10 +1990,7 @@ begin
     PTMnuIconizeClick(sender);
     CloseAction := caNone;
   end;
-
 end;
-
-
 
 procedure TFWebRadioMain.PlayRadio (radio: TRadio);
 var
@@ -2053,31 +2035,15 @@ begin
     ImgLogo.Picture.LoadFromLazarusResource('webradio256');
   end;
   //Check if there is a preset
-
- // if not IsInternet (PingUrl, Application) then
- // begin
- //   SendMessage(win, WM_INFO_UPDATE, WP_Error, 51); // Oops Error
- //   exit;
- // end;
   Application.ProcessMessages;
   if cthread <> 0 then cthread:=0;
   if length(Url) > 0 then
   begin
-    // Si la radio est présélectionnée, on la joue, sinon on joue l'url
-    //LastRadio:= Radios.FindItem ('url', url);               //ByUrl (Url);
-    //if LastRadio.Order > 0 then MnuRadioClick(FindComponent('MnuRadio' + IntToStr(LastRadio.Order)))
-    //else
-    //begin
-    //  try
-    //    TColorBtn(FindComponent('BtnRadio' + IntToStr(CurRadio.order))).Color:= clBtnFace;
-    //  except
-    //  end;
-    //  Curradio.order:= 0;
-    //  CurRadio.name:='';
-    //  CurRadio.Url:= url;
-
-     cthread := BeginThread(nil, 0, TThreadFunc(@OpenURL), PChar(url), 0, ThreadId);
-     SBRecord.Enabled:= true;
+    if CurRadio.name= '' then CurRadio.name:= url;
+    LRadioName.Caption:= sConnectStr+ ' '+CurRadio.Name;
+    LRadioIcyName.Caption:= ' ';
+    cthread := BeginThread(nil, 0, TThreadFunc(@OpenURL), PChar(url), 0, ThreadId);
+    SBRecord.Enabled:= true;
   end;
 end;
 
@@ -2139,7 +2105,6 @@ begin
     if VersionToInt(FSettings.Settings.LastVersion)>VersionToInt(version) then
        AboutBox.LUpdate.Caption := Format(AboutBox.sUpdateAvailable, [FSettings.Settings.LastVersion]) else
        AboutBox.LUpdate.Caption:= AboutBox.sNoUpdateAvailable;
-       //AboutBox.LUpdate.Hint:= AboutBox.sLastUpdateSearch + ': ' + DateToStr(FSettings.Settings.LastUpdChk);
    end;
    AboutBox.LUpdate.Hint:= AboutBox.sLastUpdateSearch + ': ' + DateToStr(FSettings.Settings.LastUpdChk);
 end;
@@ -2170,6 +2135,8 @@ begin
       sMuteHint:= ReadString(LangStr, 'sMuteHint', 'Cliquer pour couper le son');
       sMutedHint:= ReadString(LangStr, 'sMutedHint', 'Cliquer pour rétablir le son');
       SBMute.Hint:= sMuteHint;
+      ODAudio.Title:= ReadString(LangStr, 'ODAudio.Title', ODAudio.Title);
+      sMnuDeletePreset:= ReadString(LangStr, 'sMnuDeletePreset', 'Supprimer la présélection %d');
       sMuteMenu:= ReadString(LangStr, 'sMuteMenu', 'Couper le son');
       sMutedMenu:= ReadString(LangStr, 'sMutedMenu', 'Rétablir le son');
       sRecordingHint:= ReadString(LangStr, 'sRecordingHint', 'Cliquer pour enregistrer la radio');
@@ -2182,6 +2149,8 @@ begin
       sBufferStr:= ReadString(LangStr, 'sBufferStr', 'Buffering...');
       sEnterUrl:= ReadString(LangStr, 'sEnterUrl', sEnterUrl);
       sUse64bit:=ReadString(LangStr,'Use64bit','Utilisez la version 64 bits de ce programme');
+      sNoradio:= ReadString(LangStr,'sNoradio', 'Aucune radio sélectionnée');
+      sNopreset:= ReadString(LangStr,'sNopreset', 'Aucune radio présélectionnée');
 
       //Menus and buttons
       PMnuOpenRadio.Caption:= ReadString(LangStr, 'PMnuOpenRadio.Caption', PMnuOpenRadio.Caption);;
@@ -2193,9 +2162,11 @@ begin
       PMnuHelp.Caption:= ReadString(LangStr, 'PMnuHelp.Caption', PMnuHelp.Caption);
       PMnuAbout.Caption:= ReadString(LangStr, 'PMnuAbout.Caption', PMnuAbout.Caption);
       PMnuQuit.Caption:= ReadString(LangStr, 'PMnuQuit.Caption', PMnuQuit.Caption);
+      PMnuChooseRadio.Caption:= ReadString(LangStr, 'PMnuChooseRadio.Caption', PMnuChooseRadio.Caption);
       PTMnuRestore.Caption:= ReadString(LangStr, 'PTMnuRestore.Caption', PTMnuRestore.Caption);
       PTMnuIconize.Caption:= ReadString(LangStr, 'PTMnuIconize.Caption', PTMnuIconize.Caption);
       PTMnuAbout.Caption:= PMnuAbout.Caption;
+      PTMnuQuit.Caption:= PMnuQuit.Caption;
       if Muted then PTMnuMute.Caption:= sMutedMenu else PTMnuMute.Caption:= sMuteMenu;
 
       SBOpenRadio.hint:= PMnuOpenRadio.Caption;
@@ -2215,7 +2186,7 @@ begin
 
       AboutBox.LProductName.Caption:= DefaultCaption;
       AboutBox.LProgPage.Caption:= ReadString(LangStr,'AboutBox.LProgPage.Caption', AboutBox.LProgPage.Caption);
-      //AboutBox.UrlProgSite:= ReadString(LangStr,'AboutBox.UrlProgSite','https://github.com/bb84000/mailsinbox/wiki/Accueil');
+      AboutBox.UrlProgSite:= ReadString(LangStr,'AboutBox.UrlProgSite','https://github.com/bb84000/webradio/wiki/Accueil');
       AboutBox.LWebSite.Caption:= ReadString(LangStr,'AboutBox.LWebSite.Caption', AboutBox.LWebSite.Caption);
       AboutBox.LSourceCode.Caption:= ReadString(LangStr,'AboutBox.LSourceCode.Caption', AboutBox.LSourceCode.Caption);
       if not AboutBox.checked then AboutBox.LUpdate.Caption:=ReadString(LangStr,'AboutBox.LUpdate.Caption',AboutBox.LUpdate.Caption) else
@@ -2254,6 +2225,7 @@ begin
       FSettings.LGenBack.Caption:= ReadString(LangStr, 'FSettings.LGenBack.Caption', FSettings.LGenBack.Caption);
       FSettings.sMnuCopy:= ReadString(LangStr, 'FSettings.sMnuCopy', 'Copier');
       FSettings.sMnuPaste:= ReadString(LangStr, 'FSettings.sMnuPaste', 'Coller');
+      FSettings.RBnative.Caption:= ReadString(LangStr, 'FSettings.RBnative.Caption', FSettings.RBnative.Caption);
 
       // Radios form
       FRadios.Caption:= ReadString(LangStr, 'FRadios.Caption', FRadios.Caption);
@@ -2273,7 +2245,7 @@ begin
       FRadios.LComment.Caption:= ReadString(LangStr,'FRadios.LComment.Caption', FRadios.LComment.Caption);
       FRadios.LFavicon.Caption:= ReadString(LangStr,'FRadios.LFavicon.Caption', FRadios.LFavicon.Caption);
       FRadios.LPresets.Caption:= ReadString(LangStr,'FRadios.LPresets.Caption', FRadios.LPresets.Caption);
-
+      FRadios.EFavicon.Hint:= ReadString(LangStr,'FRadios.EFavicon.Hint', FRadios.EFavicon.Hint);
       FEqualizer.Caption:= ReadString(LangStr,'FEqualizer.Caption', FEqualizer.Caption);
       FEqualizer.CBEqualize.Caption:= ReadString(LangStr,'FEqualizer.CBEqualize.Caption', FEqualizer.CBEqualize.Caption);
       FEqualizer.LReset.Caption:= ReadString(LangStr,'FEqualizer.LReset.Caption', FEqualizer.LReset.Caption);

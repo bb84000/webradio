@@ -152,6 +152,7 @@ end;
     PSystem: TPanel;
     PWinVer: TPanel;
     PButtons: TPanel;
+    RBNATIVE: TRadioButton;
     RBMP3: TRadioButton;
     RBAAC: TRadioButton;
     RBWAV: TRadioButton;
@@ -554,7 +555,7 @@ begin
     CBBitrate.Enabled:= true;
     CBSampling.Enabled:= false;
   end;
-  if RBWAV.checked then
+  if RBWAV.checked or RBNATIVE.checked then
   begin
     CBBitrate.Enabled:= false;
     CBSampling.Enabled:= false;

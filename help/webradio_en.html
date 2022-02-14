@@ -18,7 +18,7 @@
   <body style="                                                                background-color: #ff9900;">
     <summary><br>
     </summary>
-    <table style="margin-left: auto; margin-right: auto; background-image: url(&quot;images/Bkground1.jpg&quot;); width: 900px; padding-left: 20px; padding-right: 20px;"
+    <table style="margin-left: auto; margin-right: auto; background-image: url(&quot;images/bkground.jpg&quot;); width: 900px; padding-left: 20px; padding-right: 20px;"
       cellpadding="0" border="0">
       <tbody>
         <tr align="justify">
@@ -32,7 +32,7 @@
                 class="bigger">Download last version</b></a><br>
             &nbsp;<br>
             <div style="text-align: center;"><img style="border: 0px solid ; width: 617px; height: 323px;"
-                usemap="#wradfr" alt="" src="images/webradioext.jpg"><br>
+                usemap="#wraden" alt="" src="images/webradioext_en.jpg"><br>
             </div>
             <div style="text-align: center;">Place the mouse cursor on an
               element of the image to see its action's name. <br>
@@ -122,9 +122,13 @@
             <a name="radioname"></a>The <b>radio's name</b> is displayed on the
             first line. It is the name assigned to the radio during its creation
             when <a href="#btnaddradio">adding the radio</a> to the radios
-            list, or the name chosen by the broadcaster if it transmit it in the
-            stream information. If the radio name is larger than the display,
-            the name is scrolling to allow to see the entire text.<br>
+            list. If the radio name is larger than the display, the name is
+            scrolling to allow to see the entire text.<br>
+            <br>
+            <a name="radiotransmittedname"></a>The name chosen by the
+            broadcaster if it transmit it in the stream information. If the name
+            is larger than the display, the name is scrolling to allow to see
+            the entire text.<br>
             <br>
             <a name="radiologo"></a>The <b>radio's logo</b> is displayed if the
             user has selected a logo file during the radio creation, or during a
@@ -283,7 +287,7 @@
               alt="" src="images/btnradiolist.jpg" align="middle"><br>
           </td>
           <td><a name="btnradiolist"></a><b>Edit the radios list</b><br>
-            <img style="border: 0px solid ; width: 579px; height: 285px;" usemap="#rlistfr"
+            <img style="border: 0px solid ; width: 579px; height: 285px;" usemap="#rlisten"
               src="images/radiolist_en.jpg" hspace="5" vspace="5" align="left">
             <div style="text-align: justify;">To <b><a name="btnaddradio"></a>add
                 a radio</b>, click the <img style="width: 22px; height: 22px;"
@@ -334,7 +338,7 @@
           <td style="vertical-align: top;"> <b><a name="btnsettings"></a>Settings</b>
             <br>
             <div style="text-align: justify;"><img style="border: 0px solid ; width: 561px; height: 474px;"
-                usemap="#settingsfr" src="images/settings_en.jpg" hspace="5" vspace="5"
+                usemap="#settingsen" src="images/settings_en.jpg" hspace="5" vspace="5"
                 align="left"><b>Open the Settings window</b><br>
               <br>
               The Settings window allow to define the main program parameters. <br>
@@ -390,15 +394,19 @@
               program's window text color and the program's window background
               are user configurable. Select predefined colors in the related
               dropdown lists, or click the <img style="width: 19px; height: 19px;"
-                alt="" src="images/btncolor.jpg" "="" class="imgcenter"> buttons
-              at the right side of the lists to select an user defined color.<br>
+                alt="" src="images/btncolor.jpg" "=" class=" imgcenter"="">
+              buttons at the right side of the lists to select an user defined
+              color.<br>
               <br>
               <b class="bigger">Recording settings</b><br>
               <a name="fileformat"></a><b>File format</b> : Click the button
               related to the recording format you want. The WAV format is
               specific to Windows and cannot be selected in other OS. In this
               cases, the settings are defined before each recording in a dialog
-              box displayed by the system, the program settings are ignored. <br>
+              box displayed by the system, the program settings are ignored. The
+              NATIVE format records the radio stream as is it transmitted,
+              without re-encoding. Recorded files may mon be playable with some 
+			  players.<br>
               <br>
               <a name="recbitrate"></a><b>Bitrate</b> : Select the maximum
               recording bitrate in the dropdown list. The most used bitrates for
@@ -442,9 +450,9 @@
           <td style="vertical-align: top;"><img style="width: 34px; height: 24px;"
               alt="" src="images/btnabout.jpg" align="middle"><br>
           </td>
-          <td> <a name="btnabout"></a><b>bout</b> <br>
+          <td> <a name="btnabout"></a><b>About</b> <br>
             <div style="text-align: justify;"><img style="border: 0px solid ; width: 352px; height: 235px;"
-                usemap="#aboutfr" src="images/aboutbox_en.jpg" hspace="5" vspace="5"
+                usemap="#abouten" src="images/aboutbox_en.jpg" hspace="5" vspace="5"
                 align="left"><b>Open the "About" dialog</b><br>
               <br>
               The dialog displays information about the program (version,
@@ -540,59 +548,60 @@
     <br>
     <br>
     <br>
-    <map name="wradfr">
-      <area shape="rect" coords="50,61,18,38" href="#btnopenradio" title="Ouvrir une radio dans la liste">
-      <area shape="rect" coords="95,61,63,38" href="#btnopenfile" title="Lire un fichier audio">
-      <area shape="rect" coords="139,61,108,38" href="#btnopenurl" title="Ouvrir un Url de radio">
-      <area shape="rect" coords="184,61,153,38" href="#btnequal" title="Affiche l'égaliseur">
-      <area shape="rect" coords="229,61,201,38" href="#btnsettings" title="Préférences">
-      <area shape="rect" coords="274,61,246,38" href="#btnradiolist" title="Liste des radios">
-      <area shape="rect" coords="319,61,291,38" href="#btnhelp" title="Affiche une aide du programme">
-      <area shape="rect" coords="364,61,336,38" href="#btnabout" title="Affiche la boite de dialogue A propos">
-      <area shape="rect" coords="409,61,381,38" href="#btnquitte" title="Qutte">
-      <area shape="rect" coords="30,222,470,245" href="#btnpreset" title="Boutons de présélection activés. Le nom de la radio présélectionnée est visible au passage de la souris">
-      <area shape="rect" coords="30,262,112,288" href="#btnpreset" title="Boutons de présélection activés. Le nom de la radio présélectionnée est visible au passage de la souris">
-      <area shape="rect" coords="122,262,470,288" href="#btnpresetd" title="Boutons de présélection non activés. Aucune radio n'a été attribuée à ces boutons">
-      <area shape="rect" coords="595,213,568,193" href="#btnmute" title="Bouton Mute">
-      <area shape="rect" coords="576,263,596,288" href="#btnrecord" title="Bouton d'enregistrement de la radio en cours">
-      <area shape="rect" coords="98,98,480,125" href="#radioname" title="Nom de la radio ou du fichier en cours de lecture">
-      <area shape="rect" coords="25,100,89,164" href="#radiologo" title="Logo de la radio ou du fichier en cours de lecture">
-      <area shape="rect" coords="100,130,480,155" href="#radiotitle" title="Titre du morceau ou de la séquence en cours de lecture">
-      <area shape="rect" coords="25,168,480,183" href="#radioinfos" title="Informations techniques sur le flux de la radio en cours de lecture">
-      <area shape="rect" coords="510,85,554,185" href="#vumeters" title="Vumètre indiquant en temps réeel le niveau du flux audio">
-      <area shape="rect" coords="562,85,592,185" href="#volume" title="Potentiomètre de réglage du volume sonore">
-      <area shape="rect" coords="498,215,600,250" href="#fileprogress" title="Barre de progression de la lecture d'un fichier">
+    <map name="wraden">
+      <area shape="rect" coords="50,61,18,38" href="#btnopenradio" title="Open a radio from list">
+      <area shape="rect" coords="95,61,63,38" href="#btnopenfile" title="Play an audio file">
+      <area shape="rect" coords="139,61,108,38" href="#btnopenurl" title="Open a radio's URL">
+      <area shape="rect" coords="184,61,153,38" href="#btnequal" title="Open the equalizer's window">
+      <area shape="rect" coords="229,61,201,38" href="#btnsettings" title="Settings">
+      <area shape="rect" coords="274,61,246,38" href="#btnradiolist" title="Edit the radios's list">
+      <area shape="rect" coords="319,61,291,38" href="#btnhelp" title="Open the program's help">
+      <area shape="rect" coords="364,61,336,38" href="#btnabout" title="Open the About... dialog">
+      <area shape="rect" coords="409,61,381,38" href="#btnquitte" title="Quit">
+      <area shape="rect" coords="30,222,470,245" href="#btnpreset" title="Preset button enabled. The preset radio's name is displayed when the mouse's cursor is on the button">
+      <area shape="rect" coords="30,262,112,288" href="#btnpreset" title="Preset button enabled. The preset radio's name is displayed when the mouse's cursor is on the button">
+      <area shape="rect" coords="122,262,470,288" href="#btnpresetd" title="Preset button disabled. No radio is assigned to this button">
+      <area shape="rect" coords="595,213,568,193" href="#btnmute" title="Mute button">
+      <area shape="rect" coords="576,263,596,288" href="#btnrecord" title="Record button for the current playing radio or file">
+      <area shape="rect" coords="98,98,480,125" href="#radioname" title="Current playing radio or file name">
+      <area shape="rect" coords="25,100,89,164" href="#radiologo" title="Current playing radio or file logo">
+      <area shape="rect" coords="25,130,480,145" href="#radiotransmittedname" title="Radio's name as transmitted by the broadcascter">
+      <area shape="rect" coords="100,144,480,160" href="#radiotitle" title="Playing sequence's title">
+      <area shape="rect" coords="25,168,480,183" href="#radioinfos" title="Current playing radio or file technical information">
+      <area shape="rect" coords="510,85,554,185" href="#vumeters" title="Vu-meter displaying in real-tile fhe stream channels levels">
+      <area shape="rect" coords="562,85,592,185" href="#volume" title="Sound volume potentiometer">
+      <area shape="rect" coords="498,215,600,250" href="#fileprogress" title="Playing file progress bar">
     </map>
-    <map name="rlistfr">
-      <area shape="rect" coords="230,37,210,58" href="#btnaddradio" title="Ajouter une radio">
-      <area shape="rect" coords="260,37,240,58" href="#btneditradio" title="Modifier une radio">
-      <area shape="rect" coords="290,37,270,58" href="#btncanceledit" title="Annuler les modifications">
-      <area shape="rect" coords="320,37,300,58" href="#btnvalidedit" title="Valider les modifications">
-      <area shape="rect" coords="350,37,330,58" href="#btndelradio" title="Supprimer une radio">
-      <area shape="rect" coords="564,82,269,105" href="#" title="Nom de la radio">
-      <area shape="rect" coords="564,112,269,135" href="#" title="Adresse Web (URL) de la radio">
-      <area shape="rect" coords="564,142,269,165" href="#" title="Commentaire">
-      <area shape="rect" coords="564,172,269,195" href="#" title="Nom du fichier logo. Cliquer sur le bouton à droite pour le choisir">
+    <map name="rlisten">
+      <area shape="rect" coords="230,37,210,58" href="#btnaddradio" title="Add a radio">
+      <area shape="rect" coords="260,37,240,58" href="#btneditradio" title="Edit a radio">
+      <area shape="rect" coords="290,37,270,58" href="#btncanceledit" title="Cancel changes">
+      <area shape="rect" coords="320,37,300,58" href="#btnvalidedit" title="Valid changes">
+      <area shape="rect" coords="350,37,330,58" href="#btndelradio" title="Delete a radio">
+      <area shape="rect" coords="564,82,269,105" href="#" title="Radio's name">
+      <area shape="rect" coords="564,112,269,135" href="#" title="Radio's Web address (URL)">
+      <area shape="rect" coords="564,142,269,165" href="#" title="Comment">
+      <area shape="rect" coords="564,172,269,195" href="#" title="Radio logo file name. Click button on the right to select">
     </map>
-    <map name="aboutfr">
-      <area shape="rect" coords="95,105,260,120" href="#update" title="Mise à jour">
-      <area shape="rect" coords="100,125,260,140" href="#webhome" title="Page d'accueil du site Web de l'auteur">
-      <area shape="rect" coords="100,145,260,160" href="#webprogram" title="Page d'accueil du site Web du programme">
-      <area shape="rect" coords="100,165,260,180" href="#websource" title="Page d'accueil du code source du programme">
+    <map name="abouten">
+      <area shape="rect" coords="95,105,260,120" href="#update" title="Program update">
+      <area shape="rect" coords="100,125,260,140" href="#webhome" title="Author's web home page">
+      <area shape="rect" coords="100,145,260,160" href="#webprogram" title="Program's Web home page">
+      <area shape="rect" coords="100,165,260,180" href="#websource" title="Source code Web home page">
     </map>
-    <map name="settingsfr">
-      <area shape="rect" coords="25,57,250,77" href="#startup" title="Lancer au démarrage du système">
-      <area shape="rect" coords="25,82,250,102" href="#startmini" title="Démarrer minimisé">
-      <area shape="rect" coords="25,97,250,117" href="#hideicon" title="Masquer l'icoône dans la barre des tâches">
-      <area shape="rect" coords="275,57,515,77" href="#saveposition" title="Sauvegarder la taille et la position de la fenêtre">
-      <area shape="rect" coords="275,82,515,102" href="#noupdate" title="Ne pas rechercher automatiquement de mise à jour">
-      <area shape="rect" coords="275,107,515,127" href="#buttonbar" title="Afficher la barre des boutons">
-      <area shape="rect" coords="25,125,250,145" href="#language" title="Sélectionner la langue de fonctionnement">
-      <area shape="rect" coords="275,125,515,145" href="#radiofont" title="Sélectionner la police de caractères du nom de la radio">
-      <area shape="rect" coords="25,275,260,295" href="#fileformat" title="Sélectionner le format d'enregistrement d'une radio">
-      <area shape="rect" coords="25,300,275,330" href="#recbitrate" title="Sélectionner le débit maximum de l'enregistrement d'une radio">
-      <area shape="rect" coords="300,300,535,330" href="#recsampling" title="Sélectionner la fréquence  d'échantillonnage de l'enregistrement d'une radio">
-      <area shape="rect" coords="25,339,535,369" href="#recfolder" title="Sélectionner le répertoire pour l'enregistrement des radios">
+    <map name="settingsen">
+      <area shape="rect" coords="25,57,250,77" href="#startup" title="Start at system startup">
+      <area shape="rect" coords="25,82,250,102" href="#startmini" title="Start minimized">
+      <area shape="rect" coords="25,97,250,117" href="#hideicon" title="Hide the icon in the taskbar">
+      <area shape="rect" coords="275,57,515,77" href="#saveposition" title="Save window size and position">
+      <area shape="rect" coords="275,82,515,102" href="#noupdate" title="No automatically check for update">
+      <area shape="rect" coords="275,107,515,127" href="#buttonbar" title="Display the button bar">
+      <area shape="rect" coords="25,125,250,145" href="#language" title="Select the language">
+      <area shape="rect" coords="275,125,515,145" href="#radiofont" title="Select the font for the radio's name">
+      <area shape="rect" coords="25,275,260,295" href="#fileformat" title="Select the radio's recording file format">
+      <area shape="rect" coords="25,300,275,330" href="#recbitrate" title="Select the radio's recording bitrate">
+      <area shape="rect" coords="300,300,535,330" href="#recsampling" title="Select the radio's recording samplling frequencey">
+      <area shape="rect" coords="25,339,535,369" href="#recfolder" title="Select the radio's recording folder">
     </map>
   </body>
 </html>

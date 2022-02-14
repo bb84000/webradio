@@ -8,7 +8,7 @@
       <Unit>
         <Filename Value="webradio.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="11"/>
+        <EditorIndex Value="9"/>
         <CursorPos Y="29"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
@@ -19,9 +19,8 @@
         <ComponentName Value="FWebRadioMain"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
-        <TopLine Value="1974"/>
-        <CursorPos X="5" Y="2000"/>
+        <TopLine Value="2176"/>
+        <CursorPos X="21" Y="2188"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -32,9 +31,9 @@
         <ComponentName Value="FSettings"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="10"/>
-        <TopLine Value="463"/>
-        <CursorPos X="32" Y="486"/>
+        <EditorIndex Value="8"/>
+        <TopLine Value="76"/>
+        <CursorPos X="32" Y="546"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -47,10 +46,11 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Radios1"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="176"/>
-        <CursorPos X="30" Y="168"/>
+        <TopLine Value="499"/>
+        <CursorPos X="42" Y="508"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="..\lazbbunits\lazbbaboutupdate.pas"/>
@@ -59,8 +59,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="107"/>
-        <CursorPos X="3" Y="63"/>
+        <TopLine Value="29"/>
+        <CursorPos X="18" Y="63"/>
         <UsageCount Value="200"/>
       </Unit>
       <Unit>
@@ -74,9 +74,9 @@
       <Unit>
         <Filename Value="history.txt"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="12"/>
-        <TopLine Value="22"/>
-        <CursorPos X="21" Y="53"/>
+        <EditorIndex Value="10"/>
+        <TopLine Value="29"/>
+        <CursorPos X="21" Y="57"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="None"/>
@@ -84,7 +84,7 @@
       <Unit>
         <Filename Value="webradio.txt"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="13"/>
+        <EditorIndex Value="11"/>
         <CursorPos X="20" Y="7"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
@@ -107,7 +107,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="38"/>
         <CursorPos X="17" Y="67"/>
-        <UsageCount Value="156"/>
+        <UsageCount Value="171"/>
       </Unit>
       <Unit>
         <Filename Value="uhtextscroll.pas"/>
@@ -116,7 +116,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="6"/>
         <CursorPos X="15" Y="23"/>
-        <UsageCount Value="62"/>
+        <UsageCount Value="77"/>
       </Unit>
       <Unit>
         <Filename Value="..\lazbbunits\lazbbinput.pas"/>
@@ -127,13 +127,14 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="6"/>
         <CursorPos X="45" Y="40"/>
-        <UsageCount Value="45"/>
+        <UsageCount Value="60"/>
       </Unit>
       <Unit>
         <Filename Value="Webradio.lng"/>
-        <EditorIndex Value="9"/>
-        <TopLine Value="383"/>
-        <CursorPos X="40" Y="318"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="7"/>
+        <TopLine Value="91"/>
+        <CursorPos X="33" Y="337"/>
         <UsageCount Value="100"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="None"/>
@@ -235,9 +236,9 @@
       <Unit>
         <Filename Value="Bass.pas"/>
         <UnitName Value="BASS"/>
-        <EditorIndex Value="8"/>
-        <TopLine Value="281"/>
-        <CursorPos Y="308"/>
+        <EditorIndex Value="6"/>
+        <TopLine Value="630"/>
+        <CursorPos X="3" Y="647"/>
         <UsageCount Value="101"/>
         <Loaded Value="True"/>
       </Unit>
@@ -250,9 +251,9 @@
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\inc\systemh.inc"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="415"/>
-        <CursorPos X="3" Y="440"/>
-        <UsageCount Value="28"/>
+        <TopLine Value="764"/>
+        <CursorPos X="11" Y="781"/>
+        <UsageCount Value="30"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\win64\system.pp"/>
@@ -264,10 +265,10 @@
       <Unit>
         <Filename Value="basswma.pas"/>
         <UnitName Value="BassWMA"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="4"/>
         <TopLine Value="35"/>
         <CursorPos X="40" Y="64"/>
-        <UsageCount Value="49"/>
+        <UsageCount Value="57"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -302,11 +303,10 @@
       <Unit>
         <Filename Value="bassenc_mp3.pas"/>
         <UnitName Value="BASSenc_MP3"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="23"/>
         <CursorPos X="10" Y="44"/>
-        <UsageCount Value="33"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="38"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\lcl\extctrls.pp"/>
@@ -356,9 +356,9 @@
       <Unit>
         <Filename Value="bassflac.pas"/>
         <UnitName Value="BassFLAC"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="3"/>
         <CursorPos X="42" Y="21"/>
-        <UsageCount Value="17"/>
+        <UsageCount Value="25"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -394,11 +394,10 @@
       </Unit>
       <Unit>
         <Filename Value="..\lazbbunits\lazbbosver.pas"/>
-        <EditorIndex Value="4"/>
-        <TopLine Value="628"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="626"/>
         <CursorPos Y="609"/>
-        <UsageCount Value="12"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="20"/>
       </Unit>
       <Unit>
         <Filename Value="..\..\..\AppData\Local\lazarus\onlinepackagemanager\packages\bgrabitmap-master\bgrabitmap\bgrabitmap.pas"/>
@@ -454,9 +453,10 @@
       </Unit>
       <Unit>
         <Filename Value="webradio.ini"/>
-        <EditorIndex Value="-1"/>
+        <EditorIndex Value="1"/>
         <CursorPos X="50" Y="7"/>
-        <UsageCount Value="14"/>
+        <UsageCount Value="19"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Ini"/>
       </Unit>
       <Unit>
@@ -546,9 +546,9 @@
       <Unit>
         <Filename Value="bass_aac.pas"/>
         <UnitName Value="BASS_AAC"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="5"/>
         <CursorPos Y="25"/>
-        <UsageCount Value="19"/>
+        <UsageCount Value="27"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -630,133 +630,132 @@
       <Unit>
         <Filename Value="C:\lazarus\lcl\interfaces\win32\win32proc.pp"/>
         <UnitName Value="Win32Proc"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="110"/>
         <CursorPos X="31" Y="127"/>
-        <UsageCount Value="11"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="16"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
       <Position>
         <Filename Value="webradio1.pas"/>
-        <Caret Line="223" Column="18" TopLine="195"/>
+        <Caret Line="1825" Column="22" TopLine="1798"/>
       </Position>
       <Position>
         <Filename Value="webradio1.pas"/>
-        <Caret Line="306" Column="22" TopLine="279"/>
+        <Caret Line="1748" Column="40" TopLine="1735"/>
       </Position>
       <Position>
         <Filename Value="webradio1.pas"/>
-        <Caret Line="329" Column="20" TopLine="302"/>
+        <Caret Line="1751" Column="51" TopLine="1735"/>
       </Position>
       <Position>
         <Filename Value="webradio1.pas"/>
-        <Caret Line="395" Column="5" TopLine="366"/>
+        <Caret Line="1760" Column="121" TopLine="1735"/>
       </Position>
       <Position>
         <Filename Value="webradio1.pas"/>
-        <Caret Line="415" Column="44" TopLine="387"/>
+        <Caret Line="1762" Column="24" TopLine="1735"/>
       </Position>
       <Position>
         <Filename Value="webradio1.pas"/>
-        <Caret Line="430" Column="6" TopLine="402"/>
+        <Caret Line="1763" Column="15" TopLine="1735"/>
       </Position>
       <Position>
         <Filename Value="webradio1.pas"/>
-        <Caret Line="460" Column="33" TopLine="436"/>
+        <Caret Line="1775" Column="15" TopLine="1747"/>
       </Position>
       <Position>
         <Filename Value="webradio1.pas"/>
-        <Caret Line="461" Column="19" TopLine="430"/>
+        <Caret Line="1784" Column="15" TopLine="1756"/>
       </Position>
       <Position>
         <Filename Value="webradio1.pas"/>
-        <Caret Line="475" Column="41" TopLine="447"/>
+        <Caret Line="1796" Column="15" TopLine="1768"/>
       </Position>
       <Position>
         <Filename Value="webradio1.pas"/>
-        <Caret Line="556" Column="26" TopLine="528"/>
+        <Caret Line="1805" Column="15" TopLine="1777"/>
       </Position>
       <Position>
         <Filename Value="webradio1.pas"/>
-        <Caret Line="663" Column="45" TopLine="635"/>
+        <Caret Line="1815" Column="55" TopLine="1787"/>
       </Position>
       <Position>
         <Filename Value="webradio1.pas"/>
-        <Caret Line="685" Column="22" TopLine="652"/>
+        <Caret Line="1740" Column="10" TopLine="1723"/>
+      </Position>
+      <Position>
+        <Filename Value="settings1.pas"/>
+        <Caret Line="558" Column="31" TopLine="545"/>
       </Position>
       <Position>
         <Filename Value="webradio1.pas"/>
-        <Caret Line="756" Column="29" TopLine="728"/>
+        <Caret Line="1747" Column="35" TopLine="1723"/>
+      </Position>
+      <Position>
+        <Filename Value="settings1.pas"/>
+        <Caret Line="111" Column="63" TopLine="86"/>
+      </Position>
+      <Position>
+        <Filename Value="settings1.pas"/>
+        <Caret Line="169" Column="25" TopLine="141"/>
+      </Position>
+      <Position>
+        <Filename Value="settings1.pas"/>
+        <Caret Line="317" Column="30" TopLine="289"/>
+      </Position>
+      <Position>
+        <Filename Value="settings1.pas"/>
+        <Caret Line="319" Column="15" TopLine="291"/>
+      </Position>
+      <Position>
+        <Filename Value="settings1.pas"/>
+        <Caret Line="320" Column="12" TopLine="292"/>
+      </Position>
+      <Position>
+        <Filename Value="settings1.pas"/>
+        <Caret Line="409" Column="71" TopLine="381"/>
+      </Position>
+      <Position>
+        <Filename Value="settings1.pas"/>
+        <Caret Line="479" Column="46" TopLine="451"/>
       </Position>
       <Position>
         <Filename Value="webradio1.pas"/>
-        <Caret Line="776" Column="55" TopLine="748"/>
+        <Caret Line="1747" Column="35" TopLine="1723"/>
       </Position>
       <Position>
         <Filename Value="webradio1.pas"/>
-        <Caret Line="814" Column="24" TopLine="786"/>
+        <Caret Line="1796" Column="140" TopLine="1640"/>
       </Position>
       <Position>
         <Filename Value="webradio1.pas"/>
-        <Caret Line="840" Column="29" TopLine="812"/>
+        <Caret Line="1808" Column="64" TopLine="1782"/>
       </Position>
       <Position>
         <Filename Value="webradio1.pas"/>
-        <Caret Line="863" Column="35" TopLine="835"/>
+        <Caret Line="2230" Column="114"/>
       </Position>
       <Position>
         <Filename Value="webradio1.pas"/>
-        <Caret Line="890" Column="8" TopLine="862"/>
+        <Caret Line="1749" Column="3" TopLine="1532"/>
       </Position>
       <Position>
         <Filename Value="webradio1.pas"/>
-        <Caret Line="895" Column="29" TopLine="867"/>
+        <Caret Line="10" Column="35"/>
       </Position>
       <Position>
         <Filename Value="webradio1.pas"/>
-        <Caret Line="939" Column="41" TopLine="911"/>
+        <Caret Line="965" Column="11" TopLine="937"/>
       </Position>
       <Position>
         <Filename Value="webradio1.pas"/>
-        <Caret Line="963" Column="52" TopLine="935"/>
+        <Caret Line="976" Column="14" TopLine="949"/>
       </Position>
       <Position>
         <Filename Value="webradio1.pas"/>
-        <Caret Line="976" Column="39" TopLine="948"/>
-      </Position>
-      <Position>
-        <Filename Value="webradio1.pas"/>
-        <Caret Line="1985" TopLine="1971"/>
-      </Position>
-      <Position>
-        <Filename Value="webradio1.pas"/>
-        <Caret Line="842" Column="3" TopLine="840"/>
-      </Position>
-      <Position>
-        <Filename Value="webradio1.pas"/>
-        <Caret Line="1974" Column="3" TopLine="1972"/>
-      </Position>
-      <Position>
-        <Filename Value="webradio1.pas"/>
-        <Caret Line="848"/>
-      </Position>
-      <Position>
-        <Filename Value="webradio1.pas"/>
-        <Caret Line="760" Column="3" TopLine="826"/>
-      </Position>
-      <Position>
-        <Filename Value="webradio1.pas"/>
-        <Caret Line="905" Column="11" TopLine="898"/>
-      </Position>
-      <Position>
-        <Filename Value="webradio1.pas"/>
-        <Caret Line="1040" TopLine="1015"/>
-      </Position>
-      <Position>
-        <Filename Value="webradio1.pas"/>
-        <Caret Line="1998" Column="27" TopLine="1974"/>
+        <Caret Line="2188" Column="99" TopLine="2176"/>
       </Position>
     </JumpHistory>
     <RunParams>

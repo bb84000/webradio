@@ -15,10 +15,10 @@
   font-size: larger;
 }
 </style> </head>
-  <body style="                                               background-color: #ff9900;">
+  <body style="                                                 background-color: #ff9900;">
     <summary><br>
     </summary>
-    <table style="margin-left: auto; margin-right: auto; background-image: url(&quot;images/Bkground1.jpg&quot;); width: 900px; padding-left: 20px; padding-right: 20px;"
+    <table style="margin-left: auto; margin-right: auto; background-image: url(&quot;images/bkground.jpg&quot;); width: 900px; padding-left: 20px; padding-right: 20px;"
       cellpadding="0" border="0">
       <tbody>
         <tr align="justify">
@@ -116,19 +116,22 @@
             principale avec un clic sur le bouton Quitte.<br>
             <br>
             <hr> <br>
-            <a name="ecran"></a><b class="bigger">L'ECRAN</b> <br>
-            <a name="radioname"></a><br>
-            Le <b>nom de la radio</b> est affiché sur la première ligne de
-            l'écran. Il s'agit du nom qui a été attribué à la radio lors de l'<a
-              href="#btnaddradio">ajout de cette radio</a> à la liste des
-            radios, ou du nom choisi par le diffuseur si celui-ci le transmet
-            dans les informations du flux. Dans le cas où la longueur du nom
-            dépasse la largeur de l'écran, il défile pour que sa totalité puisse
-            être lue;<br>
-            <br>
+            <a name="ecran"></a><b class="bigger">L'ECRAN<br>
+            </b>&nbsp;<br>
             <a name="radiologo"></a>Le <b>logo de la radio</b> est affiché
             lorsque l'utilisateur a sélectionné un fichier pour l'illustrer lors
             de l'ajout ou de la modification de cette radio.<br>
+            <br>
+            <a name="radioname"></a>Le nom de la radio est affiché sur la
+            première ligne de l'écran. Il s'agit du nom qui a été attribué à la
+            radio lors de l'<a href="#btnaddradio">ajout de cette radio</a> à la
+            liste des radios. Dans le cas où la longueur du nom dépasse la
+            largeur de l'écran, il défile pour que sa totalité puisse être lue.<br>
+            <br>
+            <a name="radiotransmittedname"></a>Nom choisi par le diffuseur si
+            celui-ci le transmet dans les informations du flux. Dans le cas où
+            la longueur du nom dépasse la largeur de l'écran, il défile pour que
+            sa totalité puisse être lue.<br>
             <br>
             <a name="radiotitle"></a>Le <b>titre de la séquence</b> en cours de
             lecture est affiché sur la seconde ligne de l'écran, si le diffuseur
@@ -395,7 +398,7 @@
             <a name="colors"></a><b class="bigger">Couleurs</b><br>
             La couleur d'affichage des textes de l'écran, celle de son arrière
             plan, celle des textes du reste de la fenêtre et son arrière plan
-            sont confiigurables. Choisissez une couleur prédéfinie dans les
+            sont configurables. Choisissez une couleur prédéfinie dans les
             listes déroulantes, ou cliquez sur le bouton <img style="width: 19px; height: 19px;"
               alt="" src="images/btncolor.jpg" align="top"> à droite de la liste
             pour choisir une couleur personnalisée.<br>
@@ -405,7 +408,11 @@
             bouton correspondant au format d'enregistrement souhaité. Le format
             WAV est spécifique à Windows, les paramètres sont définis à chaque
             enregistrement à l'aide d'une boite de dialogue affichée par le
-            système, les réglages du programme ne sont pas pris en compte.<br>
+            système, les réglages du programme ne sont pas pris en compte. Le
+            format NATIF enregistre directement le flux radio tel qu'il est
+            transmis, sans ré-encodage. Les fichiers obtenuus peuvent ne pas être
+			lisibles par tous les lecteurs. 
+            <br>
             <br>
             <a name="recbitrate"></a><b>Débit</b> : Choisissez le débit maximum
             de l'enregistrement dans la liste déroulante.Le débit le plus
@@ -566,7 +573,7 @@ logiciel
       <area shape="rect" coords="274,61,246,38" href="#btnradiolist" title="Liste des radios">
       <area shape="rect" coords="319,61,291,38" href="#btnhelp" title="Affiche une aide du programme">
       <area shape="rect" coords="364,61,336,38" href="#btnabout" title="Affiche la boite de dialogue A propos">
-      <area shape="rect" coords="409,61,381,38" href="#btnquitte" title="Qutte">
+      <area shape="rect" coords="409,61,381,38" href="#btnquitte" title="Quitte">
       <area shape="rect" coords="30,222,470,245" href="#btnpreset" title="Boutons de présélection activés. Le nom de la radio présélectionnée est visible au passage de la souris">
       <area shape="rect" coords="30,262,112,288" href="#btnpreset" title="Boutons de présélection activés. Le nom de la radio présélectionnée est visible au passage de la souris">
       <area shape="rect" coords="122,262,470,288" href="#btnpresetd" title="Boutons de présélection non activés. Aucune radio n'a été attribuée à ces boutons">
@@ -574,7 +581,8 @@ logiciel
       <area shape="rect" coords="576,263,596,288" href="#btnrecord" title="Bouton d'enregistrement de la radio en cours">
       <area shape="rect" coords="98,98,480,125" href="#radioname" title="Nom de la radio ou du fichier en cours de lecture">
       <area shape="rect" coords="25,100,89,164" href="#radiologo" title="Logo de la radio ou du fichier en cours de lecture">
-      <area shape="rect" coords="100,130,480,155" href="#radiotitle" title="Titre du morceau ou de la séquence en cours de lecture">
+      <area shape="rect" coords="25,130,480,145" href="#radiotransmittedname" title="Nom de la radio transmis par le diffuseur">
+      <area shape="rect" coords="100,144,480,160" href="#radiotitle" title="Titre du morceau ou de la séquence en cours de lecture">
       <area shape="rect" coords="25,168,480,183" href="#radioinfos" title="Informations techniques sur le flux de la radio en cours de lecture">
       <area shape="rect" coords="510,85,554,185" href="#vumeters" title="Vumètre indiquant en temps réeel le niveau du flux audio">
       <area shape="rect" coords="562,85,592,185" href="#volume" title="Potentiomètre de réglage du volume sonore">
