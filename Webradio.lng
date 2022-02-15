@@ -27,6 +27,7 @@ LLeft.Caption=L
 LRight.Caption=R
 LLeft.Hint=Left channel
 LRight.Hint=Right channel
+LEqualizer.Caption=Equalizer
 sMuteHint=Click to mute the sound
 sMutedHint=Click to unmute the sound
 sMuteMenu=Mute the sound
@@ -41,7 +42,7 @@ sNoLongerChkUpdates=No longer check updates
 sUpdateAlertBox=Current version: %sA new version %s is available
 sConnectStr=Connecting...
 sLoadStr=Loading
-sBufferStr=Buffering...
+sBufferStr=Buffering
 sConnectedStr=Connected
 sNotConnectedStr=Not connected
 sEnterUrl=Enter a radio's URL
@@ -124,6 +125,12 @@ FEqualizer.CBEqualize.Caption=Enable the equalizer
 FEqualizer.LReset.Caption=Reset levels
 
 ;Errors
+sErrBassLoaded=Bass library not loaded.%sProgram execution impossible
+sErrBassVersion=Wrong version of Bass library.%sProgram execution impossible
+sErrBassencLoaded=Bassenc library not loaded.%sRadios recording not available
+sErrBassEncodeVer=The BassEncode library version is wrong.%s Recording is impossible.
+sErrNoBassPLAY=The Bass%s libray is not installed.%sCannot play %s streams.
+sErrNoBassEnc=The BassEnc%s library is not installed.%sCannot record in %s the playing radio
 
 BASS_ERROR_MEM=There is insufficient memory
 BASS_ERROR_FILEOPEN=Cannot open file or stream
@@ -170,13 +177,11 @@ ErrInvalidDev=Invalide device
 ErrTimeout=Timeout
 
 ErrNetConnect=Internet connection error
-ErrBassVersion=Wrong version of BASS.DLL
+
 ErrUnknown=Unknown error
 ErrReading=Unable to play radio
 ErrWinVersion=The program cannot operate with this Windows' version
-ErrNoBassPLAY=The Bass%s libray is not installed.%sCannot play %s streams.
-ErrNoBassEnc=The BassEnc%s library is not installed.%sCannot record in %s the playing radio
-ErrBassEncVer=The BassEncode library version is wrong. %s Recording is impossible.
+
 ErrUnsupportedEnc=Cannot record, %s encoding not supported
 ErrEncoding=Encoding error # %d
 ErrConnection=Connection error
@@ -240,6 +245,7 @@ LLeft.Caption=G
 LRight.Caption=D
 LLeft.Hint=Voie gauche
 LRight.Hint=Voie droite
+LEqualizer.Caption=Egaliseur
 sMuteHint=Cliquer pour couper le son
 sMutedHint=Cliquer pour rétablir le son
 sMuteMenu=Couper le son
@@ -253,7 +259,7 @@ sNoLongerChkUpdates=Ne plus rechercher de mises à jour
 sUpdateAlertBox=Version actuelle : %sUne nouvelle version %s est disponible
 sConnectStr=Connexion...
 sLoadStr=Chargement de
-sBufferStr=Mise en buffer...
+sBufferStr=Mise en buffer
 sConnectedStr=Connecté
 sNotConnectedStr=Non connecté
 sEnterUrl=Saisir l'URL d'une radio
@@ -335,7 +341,16 @@ FSettings.TPColors.Caption=Couleurs
 FSettings.sMnuCopy=Copier
 FSettings.sMnuPaste=Coller
 FSettings.RBnative.Caption=NATIF
+
 // Errors
+sErrBassLoaded=Bibliothèque Bass non chargée.%sExécution du programme impossible
+sErrBassVersion=Mauvaise version de la bibliothèque Bass.%sExécution du programme impossible
+sErrBassencLoaded=Bibliothèque Bassenc non chargée.%sEnregistrement des radios impossible
+sErrBassEncodeVer=Mauvaise version de la bibliothèque BassEnc.%sEnregistrement des radios impossible
+sErrNoBassPLAY=La bibliothèque Bass%s n'est pas installée.%sLecture des flux %s impossible.
+sErrNoBassEnc=La bibliothèque BassEnc%s n'est pas installée.%sEnregistrement en %s de la radio impossible
+
+
 BASS_ERROR_MEM=Mémoire insuffisante
 BASS_ERROR_FILEOPEN=Ouverture du fichier ou du flux impossible
 BASS_ERROR_DRIVER=Erreur de driver
@@ -376,14 +391,11 @@ ErrInvalidDev=Périphérique invalide
 ErrTimeout=Délai dépassé
 
 ErrNetConnect=Erreur de connexion Internet
-ErrBassVersion=Mauvaise version de la bibliothèque Bass
+
 ErrBassInit=Erreur d'initialisation de la bibiliothèque Bass
 ErrUnknown=Erreur inconnue
 ErrReading=Lecture de la radio impossible
 ErrWinVersion=Ce programme ne fonctionne pas avec cette version de Windows
-ErrNoBassPLAY=La bibliothèque Bass%s n'est pas installée.%sLecture des flux %s impossible.
-ErrNoBassEnc=La bibliothèque BassEnc%s n'est pas installée.%sEnregistrement des radios impossible au format %s.
-ErrBassEncVer=La version de la bibliothèque BassEnc est erronnée.%sEnregistrement impossible.
 ErrUnsupportedEnc=Impossible d'enregistrer, encodage %s non supporté
 ErrEncoding=Erreur d'encodage %d
 ErrConnection=Erreur de connexion

@@ -17,8 +17,8 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <MinorVersionNr Value="7"/>
-      <BuildNr Value="2"/>
-      <StringTable Comments="Web radio player" CompanyName="sdtp - bb95" FileDescription="Tuner radio web - Web radio tuner" InternalName="WebRadio" LegalCopyright="sdtp - bb95" LegalTrademarks="sdtp - bb95" OriginalFilename="WebRadio.exe" ProductName="WebRadio" ProductVersion="0.7.0.2"/>
+      <BuildNr Value="3"/>
+      <StringTable Comments="Web radio player" CompanyName="sdtp - bb95" FileDescription="Tuner radio web - Web radio tuner" InternalName="WebRadio" LegalCopyright="sdtp - bb95" LegalTrademarks="sdtp - bb95" OriginalFilename="WebRadio.exe" ProductName="WebRadio" ProductVersion="0.7.0.3"/>
     </VersionInfo>
     <BuildModes>
       <Item Name="Default" Default="True"/>
@@ -91,9 +91,8 @@
         <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>
-        <Filename Value="bassenc_aac.pas"/>
+        <Filename Value="lazd_bassenc_aac.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="BASSenc_AAC"/>
       </Unit>
       <Unit>
         <Filename Value="equalizer1.pas"/>

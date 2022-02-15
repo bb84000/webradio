@@ -37,7 +37,7 @@ object FWebRadioMain: TFWebRadioMain
       ParentColor = False
       TabOrder = 0
       object LStereo: TLabel
-        Left = 120
+        Left = 112
         Height = 15
         Top = 85
         Width = 60
@@ -46,28 +46,29 @@ object FWebRadioMain: TFWebRadioMain
         Font.Color = clYellow
         ParentFont = False
       end
-      object LFrequency: TLabel
-        Left = 240
+      object LEqualizer: TLabel
+        Left = 236
         Height = 15
         Top = 85
         Width = 60
         AutoSize = False
-        Caption = 'Frequency'
+        Caption = 'Egaliseur'
         Font.Color = clYellow
         ParentFont = False
+        Visible = False
       end
-      object LBitrate: TLabel
-        Left = 180
+      object LBitrateFrequ: TLabel
+        Left = 174
         Height = 15
         Top = 85
         Width = 60
         AutoSize = False
-        Caption = 'LBitrate'
+        Caption = 'LBitrateFrequ'
         Font.Color = clYellow
         ParentFont = False
       end
       object LPause: TLabel
-        Left = 425
+        Left = 420
         Height = 15
         Top = 85
         Width = 40
@@ -77,7 +78,7 @@ object FWebRadioMain: TFWebRadioMain
         ParentFont = False
       end
       object LRecording: TLabel
-        Left = 300
+        Left = 298
         Height = 15
         Top = 85
         Width = 120

@@ -61,3 +61,9 @@ Version 0.7.0.2 - 14/02/2022
 - Changed display: radio name is the one given by the user when creating the radio in list
   The name transmitted by the statuionb si displayed bezlow (if any)
 - Added native format recording feature (without re-encoding)
+
+Version 0.7.0.3 - 15/02/2022
+- Stop recording when radio is changed, file is loaded or program closed
+- Added indication of equalizer enabled on display
+- Alternate bitrate and sample frequency on display to allow equalizer state on display
+- Dynamic loading of Bass libraries.

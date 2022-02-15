@@ -14,8 +14,8 @@ uses
 {$IFDEF WINDOWS}
 Win32Proc, windows,
 {$ENDIF} LCLIntf, LCLType, Classes, SysUtils, Forms, Controls, Graphics,
-Dialogs, ExtCtrls, StdCtrls, Menus, bass, basswma, bass_aac, bassenc,
-bassenc_mp3, bassenc_aac, bassenc_ogg, bassflac, Equalizer1, lazbbcontrols,
+Dialogs, ExtCtrls, StdCtrls, Menus, lazd_bass, lazd_bass_wma, lazd_bass_aac, lazd_bassenc,
+lazd_bassenc_mp3, lazd_bassenc_aac, lazd_bassenc_ogg, lazd_bass_flac, Equalizer1, lazbbcontrols,
 settings1, radios1, lazbbosver, lazbbutils, lazUTF8, lazbbinifiles, registry,
 lazbbaboutupdate, lazbbautostart, LResources, ComCtrls, Buttons,
 ColorSpeedButton, UniqueInstance, fptimer, variants,
@@ -181,8 +181,8 @@ type
     ImgLogo: TImage;
     LRecording: TLabel;
     LPause: TLabel;
-    LBitrate: TLabel;
-    LFrequency: TLabel;
+    LBitrateFrequ: TLabel;
+    LEqualizer: TLabel;
     LStereo: TLabel;
     PMnuRadList: TMenuItem;
     PMnuDeletePreset: TMenuItem;
@@ -266,7 +266,10 @@ type
     OKBtn, YesBtn, NoBtn, CancelBtn: string;
     sMnuDeletePreset: string;
     sConnectStr, sConnectedStr, sNotConnectedStr, sLoadStr: String;
-    ErrNoBassPLAY, ErrNoBassEnc, ErrBassVersion, ErrBassEncVer: String;
+    // BASS errors
+    bBassLoaded, bBassencLoaded, bBassaacLoaded, bBasswmaLoaded, bBassflacLoaded: boolean;
+    sErrBassLoaded, sErrBassencLoaded, sErrBassVersion, sErrBassencVer: String;
+    sErrNoBassPLAY, sErrNoBassEnc: String;
     ErrUnsupportedEnc, ErrEncoding : String;
     ErrConnection: String;
     sBufferStr: String;
@@ -313,7 +316,8 @@ type
     ResFnt: TLazarusResourceStream;
     FontId: integer;
     FontCount: cardinal;
-
+    bDisplayFrequency: boolean;
+    sBitrateCaption, sFrequencyCaption: String;
     procedure OnAppMinimize(Sender: TObject);
     procedure OnQueryendSession(var Cancel: Boolean);
     procedure InitButtons;
@@ -337,7 +341,6 @@ type
     procedure ChangeColors;
   public
     BassWMA, BassAAC, BassFLAC, BassEnc, BassEncMP3: HPlugin;
-
     StreamSave:boolean;
     mp3file: String;
     DefaultCaption: String;
@@ -562,7 +565,6 @@ begin
   for i:= 0 to high(Buff) do Buff[i]:= char(0);
   // Copy tag in a buffer
   Move(ID3Tag, Buff, SizeOf(Buff));
-  //FileStreamStuff
   if FWebRadioMain.StreamSave then
   begin
     if FileStream = nil then
@@ -580,7 +582,7 @@ begin
     if FileStream <> nil then FileStream.Write(buff, 128) ;
     FreeandNil(FileStream);
   end;
-  //FileStreamStuff End
+
 end;
 
 // Open an Url
@@ -600,11 +602,13 @@ begin
   HintStr:= '';
   Result:= 0;
   SimulateMsg(WP_Title, true, ' ');
+  // if we are reocording then stop
+  if FWebRadioMain.recording then FWebRadioMain.SBRecordClick(nil);
   // close old stream
   if Chan > 0 then
     if not BASS_StreamFree(chan) then
     begin
-       SimulateMsg(WP_Error, True, BASS_ErrorGetCode);
+       SimulateMsg(WP_Error, True, BASS_ErrorGetCode());
       exit;
     end;
   Bitrate:= 0;
@@ -613,7 +617,7 @@ begin
 
   if (chan = 0) or (BASS_ErrorGetCode() <> 0) then
   begin
-     SimulateMsg(WP_Error, true, BASS_ErrorGetCode);
+     SimulateMsg(WP_Error, true, BASS_ErrorGetCode());
      chan:= 0;
      if chan <> 0 then BASS_StreamFree(chan) ;
   end else
@@ -690,9 +694,16 @@ begin
       equParam.fBandwidth := 16;
       equParam.fCenter := CenterFreqs [i];
       BASS_FXSetParameters(fx[i], @equParam);
+      LEqualizer.visible:= true;
       if  FSettings.Settings.EquEnabled then
+      begin
         equParam.fgain :=  Fsettings.Settings.EquFreqs[i]; //TBE.Position-15
-    end else BASS_ChannelRemoveFX(chan, fx [i]);
+      end else
+      begin
+        LEqualizer.visible:= false;
+        BASS_ChannelRemoveFX(chan, fx [i]);
+      end;
+    end else LEqualizer.visible:= false;
   end;
 end;
 
@@ -762,7 +773,8 @@ procedure TFWebRadioMain.FormCreate(Sender: TObject);
 var
   s: String;
 begin
-  // install memory font DotMatrix at the beginning of process
+  // install memory font DotMatrix at the before creating components
+  // to be sure the font will be presnt for them
   {$IFDEF WINDOWS}
     FontDir:= GetTempDir(false);
     FontId := Screen.Fonts.IndexOf('DotMatrix');
@@ -774,8 +786,11 @@ begin
       PostMessage(HWND_BROADCAST, WM_FONTCHANGE, 0, 0) ;
       Application.ProcessMessages;
    end;
-    {$ENDIF}
+  {$ENDIF}
   inherited;
+  // load main BASS DLLs, we will test later
+  bBassLoaded:= Load_BASSDLL(bassdll);
+  bBassencLoaded:= Load_BASSENCDLL(bassencdll);
   // Variables initialization
   CanClose:= false;
   // Flag needed to execute once some processes in Form activation
@@ -827,6 +842,12 @@ begin
      OSTarget := '64 bits';
      PluginsDir:= WRExecPath+PathDelim+'Plugins'+PathDelim;
   {$ENDIF}
+   bBassaacLoaded:= Load_BASSAACDLL(PluginsDir+bassaacdll);
+  {$IFDEF WINDOWS}
+     bBasswmaLoaded:= Load_BASSWMADLL(PluginsDir+basswmadll);
+  {$ENDIF}
+   bBassflacLoaded:= Load_BASSFLACDLL(PluginsDir+bassflacdll);
+
   // Chargement des chaînes de langue...
   LangFile := TBbIniFile.Create(WRExecPath + LowerCase(ProgName)+'.lng');
   OSVersion:= TOSVersion.Create(LangStr, LangFile);
@@ -844,6 +865,16 @@ end;
 
 procedure TFWebRadioMain.FormDestroy(Sender: TObject);
 begin
+  Unload_bassencoggdll;
+  Unload_bassencaacdll;
+  Unload_bassencmp3dll;
+  Unload_BASSFLACDLL;
+  {$IFDEF WINDOWS}
+    Unload_BASSWMADLL;
+  {$ENDIF}
+  Unload_BASSAACDLL;
+  Unload_BASSENCDLL;
+  Unload_BASSDLL;
   try
     if assigned(FileStream) then FileStream.free;
     if cthread <> 0 then cthread:= 0;
@@ -983,22 +1014,31 @@ begin
   if (Pos('64', OSVersion.Architecture)>0) and (OsTarget='32 bits') then
     MsgDlg(Caption, sUse64bit, mtInformation,  [mbOK], [OKBtn]);
   ShowBtnBar;
-
   // Test version de Bass.DLL
-  if (HIWORD(BASS_GetVersion) <> BASSVERSION) then
+  if not bBassLoaded then
   begin
-    ShowMessage(ErrBassVersion);
+    ShowMessage(Format(sErrBassloaded, [LineEnding]));
+    Close;
+  end;
+  if (HIWORD(BASS_GetVersion()) <> BASSVERSION) then
+  begin
+    ShowMessage(Format(sErrBassVersion, [LineEnding]));
     Close;
   end;
   if (not BASS_Init(-1, 44100, 0, Handle, nil)) then
   begin
-     ShowMessage(BassErrArr[BASS_ERROR_INIT]);
+    ShowMessage(BassErrArr[BASS_ERROR_INIT]);
     Close;
   end;
+  // Default BASS settings
   bass_timout:= 15000;
   BASS_SetConfig(BASS_CONFIG_NET_TIMEOUT, bass_timout);
   BASS_SetConfig(BASS_CONFIG_NET_PLAYLIST, 1); // enable playlist processing
   BASS_SetConfig(BASS_CONFIG_NET_PREBUF, 0); // minimize automatic pre-buffering, so we can do it (and display it) instead
+  // Test version Bassenc.dll
+  if not bBassencLoaded then ShowMessage(Format(sErrBassencLoaded, [LineEnding])) else
+    if Hiword(BASS_Encode_GetVersion()) <> BASSVERSION then ShowMessage(Format(sErrBassEncVer, [LineEnding]));
+
   // in case startup was done after a session end
   if FSettings.Settings.Restart then
   begin
@@ -1027,27 +1067,21 @@ begin
   // Chargement des plugins
   {$IFDEF WINDOWS}
     // Chargement du plugin WMA (Windows uniquement)
-    BassWMA:= BASS_PluginLoad(PChar(PluginsDir+'basswma.dll'), 0);  //'plugins\basswma.dll', 0);
-    if BassWMA = 0 then  ShowMessage(Format(ErrNoBassPLAY, ['WMA', LineEnding, 'Microsoft']));
-    // Chargement des plugins AAC et FLAC
-    BassAAC:= BASS_PluginLoad(PChar(PluginsDir+'bass_aac.dll'), 0);
-    BassFLAC:= BASS_PluginLoad(PChar(PluginsDir+'bassflac.dll'), 0);
+    BassWMA:= BASS_PluginLoad(PChar(PluginsDir+basswmadll), 0);
+    if (BassWMA=0) or not bBasswmaLoaded then ShowMessage(Format(sErrNoBassPLAY, ['WMA', LineEnding, 'Microsoft']));
   {$ENDIF}
-  {$IFDEF LINUX}
-    BassAAC:= BASS_PluginLoad(PChar(PluginsDir+'libbass_aac.so', 0);
-    BassFLAC:= BASS_PluginLoad(PChar(PluginsDir+'libbassflac.so', 0);
-  {$ENDIF}
-  if BassAAC = 0 then ShowMessage(Format(ErrNoBassPLAY, ['AAC', LineEnding, 'AAC']));
-  if BassFLAC = 0 then ShowMessage(Format(ErrNoBassPLAY, ['FLAC', LineEnding, 'FLAC']));
-  EncVer:= BASS_Encode_GetVersion;
-  if Hiword(EncVer) <> BASSVERSION then ShowMessage(Format(ErrBassEncVer, [LineEnding]));
+  // Chargement des plugins AAC et FLAC
+  BassAAC:= BASS_PluginLoad(PChar(PluginsDir+bassaacdll), 0);
+  BassFLAC:= BASS_PluginLoad(PChar(PluginsDir+bassflacdll), 0);
+  if (BassAAC=0) or not bBassaacLoaded then ShowMessage(Format(sErrNoBassPLAY, ['AAC', LineEnding, 'AAC']));
+  if (BassFLAC=0) or not bBassflacLoaded then ShowMessage(Format(sErrNoBassPLAY, ['FLAC', LineEnding, 'FLAC']));
   mp3enclib:= Load_bassencmp3dll (PluginsDir+bassencmp3dll) ;
   aacenclib:= Load_bassencaacdll (PluginsDir+bassencaacdll) ;
   oggenclib:= Load_bassencoggdll (PluginsDir+bassencoggdll) ;
   Application.ProcessMessages;
-  if not mp3enclib then ShowMessage(Format(ErrNoBassEnc, ['MP3', LineEnding, 'MP3']));
-  if not aacenclib then ShowMessage(Format(ErrNoBassEnc, ['AAC', LineEnding, 'AAC']));
-  if not oggenclib then ShowMessage(Format(ErrNoBassEnc, ['OGG', LineEnding, 'OGG']));
+  if not mp3enclib then ShowMessage(Format(sErrNoBassEnc, ['MP3', LineEnding, 'MP3']));
+  if not aacenclib then ShowMessage(Format(sErrNoBassEnc, ['AAC', LineEnding, 'AAC']));
+  if not oggenclib then ShowMessage(Format(sErrNoBassEnc, ['OGG', LineEnding, 'OGG']));
   try
     CurRadio:= FRadios.FindbyUID(FSettings.Settings.LastRadio);
   except
@@ -1115,8 +1149,8 @@ begin
   LRadioIcyName.Font.Color:= FSettings.Settings.DisplayText;
   LStatus.Font.Color:= FSettings.Settings.DisplayText;
   Lstereo.Font.Color:= FSettings.Settings.DisplayText;
-  LBitrate.Font.Color:= FSettings.Settings.DisplayText;
-  LFrequency.Font.Color:= FSettings.Settings.DisplayText;
+  LBitrateFrequ.Font.Color:= FSettings.Settings.DisplayText;
+  LEqualizer.Font.Color:= FSettings.Settings.DisplayText;
   LRecording.Font.Color:= FSettings.Settings.DisplayText;
   LPause.Font.Color:= FSettings.Settings.DisplayText;
   LTag.Font.Color:= FSettings.Settings.DisplayText;
@@ -1189,6 +1223,7 @@ begin
   LRadioName.Font.Name:= Fsettings.Settings.RadioFont;
   ChangeColors;
   Modlangue;
+  LEqualizer.visible:= FSettings.Settings.EquEnabled;
   SettingsChanged := false;
 end;
 
@@ -1274,8 +1309,8 @@ begin
     end;
     LRadioName.Caption:= CurRadio.name;
     LStereo.Caption:= '';
-    LBitrate.Caption:= '';
-    LFrequency.Caption:= '';
+    LBitrateFrequ.Caption:= '';
+    //LEqualizer.Caption:= '';
     LRecording.Caption:= '';
     LPause.Caption:= '';
     Error:= true;
@@ -1289,8 +1324,8 @@ begin
     LStatus.Caption := sConnectStr;
     Caption:= DefaultCaption;
     Lstereo.Caption:= '';
-    LBitrate.Caption:= '';
-    LFrequency.Caption:= '';
+    LBitrateFrequ.Caption:= '';
+    //LEqualizer.Caption:= '';
     LPause.Caption:= '';
     if not error then LTag.caption := ' ';
     LRecording.Caption:= '';
@@ -1334,8 +1369,8 @@ begin
   if lparamArr[WP_Connected].state then
   begin
     if CanalInfo.chans < 2 then LStereo.caption:= sMonoCaption else LStereo.caption:= sStereoCaption ;
-    LFrequency.Caption := IntToStr(CanalInfo.freq)+' Hz';
-    if ((lparamArr[WP_Connected].value>0) and (lparamArr[WP_Connected].value<=UNK_STRM)) then LStatus.Caption:= sConnectedStr+StreamName[lparamArr[WP_Connected].value]
+    sFrequencyCaption := IntToStr(CanalInfo.freq)+' Hz';
+       if ((lparamArr[WP_Connected].value>0) and (lparamArr[WP_Connected].value<=UNK_STRM)) then LStatus.Caption:= sConnectedStr+StreamName[lparamArr[WP_Connected].value]
       else LStatus.Caption:= sConnectedStr;
   end ;
     lparamArr[WP_Connected].state:= False;
@@ -1357,7 +1392,8 @@ begin
   // WP_Bitrate message replacement
   if lparamArr[WP_Bitrate].state then
   begin
-    LBitrate.Caption := Inttostr(int64(lparamArr[WP_Bitrate].value))+' Kb/s';
+    sBitrateCaption := Inttostr(int64(lparamArr[WP_Bitrate].value))+' Kb/s';
+    LBitrateFrequ.Caption:= sBitrateCaption;
     lparamArr[WP_Bitrate].state:= false;
   end;
   if lparamArr[WP_Hint].state then
@@ -1517,6 +1553,8 @@ begin
     SBRecord.Enabled:= false;
     SBStop.Enabled:= true;
     SBPause.Enabled:= true;
+    // If we are recording, then stop
+    if Recording then SBRecordClick(nil);
   end;
 end;
 
@@ -1875,6 +1913,8 @@ begin
   BASS_SetConfig(BASS_CONFIG_GVOL_STREAM, LastVol * 100);
 end;
 
+
+
 // Tray menu
 
 procedure TFWebRadioMain.PMnuTrayPopup(Sender: TObject);
@@ -1914,7 +1954,7 @@ begin
   level:=BASS_ChannelGetLevel(chan);
   SignalMeterL.Value:= LOWORD(level) div 328;   // the left level
   SignalMeterR.Value:= HIWORD(level) div 328;   // the right level
-  if VuTimercount mod 20 = 0 then
+  if VuTimercount mod 20 = 0 then   // Display elapsed time
   try
     float_time:= BASS_ChannelBytes2Seconds(chan, BASS_ChannelGetPosition(chan, BASS_POS_BYTE));
     if Fileduration > 0 then
@@ -1930,7 +1970,10 @@ begin
     end;
   except
   end;
-end;
+  // Alternatively display bitrate and sample frequency
+   if VuTimercount mod 80 = 0 then  LBitrateFrequ.Caption:= sBitrateCaption;   // Display bitrate
+   if VuTimercount mod 400 = 0 then  LBitrateFrequ.Caption:= sFrequencyCaption; // Display frequency 1/5 time
+ end;
 
 procedure TFWebRadioMain.SettingsOnStateChange(Sender: TObject);
 begin
@@ -1961,10 +2004,12 @@ procedure TFWebRadioMain.FormClose(Sender: TObject; var CloseAction: TCloseActio
 begin
   if (not FSettings.Settings.HideInTaskbar) or CanClose then
   begin
+    // If we are recording, then stop
+    if Recording then SBRecordClick(nil);
     CloseAction := caFree;
     if FSettings.Settings.Startup then SetAutostart(progname, Application.exename)
     else UnSetAutostart(progname);
-    BASS_Free;
+    BASS_Free();
     if RadiosChanged or (FSettings.Settings.version='') then SaveConfig(All) else
     if SettingsChanged then  SaveConfig(Setting) ;
     try
@@ -2125,6 +2170,7 @@ begin
       sStereoCaption:= ReadString(LangStr,'sStereoCaption','Stéréo');
       sMonoCaption:= ReadString(LangStr,'sMonoCaption','Mono');
       LStereo.Caption:= sStereoCaption;
+      LEqualizer.Caption:= ReadString(LangStr,'LEqualizer.Caption', LEqualizer.Caption);
       sRecordingCaption:= ReadString(LangStr,'sRecordingCaption','Enregistrement');
       sStopCaption:= ReadString(LangStr, 'sStopCaption', 'Stoppé');
       sPauseCaption:= ReadString(LangStr, 'sPauseCaption','Pause');
@@ -2146,7 +2192,7 @@ begin
       sConnectedStr:= ReadString(LangStr, 'sConnectedStr', 'Connecté');
       sNotConnectedStr:= ReadString(LangStr, 'sNotConnectedStr', 'Non connecté');
       sLoadStr:=  ReadString(LangStr, 'sLoadStr', 'Chargement de');
-      sBufferStr:= ReadString(LangStr, 'sBufferStr', 'Buffering...');
+      sBufferStr:= ReadString(LangStr, 'sBufferStr', 'Mise en buffer');
       sEnterUrl:= ReadString(LangStr, 'sEnterUrl', sEnterUrl);
       sUse64bit:=ReadString(LangStr,'Use64bit','Utilisez la version 64 bits de ce programme');
       sNoradio:= ReadString(LangStr,'sNoradio', 'Aucune radio sélectionnée');
@@ -2252,8 +2298,12 @@ begin
       FEqualizer.BtnCancel.Caption:= CancelBtn;
       FEqualizer.BtnOK.Caption:= OKBtn;
 
-            // BASS Errors
-      ErrBassVersion:= ReadString(LangStr, 'ErrBassVersion','Mauvaise version de BASS.DLL');
+      // BASS Errors
+      sErrBassLoaded:= ReadString(LangStr, 'sErrBassLoaded', 'BASS.DLL non chargé.%sExécution du programme impossible');
+      sErrBassVersion:= ReadString(LangStr, 'sErrBassVersion','Mauvaise version de BASS.DLL.%sExécution du programme impossible');
+      sErrBassencLoaded:= ReadString(LangStr, 'sErrBassencLoaded', 'BASSENC.DLL non chargé.%sEnregistrement impossible');
+      sErrBassencVer:= ReadString(LangStr, 'sErrNoBassencVer','Mauvaise version de Bassenc.%sEnregistrement impossible.');
+      sErrNoBassPLAY:=  ReadString(LangStr, 'sErrNoBassPLAY','La bibliothèque Bass%s n''est pas installée.%sLecture des flux %s impossible.');
 
       BassErrArr[BASS_OK]:= 'OK';         //0
       BassErrArr[BASS_ERROR_MEM]:= ReadString(LangStr, 'BASS_ERROR_MEM', 'Erreur mémoire');
@@ -2295,9 +2345,7 @@ begin
       BassErrArr[BASS_ERROR_UNSTREAMABLE]:= ReadString(LangStr, 'BASS_ERROR_UNSTREAMABLE', 'Impossible de créer un flux');
       BassErrArr[length(BassErrArr)-1]:= ReadString(LangStr, 'BASS_ERROR_UNKNOWN', 'Erreur inconnue');
 
-      ErrNoBassPLAY:=  ReadString(LangStr, 'ErrNoBassPLAY','La bibliothèque Bass%s n''est pas installée.%sLecture des flux %s impossible.');
-      ErrNoBassEnc:=  ReadString(LangStr, 'ErrNoBassEnc','La bibliothèque BassEnc%s n''est pas installée.%sEnregistrement impossible au format %s.');
-      ErrBassEncVer:= ReadString(LangStr, 'ErrNoBassEncVer','La version de la bibliothèque BassEnc est erronnée.%sEnregistrement impossible.');
+      sErrNoBassEnc:=  ReadString(LangStr, 'sErrNoBassEnc','La bibliothèque BassEnc%s n''est pas installée.%sEnregistrement impossible au format %s.');
       ErrUnsupportedEnc:= ReadString(LangStr, 'ErrUnsupportedEnc', 'Impossible d''enregistrer, encodage %s non supporté');
       ErrEncoding:= ReadString(LangStr, 'ErrEncoding', 'Erreur d''encodage %d');
       ErrConnection:= ReadString(LangStr, 'ErrConnection', 'Erreur de connexion');
