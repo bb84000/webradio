@@ -40,6 +40,7 @@ sRecordingHint=Click to record the radio
 sStopRecordingHint=Click to stop recording
 sNoLongerChkUpdates=No longer check updates
 sUpdateAlertBox=Current version: %sA new version %s is available
+sCannotGetNewVer=New version check unavailable
 sConnectStr=Connecting...
 sLoadStr=Loading
 sBufferStr=Buffering
@@ -47,6 +48,8 @@ sConnectedStr=Connected
 sNotConnectedStr=Not connected
 sEnterUrl=Enter a radio's URL
 sUse64bit=Use the 64bit version of the program
+sShowEqualizer=Display equalizer
+sHideEqualizer=Hide Equalizer
 
 ;Menus
 PMnuOpenRadio.Caption=Open radio in the list
@@ -118,11 +121,8 @@ FSettings.sMnuCopy=Copy
 FSettings.sMnuPaste=Paste
 FSettings.RBnative.Caption=NATIVE
 
-; Equalizer
-
-FEqualizer.Caption=Parametric equalizer
-FEqualizer.CBEqualize.Caption=Enable the equalizer
-FEqualizer.LReset.Caption=Reset levels
+CBEqualize.Caption=Enable the equalizer
+LReset.Caption=Reset levels
 
 ;Errors
 sErrBassLoaded=Bass library not loaded.%sProgram execution impossible
@@ -184,7 +184,7 @@ ErrWinVersion=The program cannot operate with this Windows' version
 
 ErrUnsupportedEnc=Cannot record, %s encoding not supported
 ErrEncoding=Encoding error # %d
-ErrConnection=Connection error
+
 
 ;Http error messages
 SErrInvalidProtocol=Invalid protocol "%s"
@@ -256,6 +256,7 @@ sNoradio=Aucune radio sélectionnée
 sRecordingHint=Cliquer pour enregistrer la radio
 sStopRecordingHint=Cliquer pour arrêter l'enregistrement
 sNoLongerChkUpdates=Ne plus rechercher de mises à jour
+sCannotGetNewVer=Recherche de nouvelle version impossible
 sUpdateAlertBox=Version actuelle : %sUne nouvelle version %s est disponible
 sConnectStr=Connexion...
 sLoadStr=Chargement de
@@ -265,6 +266,8 @@ sNotConnectedStr=Non connecté
 sEnterUrl=Saisir l'URL d'une radio
 sUse64bit=Utilisez la version 64 bits de ce programme
 ODAudio.Title=Ouvrir un fichier audio
+sShowEqualizer=Afficher l''égaliseur
+sHideEqualizer=Masquer l''égaliseur
 
 ;Menus
 PMnuOpenRadio.Caption=Ouvrir une radio dans la liste
@@ -309,11 +312,8 @@ FRadios.LFavicon.Caption=Fichier logo
 FRadios.LPresets.Caption=Présélections
 FRadios.EFavicon.Hint=Cliquez sur le bouton à droite de ce champ pour sélectionner une image
 
-;Equalizer form
-
-FEqualizer.Caption=Egaliseur paramétrique
-FEqualizer.CBEqualize.Caption=Activer l'égaliseur
-FEqualizer.LReset.Caption=Remettre à zéro
+CBEqualize.Caption=Activer l'égaliseur
+LReset.Caption=Remettre à zéro
 
 ;Divers
 
@@ -398,7 +398,7 @@ ErrReading=Lecture de la radio impossible
 ErrWinVersion=Ce programme ne fonctionne pas avec cette version de Windows
 ErrUnsupportedEnc=Impossible d'enregistrer, encodage %s non supporté
 ErrEncoding=Erreur d'encodage %d
-ErrConnection=Erreur de connexion
+
 
 ;Http error messages
 SErrInvalidProtocol=Protocole "%s" invalide

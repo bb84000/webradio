@@ -1,13 +1,13 @@
 object FWebRadioMain: TFWebRadioMain
-  Left = 776
+  Left = 448
   Height = 295
-  Top = 249
-  Width = 615
+  Top = 335
+  Width = 951
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'FWebRadioMain'
   ClientHeight = 295
-  ClientWidth = 615
+  ClientWidth = 951
   OnActivate = FormActivate
   OnChangeBounds = FormChangeBounds
   OnClose = FormClose
@@ -15,26 +15,28 @@ object FWebRadioMain: TFWebRadioMain
   OnDestroy = FormDestroy
   Position = poDesktopCenter
   LCLVersion = '2.2.0.4'
-  object PMain: TPanel
+  object PnlMain: TPanel
     Left = 0
     Height = 251
     Top = 44
-    Width = 615
+    Width = 951
     Align = alClient
+    BevelInner = bvLowered
+    BevelOuter = bvNone
     ClientHeight = 251
-    ClientWidth = 615
+    ClientWidth = 951
     ParentFont = False
     PopupMenu = PMnuMain
     TabOrder = 0
-    object PDisplay: TPanel
+    object PnlDisplay: TPanel
       Left = 15
       Height = 108
       Top = 12
       Width = 473
       ClientHeight = 108
       ClientWidth = 473
-      Color = clBlack
       ParentColor = False
+      ParentFont = False
       TabOrder = 0
       object LStereo: TLabel
         Left = 112
@@ -43,8 +45,9 @@ object FWebRadioMain: TFWebRadioMain
         Width = 60
         AutoSize = False
         Caption = 'Stéréo'
-        Font.Color = clYellow
-        ParentFont = False
+        Color = clDefault
+        ParentColor = True
+        Transparent = False
       end
       object LEqualizer: TLabel
         Left = 236
@@ -53,8 +56,10 @@ object FWebRadioMain: TFWebRadioMain
         Width = 60
         AutoSize = False
         Caption = 'Egaliseur'
-        Font.Color = clYellow
+        Color = clDefault
+        ParentColor = True
         ParentFont = False
+        Transparent = False
         Visible = False
       end
       object LBitrateFrequ: TLabel
@@ -64,8 +69,9 @@ object FWebRadioMain: TFWebRadioMain
         Width = 60
         AutoSize = False
         Caption = 'LBitrateFrequ'
-        Font.Color = clYellow
-        ParentFont = False
+        Color = clDefault
+        ParentColor = True
+        Transparent = False
       end
       object LPause: TLabel
         Left = 420
@@ -74,8 +80,9 @@ object FWebRadioMain: TFWebRadioMain
         Width = 40
         AutoSize = False
         Caption = 'Pause'
-        Font.Color = clYellow
-        ParentFont = False
+        Color = clDefault
+        ParentColor = True
+        Transparent = False
       end
       object LRecording: TLabel
         Left = 298
@@ -84,8 +91,9 @@ object FWebRadioMain: TFWebRadioMain
         Width = 120
         AutoSize = False
         Caption = 'Recording'
-        Font.Color = clYellow
-        ParentFont = False
+        Color = clDefault
+        ParentColor = True
+        Transparent = False
       end
       object ImgLogo: TImage
         Left = 10
@@ -6129,22 +6137,6 @@ object FWebRadioMain: TFWebRadioMain
         Stretch = True
         StretchOutEnabled = False
       end
-      object LTag: TSCrollLabel
-        Left = 85
-        Height = 17
-        Top = 64
-        Width = 375
-        AutoSize = False
-        Caption = 'ScrollButton'
-        Font.Color = clYellow
-        ParentFont = False
-        ParentShowHint = False
-        ShowAccelChar = False
-        ShowHint = True
-        Scrolling = True
-        ScrollInterval = 35
-        ScrollAutoString = '...'
-      end
       object LStatus: TLabel
         Left = 10
         Height = 15
@@ -6152,47 +6144,61 @@ object FWebRadioMain: TFWebRadioMain
         Width = 100
         AutoSize = False
         Caption = 'Connexion'
-        Font.Color = clYellow
-        ParentFont = False
+        Color = clDefault
+        ParentColor = True
         ShowAccelChar = False
+        Transparent = False
       end
-      object LRadioName: TSCrollLabel
+      object LRadioName: TLabelSCroll
         Left = 85
         Height = 30
         Top = 16
         Width = 375
         AutoSize = False
-        Caption = 'ScrollButton'
-        Font.Color = clYellow
+        Caption = 'Radio name'
+        Color = clDefault
         Font.Height = -24
         Font.Name = 'DotMatrix'
+        ParentColor = True
         ParentFont = False
         ParentShowHint = False
-        ShowAccelChar = False
         ShowHint = True
+        Transparent = False
         Scrolling = True
-        ScrollInterval = 35
         ScrollAutoString = '...'
       end
-      object LRadioIcyName: TSCrollLabel
+      object LTag: TLabelSCroll
+        Left = 85
+        Height = 17
+        Top = 63
+        Width = 375
+        AutoSize = False
+        Caption = 'Radio tag'
+        Color = clDefault
+        ParentColor = True
+        ParentShowHint = False
+        ShowHint = True
+        Transparent = False
+        Scrolling = True
+        ScrollAutoString = '...'
+      end
+      object LRadioIcyName: TLabelSCroll
         Left = 85
         Height = 17
         Top = 44
         Width = 375
         AutoSize = False
-        Caption = 'ScrollButton'
-        Font.Color = clYellow
-        ParentBidiMode = False
-        ParentFont = False
+        Caption = 'Icy radio name'
+        Color = clDefault
+        ParentColor = True
         ParentShowHint = False
-        ShowAccelChar = False
         ShowHint = True
+        Transparent = False
         Scrolling = True
-        ScrollInterval = 35
         ScrollAutoString = '...'
       end
     end
-    object PPresets: TPanel
+    object PnlPresets: TPanel
       Left = 15
       Height = 96
       Top = 136
@@ -6802,20 +6808,20 @@ object FWebRadioMain: TFWebRadioMain
         StateDisabled.BorderWidth = 1
       end
     end
-    object PRight: TPanel
+    object PnlVolume: TPanel
       Left = 496
-      Height = 48
-      Top = 184
+      Height = 220
+      Top = 12
       Width = 105
       BevelInner = bvLowered
-      ClientHeight = 48
+      ClientHeight = 220
       ClientWidth = 105
       TabOrder = 2
       object SBPause: TSpeedButton
         Left = 6
         Height = 26
         Hint = 'Cliquer pour interrompre la lecture'
-        Top = 10
+        Top = 180
         Width = 22
         Glyph.Data = {
           36080000424D3608000000000000360000002800000020000000100000000100
@@ -6895,7 +6901,7 @@ object FWebRadioMain: TFWebRadioMain
         Left = 30
         Height = 26
         Hint = 'Cliquer pour arrêter la lecture'
-        Top = 10
+        Top = 180
         Width = 22
         Enabled = False
         Glyph.Data = {
@@ -6976,7 +6982,7 @@ object FWebRadioMain: TFWebRadioMain
         Left = 54
         Height = 26
         Hint = 'Cliquer pour reprendre la lecture'
-        Top = 10
+        Top = 180
         Width = 22
         Enabled = False
         Glyph.Data = {
@@ -7057,7 +7063,7 @@ object FWebRadioMain: TFWebRadioMain
         Left = 78
         Height = 26
         Hint = 'Cliquer pour enregistrer la radio'
-        Top = 10
+        Top = 180
         Width = 22
         Enabled = False
         Glyph.Data = {
@@ -7135,206 +7141,631 @@ object FWebRadioMain: TFWebRadioMain
         ShowHint = True
         ParentShowHint = False
       end
+      object SignalMeterL: TSignalMeter
+        Left = 8
+        Height = 120
+        Top = 3
+        Width = 32
+        ColorFore = clHighlight
+        ColorBack = cl3DLight
+        SignalUnit = 'Units'
+        ValueMax = 100
+        Digits = 0
+        Increment = 10
+        ShowIncrements = False
+        Transparent = False
+        GapTop = 10
+        GapBottom = 10
+        LeftMeter = 10
+        BarThickness = 10
+        MarkerColor = clNone
+        ShowMarker = False
+        ShowTopText = False
+        ShowValueMin = False
+        ShowValueMax = False
+      end
+      object SignalMeterR: TSignalMeter
+        Left = 38
+        Height = 120
+        Top = 3
+        Width = 32
+        Caption = 'SignalMeterR'
+        ColorFore = clHighlight
+        ColorBack = cl3DLight
+        SignalUnit = 'Units'
+        ValueMax = 100
+        Digits = 0
+        Increment = 10
+        ShowIncrements = False
+        Transparent = False
+        GapTop = 10
+        GapBottom = 10
+        LeftMeter = 10
+        BarThickness = 10
+        MarkerColor = clNone
+        ShowMarker = False
+        ShowTopText = False
+        ShowValueMin = False
+        ShowValueMax = False
+      end
+      object TBVolume: TTrackBar
+        Left = 63
+        Height = 110
+        Top = 6
+        Width = 33
+        Frequency = 10
+        Max = 100
+        OnChange = TBVolumeChange
+        Orientation = trVertical
+        Position = 0
+        Reversed = True
+        ScalePos = trLeft
+        TickMarks = tmTopLeft
+        ParentColor = False
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 0
+      end
+      object LLeft: TLabel
+        Left = 19
+        Height = 15
+        Hint = 'Voie gauche'
+        Top = 120
+        Width = 8
+        Caption = 'G'
+        ParentShowHint = False
+        ShowAccelChar = False
+        ShowHint = True
+      end
+      object LRight: TLabel
+        Left = 49
+        Height = 15
+        Hint = 'Voie droite'
+        Top = 120
+        Width = 8
+        Caption = 'D'
+        ParentShowHint = False
+        ShowAccelChar = False
+        ShowHint = True
+      end
+      object SBMute: TSpeedButton
+        Left = 72
+        Height = 20
+        Hint = 'Cliquer pour couper le son'
+        Top = 116
+        Width = 24
+        Glyph.Data = {
+          36080000424D3608000000000000360000002800000020000000100000000100
+          2000000000000008000064000000640000000000000000000000FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00ECA6A6FFECA6
+          A6FFCF8C8CFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFF6F6FFFFF6
+          F6FFFFDCDCFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00ECA6A6FFCF8C8CFFECA6A6FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFF6F6FFFFDCDCFFFFF6F6FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00ECA6A6FFECA6A6FFCF8C
+          8CFFFFFFFF00ECA6A6FFCF8C8CFFECA6A6FFFFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFF6F6FFFFF6F6FFFFDC
+          DCFFFFFFFF00FFF6F6FFFFDCDCFFFFF6F6FFFFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00ECA6
+          A6FFCF8C8CFFFFFFFF00ECA6A6FFCF8C8CFFFFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFF6
+          F6FFFFDCDCFFFFFFFF00FFF6F6FFFFDCDCFFFFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00525050FF525050FF525050FF646464FFFFFFFF00FFFF
+          FF00ECA6A6FFCF8C8CFFFFFFFF00ECA6A6FFCF8C8CFFFFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00A2A0A0FFA2A0A0FFA2A0A0FFB4B4B4FFFFFFFF00FFFF
+          FF00FFF6F6FFFFDCDCFFFFFFFF00FFF6F6FFFFDCDCFFFFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00525050FFAFAFAFFFAFAFAFFFAFAFAFFFC7C7C7FF525050FFFFFF
+          FF00FFFFFF00ECA6A6FFCF8C8CFFFFFFFF00ECA6A6FFFFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00A2A0A0FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00A2A0A0FFFFFF
+          FF00FFFFFF00FFF6F6FFFFDCDCFFFFFFFF00FFF6F6FFFFFFFF00FFFFFF00FFFF
+          FF00525050FF757575FFAFAFAFFFC7C7C7FFC7C7C7FFAFAFAFFFAFAFAFFF5250
+          50FFFFFFFF00FFFFFF00ECA6A6FFFFFFFF00ECA6A6FFFFFFFF00FFFFFF00FFFF
+          FF00A2A0A0FFC5C5C5FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00A2A0
+          A0FFFFFFFF00FFFFFF00FFF6F6FFFFFFFF00FFF6F6FFFFFFFF00FFFFFF00FFFF
+          FF00525050FF646464FF525050FF393939FF919090FFC7C7C7FFAFAFAFFF9190
+          90FF646464FFFFFFFF00ECA6A6FFFFFFFF00ECA6A6FFFFFFFF00FFFFFF00FFFF
+          FF00A2A0A0FFB4B4B4FFA2A0A0FF898989FFE1E0E0FFFFFFFF00FFFFFF00E1E0
+          E0FFB4B4B4FFFFFFFF00FFF6F6FFFFFFFF00FFF6F6FFFFFFFF00FFFFFF007662
+          62FF525050FF525050FF907575FF907575FF646464FFAFAFAFFFC7C7C7FFAFAF
+          AFFF525050FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00C6B2
+          B2FFA2A0A0FFA2A0A0FFE0C5C5FFE0C5C5FFB4B4B4FFFFFFFF00FFFFFF00FFFF
+          FF00A2A0A0FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF006D3E3EFF9075
+          75FF525050FF646464FF919090FF757575FF907575FF525050FFC7C7C7FFAFAF
+          AFFF646464FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00BD8E8EFFE0C5
+          C5FFA2A0A0FFB4B4B4FFE1E0E0FFC5C5C5FFE0C5C5FFA2A0A0FFFFFFFF00FFFF
+          FF00B4B4B4FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF006D3E3EFFDAB5
+          B5FF393939FF919090FFC7C7C7FF919090FF757575FF525050FFAFAFAFFFAFAF
+          AFFF525050FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00BD8E8EFFFFFF
+          FF00898989FFE1E0E0FFFFFFFF00E1E0E0FFC5C5C5FFA2A0A0FFFFFFFF00FFFF
+          FF00A2A0A0FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF006D3E3EFFFAFA
+          FAFF525050FF393939FFFAFAFAFFC7C7C7FF757575FF757575FF919090FF9190
+          90FF525050FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00BD8E8EFFFFFF
+          FF00A2A0A0FF898989FFFFFFFF00FFFFFF00C5C5C5FFC5C5C5FFE1E0E0FFE1E0
+          E0FFA2A0A0FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF006D3E3EFFB38E
+          8EFFC7C7C7FF393939FF525050FF757575FF525050FF646464FF907575FF9190
+          90FF646464FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00BD8E8EFFFFDE
+          DEFFFFFFFF00898989FFA2A0A0FFC5C5C5FFA2A0A0FFB4B4B4FFE0C5C5FFE1E0
+          E0FFB4B4B4FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF006D3E
+          3EFF6D3E3EFF525050FF393939FF393939FF525050FF646464FF646464FF5250
+          50FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00BD8E
+          8EFFBD8E8EFFA2A0A0FF898989FF898989FFA2A0A0FFB4B4B4FFB4B4B4FFA2A0
+          A0FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00646464FF393939FF393939FF525050FF646464FFFFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00B4B4B4FF898989FF898989FFA2A0A0FFB4B4B4FFFFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
+        }
+        Margin = 0
+        NumGlyphs = 2
+        OnClick = SBMuteClick
+        ShowHint = True
+        ParentShowHint = False
+      end
+      object PBLength: TProgressBar
+        Left = 8
+        Height = 18
+        Top = 140
+        Width = 90
+        TabOrder = 1
+        BarShowText = True
+      end
+      object Lposition: TLabel
+        Left = 5
+        Height = 15
+        Top = 160
+        Width = 104
+        Alignment = taCenter
+        AutoSize = False
+      end
     end
-    object SignalMeterL: TSignalMeter
-      Left = 500
-      Height = 120
-      Top = 3
-      Width = 32
-      ColorFore = clHighlight
-      ColorBack = cl3DLight
-      SignalUnit = 'Units'
-      ValueMax = 100
-      Digits = 0
-      Increment = 10
-      ShowIncrements = False
-      Transparent = False
-      GapTop = 10
-      GapBottom = 10
-      LeftMeter = 10
-      BarThickness = 10
-      MarkerColor = clNone
-      ShowMarker = False
-      ShowTopText = False
-      ShowValueMin = False
-      ShowValueMax = False
-    end
-    object SignalMeterR: TSignalMeter
-      Left = 530
-      Height = 120
-      Top = 3
-      Width = 32
-      Caption = 'SignalMeterR'
-      ColorFore = clHighlight
-      ColorBack = cl3DLight
-      SignalUnit = 'Units'
-      ValueMax = 100
-      Digits = 0
-      Increment = 10
-      ShowIncrements = False
-      Transparent = False
-      GapTop = 10
-      GapBottom = 10
-      LeftMeter = 10
-      BarThickness = 10
-      MarkerColor = clNone
-      ShowMarker = False
-      ShowTopText = False
-      ShowValueMin = False
-      ShowValueMax = False
-    end
-    object TBVolume: TTrackBar
-      Left = 560
-      Height = 112
-      Top = 6
-      Width = 33
-      Frequency = 10
-      Max = 100
-      OnChange = TBVolumeChange
-      Orientation = trVertical
-      Position = 0
-      Reversed = True
-      ScalePos = trLeft
-      TickMarks = tmTopLeft
-      ParentColor = False
-      ParentShowHint = False
-      ShowHint = True
+    object PEqualizer: TPanel
+      Left = 624
+      Height = 220
+      Top = 12
+      Width = 308
+      BevelInner = bvLowered
+      ClientHeight = 220
+      ClientWidth = 308
       TabOrder = 3
-    end
-    object LLeft: TLabel
-      Left = 512
-      Height = 15
-      Hint = 'Voie gauche'
-      Top = 125
-      Width = 8
-      Caption = 'G'
-      ParentShowHint = False
-      ShowAccelChar = False
-      ShowHint = True
-    end
-    object LRight: TLabel
-      Left = 542
-      Height = 15
-      Hint = 'Voie droite'
-      Top = 125
-      Width = 8
-      Caption = 'D'
-      ParentShowHint = False
-      ShowAccelChar = False
-      ShowHint = True
-    end
-    object PBLength: TProgressBar
-      Left = 497
-      Height = 18
-      Top = 147
-      Width = 104
-      TabOrder = 4
-      BarShowText = True
-    end
-    object Lposition: TLabel
-      Left = 497
-      Height = 15
-      Top = 167
-      Width = 104
-      Alignment = taCenter
-      AutoSize = False
-    end
-    object SBMute: TSpeedButton
-      Left = 569
-      Height = 24
-      Hint = 'Cliquer pour couper le son'
-      Top = 120
-      Width = 24
-      Glyph.Data = {
-        36080000424D3608000000000000360000002800000020000000100000000100
-        2000000000000008000064000000640000000000000000000000FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00ECA6A6FFECA6
-        A6FFCF8C8CFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFF6F6FFFFF6
-        F6FFFFDCDCFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00ECA6A6FFCF8C8CFFECA6A6FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFF6F6FFFFDCDCFFFFF6F6FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00ECA6A6FFECA6A6FFCF8C
-        8CFFFFFFFF00ECA6A6FFCF8C8CFFECA6A6FFFFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFF6F6FFFFF6F6FFFFDC
-        DCFFFFFFFF00FFF6F6FFFFDCDCFFFFF6F6FFFFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00ECA6
-        A6FFCF8C8CFFFFFFFF00ECA6A6FFCF8C8CFFFFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFF6
-        F6FFFFDCDCFFFFFFFF00FFF6F6FFFFDCDCFFFFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00525050FF525050FF525050FF646464FFFFFFFF00FFFF
-        FF00ECA6A6FFCF8C8CFFFFFFFF00ECA6A6FFCF8C8CFFFFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00A2A0A0FFA2A0A0FFA2A0A0FFB4B4B4FFFFFFFF00FFFF
-        FF00FFF6F6FFFFDCDCFFFFFFFF00FFF6F6FFFFDCDCFFFFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00525050FFAFAFAFFFAFAFAFFFAFAFAFFFC7C7C7FF525050FFFFFF
-        FF00FFFFFF00ECA6A6FFCF8C8CFFFFFFFF00ECA6A6FFFFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00A2A0A0FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00A2A0A0FFFFFF
-        FF00FFFFFF00FFF6F6FFFFDCDCFFFFFFFF00FFF6F6FFFFFFFF00FFFFFF00FFFF
-        FF00525050FF757575FFAFAFAFFFC7C7C7FFC7C7C7FFAFAFAFFFAFAFAFFF5250
-        50FFFFFFFF00FFFFFF00ECA6A6FFFFFFFF00ECA6A6FFFFFFFF00FFFFFF00FFFF
-        FF00A2A0A0FFC5C5C5FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00A2A0
-        A0FFFFFFFF00FFFFFF00FFF6F6FFFFFFFF00FFF6F6FFFFFFFF00FFFFFF00FFFF
-        FF00525050FF646464FF525050FF393939FF919090FFC7C7C7FFAFAFAFFF9190
-        90FF646464FFFFFFFF00ECA6A6FFFFFFFF00ECA6A6FFFFFFFF00FFFFFF00FFFF
-        FF00A2A0A0FFB4B4B4FFA2A0A0FF898989FFE1E0E0FFFFFFFF00FFFFFF00E1E0
-        E0FFB4B4B4FFFFFFFF00FFF6F6FFFFFFFF00FFF6F6FFFFFFFF00FFFFFF007662
-        62FF525050FF525050FF907575FF907575FF646464FFAFAFAFFFC7C7C7FFAFAF
-        AFFF525050FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00C6B2
-        B2FFA2A0A0FFA2A0A0FFE0C5C5FFE0C5C5FFB4B4B4FFFFFFFF00FFFFFF00FFFF
-        FF00A2A0A0FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF006D3E3EFF9075
-        75FF525050FF646464FF919090FF757575FF907575FF525050FFC7C7C7FFAFAF
-        AFFF646464FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00BD8E8EFFE0C5
-        C5FFA2A0A0FFB4B4B4FFE1E0E0FFC5C5C5FFE0C5C5FFA2A0A0FFFFFFFF00FFFF
-        FF00B4B4B4FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF006D3E3EFFDAB5
-        B5FF393939FF919090FFC7C7C7FF919090FF757575FF525050FFAFAFAFFFAFAF
-        AFFF525050FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00BD8E8EFFFFFF
-        FF00898989FFE1E0E0FFFFFFFF00E1E0E0FFC5C5C5FFA2A0A0FFFFFFFF00FFFF
-        FF00A2A0A0FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF006D3E3EFFFAFA
-        FAFF525050FF393939FFFAFAFAFFC7C7C7FF757575FF757575FF919090FF9190
-        90FF525050FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00BD8E8EFFFFFF
-        FF00A2A0A0FF898989FFFFFFFF00FFFFFF00C5C5C5FFC5C5C5FFE1E0E0FFE1E0
-        E0FFA2A0A0FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF006D3E3EFFB38E
-        8EFFC7C7C7FF393939FF525050FF757575FF525050FF646464FF907575FF9190
-        90FF646464FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00BD8E8EFFFFDE
-        DEFFFFFFFF00898989FFA2A0A0FFC5C5C5FFA2A0A0FFB4B4B4FFE0C5C5FFE1E0
-        E0FFB4B4B4FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF006D3E
-        3EFF6D3E3EFF525050FF393939FF393939FF525050FF646464FF646464FF5250
-        50FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00BD8E
-        8EFFBD8E8EFFA2A0A0FF898989FF898989FFA2A0A0FFB4B4B4FFB4B4B4FFA2A0
-        A0FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00646464FF393939FF393939FF525050FF646464FFFFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00B4B4B4FF898989FF898989FFA2A0A0FFB4B4B4FFFFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
-      }
-      Margin = 0
-      NumGlyphs = 2
-      OnClick = SBMuteClick
-      ShowHint = True
-      ParentShowHint = False
+      object TBEq1: TTrackBar
+        Left = 25
+        Height = 137
+        Top = 25
+        Width = 25
+        Frequency = 3
+        LineSize = 3
+        Max = 30
+        OnChange = TBEqChange
+        Orientation = trVertical
+        Position = 15
+        Reversed = True
+        TickMarks = tmTopLeft
+        TabOrder = 0
+      end
+      object TBEq2: TTrackBar
+        Left = 55
+        Height = 137
+        Top = 25
+        Width = 25
+        Frequency = 3
+        LineSize = 3
+        Max = 30
+        OnChange = TBEqChange
+        Orientation = trVertical
+        Position = 15
+        Reversed = True
+        TickMarks = tmTopLeft
+        TabOrder = 1
+      end
+      object TBEq3: TTrackBar
+        Left = 85
+        Height = 137
+        Top = 25
+        Width = 25
+        Frequency = 3
+        LineSize = 3
+        Max = 30
+        OnChange = TBEqChange
+        Orientation = trVertical
+        Position = 15
+        Reversed = True
+        TickMarks = tmTopLeft
+        TabOrder = 2
+      end
+      object TBEq4: TTrackBar
+        Left = 115
+        Height = 137
+        Top = 25
+        Width = 25
+        Frequency = 3
+        LineSize = 3
+        Max = 30
+        OnChange = TBEqChange
+        Orientation = trVertical
+        Position = 15
+        Reversed = True
+        TickMarks = tmTopLeft
+        TabOrder = 3
+      end
+      object TBEq5: TTrackBar
+        Left = 145
+        Height = 137
+        Top = 25
+        Width = 25
+        Frequency = 3
+        LineSize = 3
+        Max = 30
+        OnChange = TBEqChange
+        Orientation = trVertical
+        Position = 15
+        Reversed = True
+        TickMarks = tmTopLeft
+        TabOrder = 7
+      end
+      object TBEq6: TTrackBar
+        Left = 175
+        Height = 137
+        Top = 25
+        Width = 25
+        Frequency = 3
+        LineSize = 3
+        Max = 30
+        OnChange = TBEqChange
+        Orientation = trVertical
+        Position = 15
+        Reversed = True
+        TickMarks = tmTopLeft
+        TabOrder = 6
+      end
+      object TBEq7: TTrackBar
+        Left = 205
+        Height = 137
+        Top = 25
+        Width = 25
+        Frequency = 3
+        LineSize = 3
+        Max = 30
+        OnChange = TBEqChange
+        Orientation = trVertical
+        Position = 15
+        Reversed = True
+        TickMarks = tmTopLeft
+        TabOrder = 8
+      end
+      object TBEq8: TTrackBar
+        Left = 235
+        Height = 137
+        Top = 25
+        Width = 25
+        Frequency = 3
+        LineSize = 3
+        Max = 30
+        OnChange = TBEqChange
+        Orientation = trVertical
+        Position = 15
+        Reversed = True
+        TickMarks = tmTopLeft
+        TabOrder = 9
+      end
+      object TBEq9: TTrackBar
+        Left = 265
+        Height = 137
+        Top = 25
+        Width = 25
+        Frequency = 3
+        LineSize = 3
+        Max = 30
+        OnChange = TBEqChange
+        Orientation = trVertical
+        Position = 15
+        Reversed = True
+        TickMarks = tmTopLeft
+        TabOrder = 4
+      end
+      object CBEqualize: TCheckBox
+        Left = 8
+        Height = 19
+        Top = 189
+        Width = 135
+        AutoSize = False
+        Caption = 'Activer l''égaliseur'
+        OnChange = CBEqualizeChange
+        TabOrder = 5
+      end
+      object LHzCaption: TLabel
+        Left = 8
+        Height = 15
+        Top = 10
+        Width = 15
+        AutoSize = False
+        Caption = 'Hz'
+      end
+      object LHz1: TLabel
+        Left = 35
+        Height = 15
+        Top = 10
+        Width = 20
+        Alignment = taCenter
+        AutoSize = False
+        Caption = '62'
+      end
+      object LdB: TLabel
+        Left = 11
+        Height = 15
+        Top = 165
+        Width = 20
+        AutoSize = False
+        Caption = 'dB'
+      end
+      object LHz2: TLabel
+        Left = 65
+        Height = 15
+        Top = 10
+        Width = 20
+        Alignment = taCenter
+        AutoSize = False
+        Caption = '125'
+      end
+      object LHz3: TLabel
+        Left = 95
+        Height = 15
+        Top = 10
+        Width = 20
+        Alignment = taCenter
+        AutoSize = False
+        Caption = '250'
+      end
+      object LHz4: TLabel
+        Left = 125
+        Height = 15
+        Top = 10
+        Width = 20
+        Alignment = taCenter
+        AutoSize = False
+        Caption = '500'
+      end
+      object LHz5: TLabel
+        Left = 155
+        Height = 15
+        Top = 10
+        Width = 20
+        Alignment = taCenter
+        AutoSize = False
+        Caption = '1K'
+      end
+      object LHz6: TLabel
+        Left = 185
+        Height = 15
+        Top = 10
+        Width = 20
+        Alignment = taCenter
+        AutoSize = False
+        Caption = '2K'
+      end
+      object LHz7: TLabel
+        Left = 215
+        Height = 15
+        Top = 10
+        Width = 20
+        Alignment = taCenter
+        AutoSize = False
+        Caption = '4K'
+      end
+      object LHz8: TLabel
+        Left = 245
+        Height = 15
+        Top = 10
+        Width = 20
+        Alignment = taCenter
+        AutoSize = False
+        Caption = '8K'
+      end
+      object LHz9: TLabel
+        Left = 275
+        Height = 15
+        Top = 10
+        Width = 20
+        Alignment = taCenter
+        AutoSize = False
+        Caption = '16K'
+      end
+      object LZero: TLabel
+        Left = 11
+        Height = 15
+        Top = 85
+        Width = 10
+        AutoSize = False
+        Caption = '0'
+      end
+      object LdB1: TLabel
+        Left = 38
+        Height = 15
+        Top = 165
+        Width = 20
+        Alignment = taCenter
+        AutoSize = False
+        Caption = '0'
+      end
+      object LdB2: TLabel
+        Left = 68
+        Height = 15
+        Top = 165
+        Width = 20
+        Alignment = taCenter
+        AutoSize = False
+        Caption = '0'
+      end
+      object LdB3: TLabel
+        Left = 98
+        Height = 15
+        Top = 165
+        Width = 20
+        Alignment = taCenter
+        AutoSize = False
+        Caption = '0'
+      end
+      object LdB4: TLabel
+        Left = 125
+        Height = 15
+        Top = 165
+        Width = 20
+        Alignment = taCenter
+        AutoSize = False
+        Caption = '0'
+      end
+      object LdB5: TLabel
+        Left = 155
+        Height = 15
+        Top = 165
+        Width = 20
+        Alignment = taCenter
+        AutoSize = False
+        Caption = '0'
+      end
+      object LdB6: TLabel
+        Left = 185
+        Height = 15
+        Top = 165
+        Width = 20
+        Alignment = taCenter
+        AutoSize = False
+        Caption = '0'
+      end
+      object LdB7: TLabel
+        Left = 215
+        Height = 15
+        Top = 165
+        Width = 20
+        Alignment = taCenter
+        AutoSize = False
+        Caption = '0'
+      end
+      object LdB8: TLabel
+        Left = 245
+        Height = 15
+        Top = 165
+        Width = 20
+        Alignment = taCenter
+        AutoSize = False
+        Caption = '0'
+      end
+      object LdB9: TLabel
+        Left = 275
+        Height = 15
+        Top = 165
+        Width = 20
+        Alignment = taCenter
+        AutoSize = False
+        Caption = '0'
+      end
+      object SBReset: TSpeedButton
+        Left = 269
+        Height = 20
+        Top = 186
+        Width = 23
+        Caption = '0'
+        OnClick = SBResetClick
+      end
+      object LReset: TLabel
+        Left = 174
+        Height = 15
+        Top = 190
+        Width = 79
+        AutoSize = False
+        Caption = 'Remetre à zéro'
+      end
     end
   end
   object PnlTop: TPanel
     Left = 0
     Height = 44
     Top = 0
-    Width = 615
+    Width = 951
     Align = alTop
     BevelInner = bvLowered
     ClientHeight = 44
-    ClientWidth = 615
+    ClientWidth = 951
     TabOrder = 1
     object SBOpenRadio: TSpeedButton
       Left = 15
       Height = 26
       Top = 10
       Width = 36
+      Glyph.Data = {
+        36080000424D3608000000000000360000002800000020000000100000000100
+        2000000000000008000064000000640000000000000000000000000000000000
+        0000000000000000000000000000000000004C334C0A727266147F786A247362
+        562C434343FF3F3E3EFFFED09616FFCCAA0FFFDF9F08FFFFAA03000000000000
+        000000000000000000000000000000000000AD94AD0AD3D3C714E0D9CB24D4C3
+        B72CA4A4A4FFA09F9FFFFFFFF716FFFFFF0FFFFFFF08FFFFFF03000000000000
+        000000000000000000022727270D1E281E19E2A9A909C5A27316585858FF7B79
+        73FF321B0DFE5A422FFFBEBBB4FF4B4B49C7FFD4A11EFED79C0D000000000000
+        000000000000616161028888880D7F897F19FFFFFF09FFFFD416B9B9B9FFDCDA
+        D4FF937C6EFEBBA390FFFFFFFFFFACACAAC7FFFFFF1EFFFFFD0D000000002A2A
+        2A063333220F24241523211D194546392B3A644E3851060606FF806F53FF3330
+        26FF232626FF252829FF33332EFFE0D6BFFCFED09642FED09A21000000008B8B
+        8B069494830F85857623827E7A45A79A8C3AC5AF9951676767FFE1D0B4FF9491
+        87FF848787FF86898AFF94948FFFFFFFFFFCFFFFF742FFFFFB217F7F5506786B
+        6B135B514C353B312C67A07A37FFD79646FF1A1714FF7E7D79FF453C20FF1D20
+        20FF202321FF222425FF2B2D2BFF46443BFFD3CFC9FFFECD9839E0E0B606D9CC
+        CC13BCB2AD359C928D67FFDB98FFFFF7A7FF7B7875FFDFDEDAFFA69D81FF7E81
+        81FF818482FF838586FF8C8E8CFFA7A59CFFFFFFFFFFFFFFF939BF3F7F04DDBB
+        990FD5AC831F181818FF000000FF000000FF131313FF714C22FF161B19FF1A1D
+        1DFF1D1F1DFF26292AFF383A39FF454747FF8F6631FFFFCF9950FFA0E004FFFF
+        FA0FFFFFE41F797979FF616161FF616161FF747474FFD2AD83FF777C7AFF7B7E
+        7EFF7E807EFF878A8BFF999B9AFFA6A8A8FFF0C792FFFFFFFA50FFC67109FEE4
+        AF1D414141FF040304FF050806FF0B0B0BFFEDEDEDFF815623FF141717FF2325
+        24FF3E4140FF525555FF5F6161FF636665FF706040FFEDBE8F67FFFFD209FFFF
+        FF1DA2A2A2FF656465FF666967FF6C6C6CFFFFFFFFFFE2B784FF757878FF8486
+        85FF9FA2A1FFB3B6B6FFC0C2C2FFC4C7C6FFD1C1A1FFFFFFF067FEECB60EA860
+        2CFF7C7C7CFF171B1AFF171B19FF080B09FFD0CFCFFF786A47FF5A5C5CFF2225
+        23FF8F9090FF909291FF89898AFF7C7E7FFFA9A59CFF434343FFFFFFFF0EFFC1
+        8DFFDDDDDDFF787C7BFF787C7AFF696C6AFFFFFFFFFFD9CBA8FFBBBDBDFF8386
+        84FFF0F1F1FFF1F3F2FFEAEAEBFFDDDFE0FFFFFFFDFFA4A4A4FFFED49B12AC6A
+        33FFB8B8B8FF515353FF5D5F5EFF5B5B5AFFC8C8C8FF877A5CFF6B6E6EFF5252
+        52FFABACACFFA3A4A4FF929191FF7F8281FFA8A69EFF414141FFFFFFFC12FFCB
+        94FFFFFFFFFFB2B4B4FFBEC0BFFFBCBCBBFFFFFFFFFFE8DBBDFFCCCFCFFFB3B3
+        B3FFFFFFFFFFFFFFFFFFF3F2F2FFE0E3E2FFFFFFFFFFA2A2A2FFA7581FFAB97C
+        3CFFE8E8E8FF848786FF969B99FFA6A8A7FFD6D5D5FF715C34FF494D4DFF2D32
+        30FF5A5D5DFF707171FF737575FF686A6AFFA89E88FF484745F5FFB980FAFFDD
+        9DFFFFFFFFFFE5E8E7FFF7FCFAFFFFFFFFFFFFFFFFFFD2BD95FFAAAEAEFF8E93
+        91FFBBBEBEFFD1D2D2FFD4D6D6FFC9CBCBFFFFFFE9FFA9A8A6F5A85A20FFC58A
+        42FFB3925FFFCECFCEFF39403DFF3D4140FFFDFDFDFF683A0AFF1A1D1BFF1D20
+        1FFF2A2D2CFF3B3E3BFF484A49FF4E5050FF734A18FFFED19B5AFFBB81FFFFEB
+        A3FFFFF3C0FFFFFFFFFF9AA19EFF9EA2A1FFFFFFFFFFC99B6BFF7B7E7CFF7E81
+        80FF8B8E8DFF9C9F9CFFA9ABAAFFAFB1B1FFD4AB79FFFFFFFC5AAB642056CB92
+        40FFEABC5CFFF5D781FF323232FF767676FFFFFFFFFF928B7FFF1E201CFF1D20
+        1FFF202323FF232827FF2B2E2EFF292929FFFFF1DEFFFECB9846FFC58156FFF3
+        A1FFFFFFBDFFFFFFE2FF939393FFD7D7D7FFFFFFFFFFF3ECE0FF7F817DFF7E81
+        80FF818484FF848988FF8C8F8FFF8A8A8AFFFFFFFFFFFFFFF94600000000C990
+        3AFFE9BF5DFFF4E18AFFFBF1D8FFCDEBD2FFCBE6C2FFC1C1C1FF7A4915FF1D20
+        1CFF202220FF202323FF1E2120FF62370DFF424443FFFECD9B2E00000000FFF1
+        9BFFFFFFBEFFFFFFEBFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFDBAA76FF7E81
+        7DFF818381FF818484FF7F8281FFC3986EFFA3A5A4FFFFFFFC2E000000000654
+        45FFE2B553FFF1DC81FFABE9D3FFFFF7F0FFB9EFD2FFA1D6B2FFB1B0B1FF8D6A
+        3BFF847A61FFC0B59DFF836641FFC8C8C8FEFFCF9A30FED096160000000067B5
+        A6FFFFFFB4FFFFFFE2FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEECB
+        9CFFE5DBC2FFFFFFFEFFE4C7A2FFFFFFFFFEFFFFFB30FFFFF716000000000000
+        0000DDAD5CFFE7C466FFF9ECA0FFF5E8A5FF91F2D3FF5CA98AFF81E1B4FFD1D1
+        D1FFFBFBFBFFFFFFFFFF565049C2FFD29928FFCC9914FFDF9F08000000000000
+        0000FFFFBDFFFFFFC7FFFFFFFFFFFFFFFFFFF2FFFFFFBDFFEBFFE2FFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFB7B1AAC2FFFFFA28FFFFFA14FFFFFF08000000000000
+        000000000000285744FF56E7C0FFE5C061FFE8C260FFE6B350FF59D6ACFF55C5
+        9AFFABC0923DFECD9C1FFED09616FED7B00DFFFF990500000000000000000000
+        00000000000089B8A5FFB7FFFFFFFFFFC2FFFFFFC1FFFFFFB1FFBAFFFFFFB6FF
+        FBFFFFFFF33DFFFFFD1FFFFFF716FFFFFF0DFFFFFA0500000000000000000000
+        0000000000000000000000000000A96B3E2DBA7028FFAB9667FF79B69115FFDF
+        9F08FEE2A909FFFF9905FFFF7F02000000000000000000000000000000000000
+        0000000000000000000000000000FFCC9F2DFFD189FFFFF7C8FFDAFFF215FFFF
+        FF08FFFFFF09FFFFFA05FFFFE002000000000000000000000000
+      }
       NumGlyphs = 2
       OnClick = PmnuChooseRadioClick
       ShowHint = True
@@ -7345,6 +7776,74 @@ object FWebRadioMain: TFWebRadioMain
       Height = 26
       Top = 10
       Width = 36
+      Glyph.Data = {
+        36080000424D3608000000000000360000002800000020000000100000000100
+        2000000000000008000064000000640000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000002F65
+        99FF2F6599FF2F6599FF2F6599FF2F6599FF2F6599FF2F6599FF2F6599FF2F65
+        99FF2F6599FF2F6599FF2F6599FF0000000000000000000000000000000093C9
+        FDFF93C9FDFF93C9FDFF93C9FDFF93C9FDFF93C9FDFF93C9FDFF93C9FDFF93C9
+        FDFF93C9FDFF93C9FDFF93C9FDFF0000000000000000000000002F6599FF2F65
+        99FF8AE7FFFF8AE7FFFF8AE7FFFF8AE7FFFF8AE7FFFF8AE7FFFF8AE7FFFF8AE7
+        FFFF8AE7FFFF8AE7FFFF8AE7FFFF2F6599FF000000000000000093C9FDFF93C9
+        FDFFEEFFFFFFEEFFFFFFEEFFFFFFEEFFFFFFEEFFFFFFEEFFFFFFEEFFFFFFEEFF
+        FFFFEEFFFFFFEEFFFFFFEEFFFFFF93C9FDFF00000000000000002F6599FF8AE7
+        FFFF2F6599FF8AE7FFFF8AE7FFFF8AE7FFFF8AE7FFFF8AE7FFFF8AE7FFFF8AE7
+        FFFF8AE7FFFF8AE7FFFF8AE7FFFF8AE7FFFF2F6599FF0000000093C9FDFFEEFF
+        FFFF93C9FDFFEEFFFFFFEEFFFFFFEEFFFFFFEEFFFFFFEEFFFFFFEEFFFFFFEEFF
+        FFFFEEFFFFFFEEFFFFFFEEFFFFFFEEFFFFFF93C9FDFF000000002F6599FF8AE7
+        FFFF2F6599FF8AE7FFFF8AE7FFFF8AE7FFFF8AE7FFFF8AE7FFFF8AE7FFFF8AE7
+        FFFF8AE7FFFF8AE7FFFF8AE7FFFF8AE7FFFF2F6599FF0000000093C9FDFFEEFF
+        FFFF93C9FDFFEEFFFFFFEEFFFFFFEEFFFFFFEEFFFFFFEEFFFFFFEEFFFFFFEEFF
+        FFFFEEFFFFFFEEFFFFFFEEFFFFFFEEFFFFFF93C9FDFF000000002F6599FF8AE7
+        FFFF8AE7FFFF2F6599FFC3F2FFFFDD1EFFFFDD1EFFFFDD1EFFFFC3F2FFFFC3F2
+        FFFFC3F2FFFFC3F2FFFFC3F2FFFFC3F2FFFFC3F2FFFF2F6599FF93C9FDFFEEFF
+        FFFFEEFFFFFF93C9FDFFFFFFFFFFFF82FFFFFF82FFFFFF82FFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF93C9FDFF2F6599FF8AE7
+        FFFF8AE7FFFF8AE7FFFF2F6599FFDD1EFFFFDD1EFFFFDD1EFFFFDD1EFFFFC3F2
+        FFFFC3F2FFFFDD1EFFFFDD1EFFFFDD1EFFFFC3F2FFFF2F6599FF93C9FDFFEEFF
+        FFFFEEFFFFFFEEFFFFFF93C9FDFFFF82FFFFFF82FFFFFF82FFFFFF82FFFFFFFF
+        FFFFFFFFFFFFFF82FFFFFF82FFFFFF82FFFFFFFFFFFF93C9FDFF2F6599FF8AE7
+        FFFF8AE7FFFF8AE7FFFF8AE7FFFFDD1EFFFFDD1EFFFFDD1EFFFFDD1EFFFF2F65
+        99FF2F6599FFDD1EFFFFDD1EFFFFDD1EFFFFDD1EFFFF0000000093C9FDFFEEFF
+        FFFFEEFFFFFFEEFFFFFFEEFFFFFFFF82FFFFFF82FFFFFF82FFFFFF82FFFF93C9
+        FDFF93C9FDFFFF82FFFFFF82FFFFFF82FFFFFF82FFFF000000002F6599FF8AE7
+        FFFF8AE7FFFF8AE7FFFF8AE7FFFF8AE7FFFFDD1EFFFFDD1EFFFFDD1EFFFF8AE7
+        FFFF8AE7FFFFDD1EFFFFDD1EFFFFDD1EFFFFDD1EFFFF0000000093C9FDFFEEFF
+        FFFFEEFFFFFFEEFFFFFFEEFFFFFFEEFFFFFFFF82FFFFFF82FFFFFF82FFFFEEFF
+        FFFFEEFFFFFFFF82FFFFFF82FFFFFF82FFFFFF82FFFF000000002F6599FFC3F2
+        FFFFC3F2FFFFC3F2FFFFC3F2FFFFC3F2FFFFC3F2FFFFC3F2FFFFDD1EFFFFC3F2
+        FFFFC3F2FFFFC3F2FFFFDD1EFFFFDD1EFFFFDD1EFFFF0000000093C9FDFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF82FFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFF82FFFFFF82FFFFFF82FFFF000000002F6599FFC3F2
+        FFFFC3F2FFFFC3F2FFFFC3F2FFFFC3F2FFFFC3F2FFFFC3F2FFFFDD1EFFFFC3F2
+        FFFFC3F2FFFFC3F2FFFFC3F2FFFF2F6599FFDD1EFFFF0000000093C9FDFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF82FFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFF93C9FDFFFF82FFFF000000002F6599FFC3F2
+        FFFFC3F2FFFFC3F2FFFFC3F2FFFFC3F2FFFF2F6599FF2F6599FFDD1EFFFF2F65
+        99FF2F6599FF2F6599FF2F6599FF00000000DD1EFFFF0000000093C9FDFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF93C9FDFF93C9FDFFFF82FFFF93C9
+        FDFF93C9FDFF93C9FDFF93C9FDFF00000000FF82FFFF00000000000000002F65
+        99FF2F6599FF2F6599FF2F6599FF2F6599FF0000000000000000DD1EFFFF0000
+        000000000000000000000000000000000000DD1EFFFF000000000000000093C9
+        FDFF93C9FDFF93C9FDFF93C9FDFF93C9FDFF0000000000000000FF82FFFF0000
+        000000000000000000000000000000000000FF82FFFF00000000000000000000
+        0000000000000000000000000000000000000000000000000000DD1EFFFFDD1E
+        FFFFDD1EFFFFDD1EFFFFDD1EFFFF00000000DD1EFFFF00000000000000000000
+        0000000000000000000000000000000000000000000000000000FF82FFFFFF82
+        FFFFFF82FFFFFF82FFFFFF82FFFF00000000FF82FFFF00000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        00000000000000000000DD1EFFFFDD1EFFFFDD1EFFFF00000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        00000000000000000000FF82FFFFFF82FFFFFF82FFFF00000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000
+      }
       NumGlyphs = 2
       OnClick = PMnuReadFileClick
       ShowHint = True
@@ -7355,6 +7854,74 @@ object FWebRadioMain: TFWebRadioMain
       Height = 26
       Top = 10
       Width = 36
+      Glyph.Data = {
+        36080000424D3608000000000000360000002800000020000000100000000100
+        2000000000000008000064000000640000000000000000000000000000000000
+        00000000000000000000000000010000000D000000180000001F0000001F0000
+        00190000000E0000000200000000000000000000000000000000000000000000
+        00000000000000000000646464016464640D646464186464641F6464641F6464
+        64196464640E6464640200000000000000000000000000000000000000000000
+        0000000000000000000D0000002B0000006BE3B445FFE1AA41FFE4AF43FF1BD2
+        A3FF000000780000003000000011000000000000000000000000000000000000
+        0000000000006464640D6464642B6464646BFFFFA9FFFFFFA5FFFFFFA7FF7FFF
+        FFFF646464786464643064646411000000000000000000000000000000000000
+        00000000000000000008B66A23FFB16220FFAF6120FFB16220FFAC9656FF1CC9
+        9CFF1CCE9FFF1AC89AFF0000000A000000000000000000000000000000000000
+        00000000000064646408FFCE87FFFFC684FFFFC584FFFFC684FFFFFABAFF80FF
+        FFFF80FFFFFF7EFFFEFF6464640A000000000000000000000000000000000000
+        000000000000DD1EFFFFDD1EFFFFDD1EFFFFDD1EFFFFB16325FF21B48AFF1FB9
+        8DFFDD1EFFFFDD1EFFFFDD1EFFFFDD1EFFFF0000000000000000000000000000
+        000000000000FF82FFFFFF82FFFFFF82FFFFFF82FFFFFFC789FF85FFEEFF83FF
+        F1FFFF82FFFFFF82FFFFFF82FFFFFF82FFFF0000000000000000000000000000
+        0000DD1EFFFFDD1EFFFF27A27CFF2CAA82FFDD1EFFFFDD1EFFFF2AB288FFDD1E
+        FFFFDD1EFFFF21A980FF1D9E77FFDD1EFFFFDD1EFFFF00000000000000000000
+        0000FF82FFFFFF82FFFF8BFFE0FF90FFE6FFFF82FFFFFF82FFFF8EFFECFFFF82
+        FFFFFF82FFFF85FFE4FF81FFDBFFFF82FFFFFF82FFFF00000000DD1EFFFFDD1E
+        FFFFDD1EFFFF97531DFF33B78EFF37BE96FF39C299FFDD1EFFFFDD1EFFFFDD1E
+        FFFF2CAD85FF28A67FFF239C75FFB76822FFDD1EFFFFDD1EFFFFFF82FFFFFF82
+        FFFFFF82FFFFFBB781FF97FFF2FF9BFFFAFF9DFFFDFFFF82FFFFFF82FFFFFF82
+        FFFF90FFE9FF8CFFE3FF87FFD9FFFFCC86FFFF82FFFFFF82FFFF000000009A4E
+        17FFDD1EFFFFDD1EFFFF3DC9A0FF42D2A8FFDD1EFFFFDD1EFFFF40D2A9FFDD1E
+        FFFFDD1EFFFF2EB086FFA56A39FFDD1EFFFFDD1EFFFF0000000000000000FEB2
+        7BFFFF82FFFFFF82FFFFA1FFFFFFA6FFFFFFFF82FFFFFF82FFFFA4FFFFFFFF82
+        FFFFFF82FFFF92FFEAFFFFCE9DFFFF82FFFFFF82FFFF00000000000000009D55
+        1DFFB0732DFFDD1EFFFFDD1EFFFFDD1EFFFFDD1EFFFF50E9C0FF4CE3BAFF46DB
+        B0FFDD1EFFFFDD1EFFFFDD1EFFFFDD1EFFFFAF6220FF0000000000000000FFB9
+        81FFFFD791FFFF82FFFFFF82FFFFFF82FFFFFF82FFFFB4FFFFFFB0FFFFFFAAFF
+        FFFFFF82FFFFFF82FFFFFF82FFFFFF82FFFFFFC684FF0000000000000000A963
+        24FFC28A36FFDCAB47FFEBC45CFF58F8CFFF60FCD3FF58FCD2FFEFCE67FF4CE7
+        BEFF4FB48DFF3CC99FFF31B58DFF29A57DFFA75A1CFF0000000000000000FFC7
+        88FFFFEE9AFFFFFFABFFFFFFC0FFBCFFFFFFC4FFFFFFBCFFFFFFFFFFCBFFB0FF
+        FFFFB3FFF1FFA0FFFFFF95FFF1FF8DFFE1FFFFBE80FF0000000000000000AF6C
+        28FFDD1EFFFFDD1EFFFFDD1EFFFF79FAD9FFDD1EFFFFD0D9A2FFECE598FFDD1E
+        FFFF33AA8CFFDD1EFFFFDD1EFFFFDD1EFFFF23936EFF0000000000000000FFD0
+        8CFFFF82FFFFFF82FFFFFF82FFFFDDFFFFFFFF82FFFFFFFFFFFFFFFFFCFFFF82
+        FFFF97FFF0FFFF82FFFFFF82FFFFFF82FFFF87F7D2FF0000000000000000AF64
+        23FFDD1EFFFFEAC560FFDD1EFFFFFBF5DAFFDD1EFFFFDD1EFFFFDD1EFFFF5CFB
+        D2FFCDC977FFDD1EFFFF38C096FF2CAA81FF23926EFF0000000000000000FFC8
+        87FFFF82FFFFFFFFC4FFFF82FFFFFFFFFFFFFF82FFFFFF82FFFFFF82FFFFC0FF
+        FFFFFFFFDBFFFF82FFFF9CFFFAFF90FFE5FF87F6D2FF00000000000000000000
+        0000DD1EFFFFE8C25FFFDD1EFFFF5FB4A3FFDD1EFFFFAFFAEAFF89FBDFFFDD1E
+        FFFF50E9C0FFDD1EFFFF38BE97FF2BA780FF0000000000000000000000000000
+        0000FF82FFFFFFFFC3FFFF82FFFFC3FFFFFFFF82FFFFFFFFFFFFEDFFFFFFFF82
+        FFFFB4FFFFFFFF82FFFF9CFFFBFF8FFFE4FF0000000000000000000000000000
+        0000DD1EFFFFDEB04FFFDD1EFFFFF5EAACFFDD1EFFFFDD1EFFFFDD1EFFFFDD1E
+        FFFF4DE4BBFFDD1EFFFF35B891FF299F79FF0000000000000000000000000000
+        0000FF82FFFFFFFFB3FFFF82FFFFFFFFFFFFFF82FFFFFF82FFFFFF82FFFFFF82
+        FFFFB1FFFFFFFF82FFFF99FFF5FF8DFFDDFF0000000000000000000000000000
+        0000000000003CBC99FF40C09EFFC0E2A6FFEFD97EFFA9EABCFF60F3CCFF50E8
+        C1FF47D8B0FF3BC49CFF30AC86FF000000000000000000000000000000000000
+        000000000000A0FFFDFFA4FFFFFFFFFFFFFFFFFFE2FFFFFFFFFFC4FFFFFFB4FF
+        FFFFABFFFFFF9FFFFFFF94FFEAFF000000000000000000000000000000000000
+        0000000000000000000041C9A4E44BDDB6FF467256FF1B725FFFD8A343FF9991
+        61FF3DC59EFF33B38C9500000000000000000000000000000000000000000000
+        00000000000000000000A5FFFFE4AFFFFFFFAAD6BAFF7FD6C3FFFFFFA7FFFDF5
+        C5FFA1FFFFFF97FFF09500000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000
+      }
       NumGlyphs = 2
       OnClick = PMnuOpenURLClick
       ShowHint = True
@@ -7365,6 +7932,74 @@ object FWebRadioMain: TFWebRadioMain
       Height = 26
       Top = 10
       Width = 36
+      Glyph.Data = {
+        36080000424D3608000000000000360000002800000020000000100000000100
+        2000000000000008000064000000640000000000000000000000000000000000
+        00FF00000000000000FF0000000000000000000000FF00000000000000FF0000
+        000000000000000000FF00000000000000FF0000000000000000FFFFFF009292
+        92FFFFFFFF00929292FFFFFFFF00FFFFFF00929292FFFFFFFF00929292FFFFFF
+        FF00FFFFFF00929292FFFFFFFF00929292FFFFFFFF00FFFFFF00000000000000
+        000000000000000000FF00000000000000000000000000000000000000FF0000
+        0000000000000000000000000000000000FF0000000000000000FFFFFF00FFFF
+        FF00FFFFFF00929292FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00929292FFFFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00929292FFFFFFFF00FFFFFF00000000000000
+        00FF00000000000000FF0000000000000000000000FF00000000000000FF0000
+        000000000000000000FF00000000000000FF0000000000000000FFFFFF009292
+        92FFFFFFFF00929292FFFFFFFF00FFFFFF00929292FFFFFFFF00929292FFFFFF
+        FF00FFFFFF00929292FFFFFFFF00929292FFFFFFFF00FFFFFF00000000000000
+        000000000000000000FF00000000000000000000000000000000000000FF0000
+        0000000000000000000000000000000000FF0000000000000000FFFFFF00FFFF
+        FF00FFFFFF00929292FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00929292FFFFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00929292FFFFFFFF00FFFFFF00000000000000
+        00FF00000000000000FF0000000000000000000000FF00000000000000FF0000
+        00FF00000000000000FF00000000000000FF0000000000000000FFFFFF009292
+        92FFFFFFFF00929292FFFFFFFF00FFFFFF00929292FFFFFFFF00929292FF9292
+        92FFFFFFFF00929292FFFFFFFF00929292FFFFFFFF00FFFFFF00000000000000
+        000000000000000000FF000000000000000000000000000000FF000000FF0000
+        00FF000000000000000000000000000000FF0000000000000000FFFFFF00FFFF
+        FF00FFFFFF00929292FFFFFFFF00FFFFFF00FFFFFF00929292FF929292FF9292
+        92FFFFFFFF00FFFFFF00FFFFFF00929292FFFFFFFF00FFFFFF00000000000000
+        00FF00000000000000FF0000000000000000000000FF00000000000000FF0000
+        00FF00000000000000FF00000000000000FF000000FF00000000FFFFFF009292
+        92FFFFFFFF00929292FFFFFFFF00FFFFFF00929292FFFFFFFF00929292FF9292
+        92FFFFFFFF00929292FFFFFFFF00929292FF929292FFFFFFFF00000000000000
+        000000000000000000FF00000000000000000000000000000000000000FF0000
+        00000000000000000000000000FF000000FF000000FF00000000FFFFFF00FFFF
+        FF00FFFFFF00929292FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00929292FFFFFF
+        FF00FFFFFF00FFFFFF00929292FF929292FF929292FFFFFFFF00000000000000
+        00FF00000000000000FF000000FF00000000000000FF00000000000000FF0000
+        000000000000000000FF00000000000000FF000000FF00000000FFFFFF009292
+        92FFFFFFFF00929292FF929292FFFFFFFF00929292FFFFFFFF00929292FFFFFF
+        FF00FFFFFF00929292FFFFFFFF00929292FF929292FFFFFFFF00000000000000
+        0000000000FF000000FF000000FF000000000000000000000000000000FF0000
+        0000000000000000000000000000000000FF0000000000000000FFFFFF00FFFF
+        FF00929292FF929292FF929292FFFFFFFF00FFFFFF00FFFFFF00929292FFFFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00929292FFFFFFFF00FFFFFF00000000000000
+        00FF00000000000000FF000000FF00000000000000FF00000006000000FF0000
+        000000000000000000FF00000000000000FF0000000000000000FFFFFF009292
+        92FFFFFFFF00929292FF929292FFFFFFFF00929292FF92929206929292FFFFFF
+        FF00FFFFFF00929292FFFFFFFF00929292FFFFFFFF00FFFFFF00000000000000
+        000000000000000000FF00000000000000000000000000000006000000FF0000
+        0000000000000000000000000000000000FF0000000000000000FFFFFF00FFFF
+        FF00FFFFFF00929292FFFFFFFF00FFFFFF00FFFFFF0092929206929292FFFFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00929292FFFFFFFF00FFFFFF00000000000000
+        00FF00000000000000FF0000000000000000000000FF00000006000000FF0000
+        000000000000000000FF00000000000000FF0000000000000000FFFFFF009292
+        92FFFFFFFF00929292FFFFFFFF00FFFFFF00929292FF92929206929292FFFFFF
+        FF00FFFFFF00929292FFFFFFFF00929292FFFFFFFF00FFFFFF00000000000000
+        000000000000000000FF00000000000000000000000000000006000000FF0000
+        0000000000000000000000000000000000FF0000000000000000FFFFFF00FFFF
+        FF00FFFFFF00929292FFFFFFFF00FFFFFF00FFFFFF0092929206929292FFFFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00929292FFFFFFFF00FFFFFF00000000000000
+        00FF00000000000000FF0000000000000000000000FF00000006000000FF0000
+        000000000000000000FF00000000000000FF0000000000000000FFFFFF009292
+        92FFFFFFFF00929292FFFFFFFF00FFFFFF00929292FF92929206929292FFFFFF
+        FF00FFFFFF00929292FFFFFFFF00929292FFFFFFFF00FFFFFF00000000000000
+        000000000000000000FF00000000000000000000000000000006000000FF0000
+        0000000000000000000000000000000000FF0000000000000000FFFFFF00FFFF
+        FF00FFFFFF00929292FFFFFFFF00FFFFFF00FFFFFF0092929206929292FFFFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00929292FFFFFFFF00FFFFFF00
+      }
       NumGlyphs = 2
       OnClick = PMnuEqualizerClick
       ShowHint = True
@@ -7375,6 +8010,74 @@ object FWebRadioMain: TFWebRadioMain
       Height = 26
       Top = 10
       Width = 36
+      Glyph.Data = {
+        36080000424D3608000000000000360000002800000020000000100000000100
+        2000000000000008000064000000640000000000000000000000FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00DBDBDBFF646464FF979797FF6464
+        64FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00C1C1C1FFA1A1A1FFAEAEAEFFA1A1
+        A1FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00646464FF000000FF000000FF6464
+        64FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00A1A1A1FF858585FF858585FFA1A1
+        A1FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00979797FF646464FFFFFFFF00646464FF979797FF646464FF6464
+        64FFFFFFFF00646464FF646464FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00AEAEAEFFA1A1A1FFFFFFFF00A1A1A1FFAEAEAEFFA1A1A1FFA1A1
+        A1FFFFFFFF00A1A1A1FFA1A1A1FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00979797FF000000FF646464FF000000FF646464FF979797FF979797FF0000
+        00FF000000FF646464FF000000FF646464FFFFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00AEAEAEFF858585FFA1A1A1FF858585FFA1A1A1FFAEAEAEFFAEAEAEFF8585
+        85FF858585FFA1A1A1FF858585FFA1A1A1FFFFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00646464FFEBEBEBFFCACACAFF646464FFCACACAFFCACACAFFF1F1F1FFF1F1
+        F1FF979797FF979797FF646464FF000000FFFFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00A1A1A1FFC8C8C8FFBCBCBCFFA1A1A1FFBCBCBCFFBCBCBCFFC7C7C7FFC7C7
+        C7FFAEAEAEFFAEAEAEFFA1A1A1FF858585FFFFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00646464FFCACACAFF979797FFCACACAFFCACACAFF979797FFCACA
+        CAFF646464FF979797FF000000FF979797FFFFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00A1A1A1FFBCBCBCFFAEAEAEFFBCBCBCFFBCBCBCFFAEAEAEFFBCBC
+        BCFFA1A1A1FFAEAEAEFF858585FFAEAEAEFFFFFFFF00FFFFFF00DBDBDBFF6464
+        64FF646464FF646464FF646464FFCACACAFF646464FF646464FF646464FF6464
+        64FFCACACAFF000000FF000000FF646464FF646464FF646464FFC1C1C1FFA1A1
+        A1FFA1A1A1FFA1A1A1FFA1A1A1FFBCBCBCFFA1A1A1FFA1A1A1FFA1A1A1FFA1A1
+        A1FFBCBCBCFF858585FF858585FFA1A1A1FFA1A1A1FFA1A1A1FF646464FF6464
+        64FF646464FFF1F1F1FF979797FF646464FF646464FF979797FF646464FF6464
+        64FF979797FFF1F1F1FF646464FF646464FF000000FF979797FFA1A1A1FFA1A1
+        A1FFA1A1A1FFC7C7C7FFAEAEAEFFA1A1A1FFA1A1A1FFAEAEAEFFA1A1A1FFA1A1
+        A1FFAEAEAEFFC7C7C7FFA1A1A1FFA1A1A1FF858585FFAEAEAEFF979797FFCACA
+        CAFFCACACAFFF1F1F1FF646464FF000000FF646464FF646464FF979797FF6464
+        64FFCACACAFFF1F1F1FFCACACAFF979797FF000000FF646464FFAEAEAEFFBCBC
+        BCFFBCBCBCFFC7C7C7FFA1A1A1FF858585FFA1A1A1FFA1A1A1FFAEAEAEFFA1A1
+        A1FFBCBCBCFFC7C7C7FFBCBCBCFFAEAEAEFF858585FFA1A1A1FF979797FF6464
+        64FF646464FFCACACAFF646464FFCACACAFFF1F1F1FF646464FF646464FF6464
+        64FFCACACAFFCACACAFF646464FF646464FF646464FFCACACAFFAEAEAEFFA1A1
+        A1FFA1A1A1FFBCBCBCFFA1A1A1FFBCBCBCFFC7C7C7FFA1A1A1FFA1A1A1FFA1A1
+        A1FFBCBCBCFFBCBCBCFFA1A1A1FFA1A1A1FFA1A1A1FFBCBCBCFFFFFFFF00FFFF
+        FF00FFFFFF00646464FF979797FF646464FFCACACAFF000000FF646464FFCACA
+        CAFF8E8E8EFF646464FF000000FF979797FFFFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00A1A1A1FFAEAEAEFFA1A1A1FFBCBCBCFF858585FFA1A1A1FFBCBC
+        BCFFACACACFFA1A1A1FF858585FFAEAEAEFFFFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00CACACAFFCACACAFFCACACAFF979797FF646464FF646464FF979797FF6464
+        64FFCACACAFFCACACAFF000000FF000000FFFFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00BCBCBCFFBCBCBCFFBCBCBCFFAEAEAEFFA1A1A1FFA1A1A1FFAEAEAEFFA1A1
+        A1FFBCBCBCFFBCBCBCFF858585FF858585FFFFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00979797FF646464FFCACACAFF646464FFF1F1F1FFF1F1F1FFF1F1F1FF6464
+        64FF000000FFAAAAAAFF000000FFCACACAFFFFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00AEAEAEFFA1A1A1FFBCBCBCFFA1A1A1FFC7C7C7FFC7C7C7FFC7C7C7FFA1A1
+        A1FF858585FFB4B4B4FF858585FFBCBCBCFFFFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00979797FF000000FFF1F1F1FF646464FFCACACAFF646464FF6464
+        64FFFFFFFF00000000FFCACACAFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00AEAEAEFF858585FFC7C7C7FFA1A1A1FFBCBCBCFFA1A1A1FFA1A1
+        A1FFFFFFFF00858585FFBCBCBCFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00646464FFCACACAFF646464FF0000
+        00FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00A1A1A1FFBCBCBCFFA1A1A1FF8585
+        85FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00979797FF979797FF646464FF6464
+        64FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00AEAEAEFFAEAEAEFFA1A1A1FFA1A1
+        A1FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
+      }
       NumGlyphs = 2
       OnClick = PMnuSettingsClick
       ShowHint = True
@@ -7385,8 +8088,75 @@ object FWebRadioMain: TFWebRadioMain
       Height = 26
       Top = 10
       Width = 36
+      Glyph.Data = {
+        36080000424D3608000000000000360000002800000020000000100000000100
+        2000000000000008000064000000640000000000000000000000000000009999
+        99FF999999FF999999FF999999FF999999FF999999FF999999FF999999FF9999
+        99FF999999FF999999FF999999FF999999FF999999FF0000000000000000D8D8
+        D8FFD8D8D8FFD8D8D8FFD8D8D8FFD8D8D8FFD8D8D8FFD8D8D8FFD8D8D8FFD8D8
+        D8FFD8D8D8FFD8D8D8FFD8D8D8FFD8D8D8FFD8D8D8FF00000000999999FFF7F7
+        F7FFF6F6F6FFF6F6F6FFF6F6F6FFF6F6F6FFF5F5F5FFF5F5F5FFF4F4F4FFF4F4
+        F4FFF4F4F4FFF3F3F3FFF3F3F3FFF3F3F3FFF2F2F2FF999999FFD8D8D8FFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD8D8D8FF999999FFF8F8
+        F8FFC6C6C6FF9E9E9EFFC6C6C6FFF6F6F6FFF5F5F5FFF5F5F5FFF5F5F5FFF4F4
+        F4FFF4F4F4FFF4F4F4FFF3F3F3FFF3F3F3FFF3F3F3FF999999FFD8D8D8FFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD8D8D8FF999999FFF8F8
+        F8FF9E9E9EFFE1E1E1FF9E9E9EFFF6F6F6FF4D4D4DFF4D4D4DFF4D4D4DFF4D4D
+        4DFF4D4D4DFF4D4D4DFF4D4D4DFF4D4D4DFFF3F3F3FF999999FFD8D8D8FFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB1B1B1FFB1B1B1FFB1B1B1FFB1B1
+        B1FFB1B1B1FFB1B1B1FFB1B1B1FFB1B1B1FFFFFFFFFFD8D8D8FF999999FFF8F8
+        F8FFC5C5C5FF9D9D9DFFC6C6C6FFF7F7F7FFF6F6F6FFF6F6F6FFF5F5F5FFF5F5
+        F5FFF5F5F5FFF4F4F4FFF4F4F4FFF4F4F4FFF3F3F3FF999999FFD8D8D8FFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD8D8D8FF999999FFF8F8
+        F8FFF8F8F8FFF7F7F7FFF7F7F7FFF7F7F7FFF6F6F6FFF6F6F6FFF6F6F6FFF5F5
+        F5FFF5F5F5FFF5F5F5FFF4F4F4FFF4F4F4FFF4F4F4FF999999FFD8D8D8FFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD8D8D8FF999999FFF8F8
+        F8FFC7C7C7FF9E9E9EFFC6C6C6FFF7F7F7FFF7F7F7FFF6F6F6FFF6F6F6FFF6F6
+        F6FFF5F5F5FFF5F5F5FFF5F5F5FFF4F4F4FFF4F4F4FF999999FFD8D8D8FFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD8D8D8FF999999FFF8F8
+        F8FF9E9E9EFFE1E1E1FF9E9E9EFFF7F7F7FF4D4D4DFF4D4D4DFF4D4D4DFF4D4D
+        4DFF4D4D4DFF4D4D4DFF4D4D4DFFF5F5F5FFF4F4F4FF999999FFD8D8D8FFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB1B1B1FFB1B1B1FFB1B1B1FFB1B1
+        B1FFB1B1B1FFB1B1B1FFB1B1B1FFFFFFFFFFFFFFFFFFD8D8D8FF999999FFF8F8
+        F8FFC6C6C6FF9D9D9DFFC7C7C7FFF8F8F8FFF7F7F7FFF7F7F7FFF7F7F7FFF6F6
+        F6FFF6F6F6FFF6F6F6FFF5F5F5FFF5F5F5FFF5F5F5FF999999FFD8D8D8FFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD8D8D8FF999999FFF8F8
+        F8FFF9F9F9FFF9F9F9FFF8F8F8FFF8F8F8FFF7F7F7FFF7F7F7FFF7F7F7FFF7F7
+        F7FFF6F6F6FFF6F6F6FFF6F6F6FFF5F5F5FFF5F5F5FF999999FFD8D8D8FFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD8D8D8FF999999FFF8F8
+        F8FFC7C7C7FF9E9E9EFFC7C7C7FFF8F8F8FFF8F8F8FFF7F7F7FFF7F7F7FFF7F7
+        F7FFF7F7F7FFF6F6F6FFF6F6F6FFF6F6F6FFF5F5F5FF999999FFD8D8D8FFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD8D8D8FF999999FFF8F8
+        F8FF9E9E9EFFE12C2CFF9E9E9EFFF9F9F9FF4D4D4DFF4D4D4DFF4D4D4DFF4D4D
+        4DFF4D4D4DFF4D4D4DFF4D4D4DFF4D4D4DFFF6F6F6FF999999FFD8D8D8FFFFFF
+        FFFFFFFFFFFFFF9090FFFFFFFFFFFFFFFFFFB1B1B1FFB1B1B1FFB1B1B1FFB1B1
+        B1FFB1B1B1FFB1B1B1FFB1B1B1FFB1B1B1FFFFFFFFFFD8D8D8FF999999FFF8F8
+        F8FFC7C7C7FF9D9D9DFFC7C7C7FFF9F9F9FFF8F8F8FFF8F8F8FFF8F8F8FFF7F7
+        F7FFF7F7F7FFF7F7F7FFF7F7F7FFF6F6F6FFF6F6F6FF999999FFD8D8D8FFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD8D8D8FF999999FFF8F8
+        F8FFFAFAFAFFFAFAFAFFFAFAFAFFF9F9F9FFF9F9F9FFF8F8F8FFF8F8F8FFF8F8
+        F8FFF7F7F7FFF7F7F7FFF7F7F7FFF7F7F7FFF6F6F6FF999999FFD8D8D8FFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD8D8D8FF00000000A669
+        40FFA66940FFA66940FFA66940FFA66940FFA66940FFA66940FFA66940FF9999
+        99FF999999FF999999FF999999FF999999FF999999FF0000000000000000FFCD
+        A4FFFFCDA4FFFFCDA4FFFFCDA4FFFFCDA4FFFFCDA4FFFFCDA4FFFFCDA4FFD8D8
+        D8FFD8D8D8FFD8D8D8FFD8D8D8FFD8D8D8FFD8D8D8FF0000000000000000D19E
+        7CFFC48155FFC48155FFC48155FFC48155FFC48155FFC48155FFD29E7CFF0000
+        000000000000000000000000000000000000000000000000000000000000FFFF
+        E0FFFFE5B9FFFFE5B9FFFFE5B9FFFFE5B9FFFFE5B9FFFFE5B9FFFFFFE0FF0000
+        0000000000000000000000000000000000000000000000000000
+      }
       NumGlyphs = 2
-      OnClick = PMnuRadListClick
       ShowHint = True
       ParentShowHint = False
     end
@@ -7395,6 +8165,74 @@ object FWebRadioMain: TFWebRadioMain
       Height = 26
       Top = 10
       Width = 36
+      Glyph.Data = {
+        36080000424D3608000000000000360000002800000020000000100000000100
+        2000000000000008000064000000640000000000000000000000000000000000
+        00000000000000000000A4D10078A4D100C1A4D100E1A4D100FAA4D100F7A4D1
+        00DDA4D100BDA4D1006300000000000000000000000000000000000000000000
+        00000000000000000000A4AE7F78A4AE7FC1A4AE7FE1A4AE7FFAA4AE7FF7A4AE
+        7FDDA4AE7FBDA4AE7F6300000000000000000000000000000000000000000000
+        0000A4D10022A4D100C5A4D100F8A4D100FFA4D100FFA4D100FFA4D100FFA4D1
+        00FFA4D100FFA4D100F3A4D100BAA4D100130000000000000000000000000000
+        0000A4AE7F22A4AE7FC5A4AE7FF8A4AE7FFFA4AE7FFFA4AE7FFFA4AE7FFFA4AE
+        7FFFA4AE7FFFA4AE7FF3A4AE7FBAA4AE7F13000000000000000000000000A4D1
+        0022A4D100E8A4D100FFA4D100FFA4D100FFF6F6F6FFF6F6F6FFF6F6F6FFF6F6
+        F6FFF6F6F6FFA4D100FFA4D100FFA4D100DCA4D1000F0000000000000000A4AE
+        7F22A4AE7FE8A4AE7FFFA4AE7FFFA4AE7FFFB6B6B6FFB6B6B6FFB6B6B6FFB6B6
+        B6FFB6B6B6FFA4AE7FFFA4AE7FFFA4AE7FDCA4AE7F0F0000000000000000A4D1
+        00C1A4D100FFA4D100FFA4D100FFA4D100FFF6F6F6FFF6F6F6FFF6F6F6FFF6F6
+        F6FFF6F6F6FFA4D100FFA4D100FFA4D100FFA4D100AD0000000000000000A4AE
+        7FC1A4AE7FFFA4AE7FFFA4AE7FFFA4AE7FFFB6B6B6FFB6B6B6FFB6B6B6FFB6B6
+        B6FFB6B6B6FFA4AE7FFFA4AE7FFFA4AE7FFFA4AE7FAD00000000A4D10075A4D1
+        00F8A4D100FFA4D100FFA4D100FFA4D100FFABD416FFF6F6F6FFF6F6F6FFF6F6
+        F6FFA8D30BFFA4D100FFA4D100FFA4D100FFA4D100F0A4D10052A4AE7F75A4AE
+        7FF8A4AE7FFFA4AE7FFFA4AE7FFFA4AE7FFFA5AE84FFB6B6B6FFB6B6B6FFB6B6
+        B6FFA4AE82FFA4AE7FFFA4AE7FFFA4AE7FFFA4AE7FF0A4AE7F52A4D100B0A4D1
+        00FFA4D100FFA4D100FFA4D100FFA4D100FFA4D100FFF6F6F6FFF6F6F6FFF6F6
+        F6FFA4D100FFA4D100FFA4D100FFA4D100FFA4D100FFA4D100A2A4AE7FB0A4AE
+        7FFFA4AE7FFFA4AE7FFFA4AE7FFFA4AE7FFFA4AE7FFFB6B6B6FFB6B6B6FFB6B6
+        B6FFA4AE7FFFA4AE7FFFA4AE7FFFA4AE7FFFA4AE7FFFA4AE7FA2A4D100D1A4D1
+        00FFA4D100FFA4D100FFA4D100FFA4D100FFAED51EFFF6F6F6FFF6F6F6FFF6F6
+        F6FFA4D100FFA4D100FFA4D100FFA4D100FFA4D100FFA4D100CCA4AE7FD1A4AE
+        7FFFA4AE7FFFA4AE7FFFA4AE7FFFA4AE7FFFA6AE86FFB6B6B6FFB6B6B6FFB6B6
+        B6FFA4AE7FFFA4AE7FFFA4AE7FFFA4AE7FFFA4AE7FFFA4AE7FCCA4D100F0A4D1
+        00FFA4D100FFA4D100FFA4D100FFA4D100FFF6F6F6FFF6F6F6FFF6F6F6FFF6F6
+        F6FFA4D100FFA4D100FFA4D100FFA4D100FFA4D100FFA4D100EAA4AE7FF0A4AE
+        7FFFA4AE7FFFA4AE7FFFA4AE7FFFA4AE7FFFB6B6B6FFB6B6B6FFB6B6B6FFB6B6
+        B6FFA4AE7FFFA4AE7FFFA4AE7FFFA4AE7FFFA4AE7FFFA4AE7FEAA4D100E9A4D1
+        00FFA4D100FFA4D100FFA4D100FFA4D100FFF6F6F6FFF6F6F6FFF6F6F6FFF6F6
+        F6FFA4D100FFA4D100FFA4D100FFA4D100FFA4D100FFA4D100EAA4AE7FE9A4AE
+        7FFFA4AE7FFFA4AE7FFFA4AE7FFFA4AE7FFFB6B6B6FFB6B6B6FFB6B6B6FFB6B6
+        B6FFA4AE7FFFA4AE7FFFA4AE7FFFA4AE7FFFA4AE7FFFA4AE7FEAA4D100CEA4D1
+        00FFA4D100FFA4D100FFA4D100FFA4D100FFAAD412FFBFDD50FFDCEAA9FFF6F6
+        F6FFA4D100FFA4D100FFA4D100FFA4D100FFA4D100FFA4D100CAA4AE7FCEA4AE
+        7FFFA4AE7FFFA4AE7FFFA4AE7FFFA4AE7FFFA5AE83FFAAB091FFB0B3A5FFB6B6
+        B6FFA4AE7FFFA4AE7FFFA4AE7FFFA4AE7FFFA4AE7FFFA4AE7FCAA4D100B0A4D1
+        00FFA4D100FFA4D100FFA4D100FFA4D100FFA4D100FFA4D100FFA5D103FFA4D1
+        00FFA4D100FFA4D100FFA4D100FFA4D100FFA4D100FFA4D100A2A4AE7FB0A4AE
+        7FFFA4AE7FFFA4AE7FFFA4AE7FFFA4AE7FFFA4AE7FFFA4AE7FFFA4AE80FFA4AE
+        7FFFA4AE7FFFA4AE7FFFA4AE7FFFA4AE7FFFA4AE7FFFA4AE7FA2A4D10075A4D1
+        00F8A4D100FFA4D100FFA4D100FFA4D100FFA4D100FFCEE47EFFF2F4EAFFC5E0
+        63FFA4D100FFA4D100FFA4D100FFA4D100FFA4D100F0A4D10052A4AE7F75A4AE
+        7FF8A4AE7FFFA4AE7FFFA4AE7FFFA4AE7FFFA4AE7FFFADB29BFFB5B5B3FFABB1
+        95FFA4AE7FFFA4AE7FFFA4AE7FFFA4AE7FFFA4AE7FF0A4AE7F5200000000A4D1
+        00C1A4D100FFA4D100FFA4D100FFA4D100FFA4D100FFF0F3E3FFF6F6F6FFECF1
+        D7FFA4D100FFA4D100FFA4D100FFA4D100FFA4D100AD0000000000000000A4AE
+        7FC1A4AE7FFFA4AE7FFFA4AE7FFFA4AE7FFFA4AE7FFFB4B5B1FFB6B6B6FFB3B5
+        AFFFA4AE7FFFA4AE7FFFA4AE7FFFA4AE7FFFA4AE7FAD0000000000000000A4D1
+        0022A4D100E8A4D100FFA4D100FFA4D100FFA4D100FFCCE377FFEEF3DFFFC5E0
+        63FFA4D100FFA4D100FFA4D100FFA4D100DCA4D1000F0000000000000000A4AE
+        7F22A4AE7FE8A4AE7FFFA4AE7FFFA4AE7FFFA4AE7FFFACB19AFFB4B5B1FFABB1
+        95FFA4AE7FFFA4AE7FFFA4AE7FFFA4AE7FDCA4AE7F0F00000000000000000000
+        0000A4D10022A4D100C5A4D100F8A4D100FFA4D100FFA4D100FFA4D100FFA4D1
+        00FFA4D100FFA4D100F3A4D100BAA4D100130000000000000000000000000000
+        0000A4AE7F22A4AE7FC5A4AE7FF8A4AE7FFFA4AE7FFFA4AE7FFFA4AE7FFFA4AE
+        7FFFA4AE7FFFA4AE7FF3A4AE7FBAA4AE7F130000000000000000000000000000
+        00000000000000000000A4D10078A4D100BDA4D100D9A4D100F2A4D100E8A4D1
+        00D5A4D100B9A4D1006300000000000000000000000000000000000000000000
+        00000000000000000000A4AE7F78A4AE7FBDA4AE7FD9A4AE7FF2A4AE7FE8A4AE
+        7FD5A4AE7FB9A4AE7F6300000000000000000000000000000000
+      }
       NumGlyphs = 2
       OnClick = PMnuAboutClick
       ShowHint = True
@@ -7405,6 +8243,74 @@ object FWebRadioMain: TFWebRadioMain
       Height = 26
       Top = 10
       Width = 36
+      Glyph.Data = {
+        36080000424D3608000000000000360000002800000020000000100000000100
+        2000000000000008000064000000640000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        00000000000000000000000000FF000000FF000000FF000000FF000000FF0000
+        00FF000000FF0000000000000000000000000000000000000000000000000000
+        00000000000000000000787878FF787878FF787878FF787878FF787878FF7878
+        78FF787878FF0000000000000000000000000000000000000000000000000000
+        0000000000FF000000FF000000FF0000FFFF0000FFFF0000FFFF0000FFFF0000
+        FFFF000000FF000000FF000000FF000000000000000000000000000000000000
+        0000787878FF787878FF787878FF7878BDFF7878BDFF7878BDFF7878BDFF7878
+        BDFF787878FF787878FF787878FF000000000000000000000000000000000000
+        00FF000000FF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000
+        FFFF0000FFFF0000FFFF000000FF000000FF0000000000000000000000007878
+        78FF787878FF7878BDFF7878BDFF7878BDFF7878BDFF7878BDFF7878BDFF7878
+        BDFF7878BDFF7878BDFF787878FF787878FF0000000000000000000000000000
+        00FF0000FFFF0000FFFF0000FFFFF6F6F6FFF6F6F6FFF6F6F6FFF6F6F6FFF6F6
+        F6FF0000FFFF0000FFFF0000FFFF000000FF0000000000000000000000007878
+        78FF7878BDFF7878BDFF7878BDFFBBBBBBFFBBBBBBFFBBBBBBFFBBBBBBFFBBBB
+        BBFF7878BDFF7878BDFF7878BDFF787878FF0000000000000000000000FF0000
+        00FF0000FFFF0000FFFFF6F6F6FFF6F6F6FF0000FFFF0000FFFF0000FFFFF6F6
+        F6FFF6F6F6FF0000FFFF0000FFFF000000FF000000FF00000000787878FF7878
+        78FF7878BDFF7878BDFFBBBBBBFFBBBBBBFF7878BDFF7878BDFF7878BDFFBBBB
+        BBFFBBBBBBFF7878BDFF7878BDFF787878FF787878FF00000000000000FF0000
+        FFFF0000FFFFF6F6F6FFF6F6F6FF0000FFFF0000FFFF0000FFFF0000FFFF0000
+        FFFFF6F6F6FFF6F6F6FF0000FFFF0000FFFF000000FF00000000787878FF7878
+        BDFF7878BDFFBBBBBBFFBBBBBBFF7878BDFF7878BDFF7878BDFF7878BDFF7878
+        BDFFBBBBBBFFBBBBBBFF7878BDFF7878BDFF787878FF00000000000000FF0000
+        FFFF0000FFFFF6F6F6FF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000
+        FFFF0000FFFFF6F6F6FF0000FFFF0000FFFF000000FF00000000787878FF7878
+        BDFF7878BDFFBBBBBBFF7878BDFF7878BDFF7878BDFF7878BDFF7878BDFF7878
+        BDFF7878BDFFBBBBBBFF7878BDFF7878BDFF787878FF00000000000000FF0000
+        FFFF0000FFFFF6F6F6FF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000
+        FFFF0000FFFFF6F6F6FF0000FFFF0000FFFF000000FF00000000787878FF7878
+        BDFF7878BDFFBBBBBBFF7878BDFF7878BDFF7878BDFF7878BDFF7878BDFF7878
+        BDFF7878BDFFBBBBBBFF7878BDFF7878BDFF787878FF00000000000000FF0000
+        FFFF0000FFFFF6F6F6FF0000FFFF0000FFFF0000FFFFF6F6F6FF0000FFFF0000
+        FFFF0000FFFFF6F6F6FF0000FFFF0000FFFF000000FF00000000787878FF7878
+        BDFF7878BDFFBBBBBBFF7878BDFF7878BDFF7878BDFFBBBBBBFF7878BDFF7878
+        BDFF7878BDFFBBBBBBFF7878BDFF7878BDFF787878FF00000000000000FF0000
+        FFFF0000FFFFF6F6F6FFF6F6F6FF0000FFFF0000FFFFF6F6F6FF0000FFFF0000
+        FFFFF6F6F6FFF6F6F6FF0000FFFF0000FFFF000000FF00000000787878FF7878
+        BDFF7878BDFFBBBBBBFFBBBBBBFF7878BDFF7878BDFFBBBBBBFF7878BDFF7878
+        BDFFBBBBBBFFBBBBBBFF7878BDFF7878BDFF787878FF00000000000000FF0000
+        00FF0000FFFF0000FFFFF6F6F6FFF6F6F6FF0000FFFFF6F6F6FF0000FFFFF6F6
+        F6FFF6F6F6FF0000FFFF0000FFFF000000FF000000FF00000000787878FF7878
+        78FF7878BDFF7878BDFFBBBBBBFFBBBBBBFF7878BDFFBBBBBBFF7878BDFFBBBB
+        BBFFBBBBBBFF7878BDFF7878BDFF787878FF787878FF00000000000000000000
+        00FF0000FFFF0000FFFF0000FFFFF6F6F6FF0000FFFFF6F6F6FF0000FFFFF6F6
+        F6FF0000FFFF0000FFFF0000FFFF000000FF0000000000000000000000007878
+        78FF7878BDFF7878BDFF7878BDFFBBBBBBFF7878BDFFBBBBBBFF7878BDFFBBBB
+        BBFF7878BDFF7878BDFF7878BDFF787878FF0000000000000000000000000000
+        00FF000000FF0000FFFF0000FFFF0000FFFF0000FFFFF6F6F6FF0000FFFF0000
+        FFFF0000FFFF0000FFFF000000FF000000FF0000000000000000000000007878
+        78FF787878FF7878BDFF7878BDFF7878BDFF7878BDFFBBBBBBFF7878BDFF7878
+        BDFF7878BDFF7878BDFF787878FF787878FF0000000000000000000000000000
+        0000000000FF000000FF000000FF0000FFFF0000FFFF0000FFFF0000FFFF0000
+        FFFF000000FF000000FF000000FF000000000000000000000000000000000000
+        0000787878FF787878FF787878FF7878BDFF7878BDFF7878BDFF7878BDFF7878
+        BDFF787878FF787878FF787878FF000000000000000000000000000000000000
+        00000000000000000000000000FF000000FF000000FF000000FF000000FF0000
+        00FF000000FF0000000000000000000000000000000000000000000000000000
+        00000000000000000000787878FF787878FF787878FF787878FF787878FF7878
+        78FF787878FF0000000000000000000000000000000000000000
+      }
       NumGlyphs = 2
       OnClick = PMnuQuitClick
       ShowHint = True
@@ -7559,185 +8465,185 @@ object FWebRadioMain: TFWebRadioMain
   end
   object ODAudio: TOpenDialog
     Filter = 'Music Files|*.wav;*.mp3;*.wma;*.aac;*.ogg;'
-    Left = 552
-    Top = 280
+    Left = 728
+    Top = 8
   end
   object ILButtons: TImageList
     Width = 32
     Left = 472
     Top = 8
     Bitmap = {
-      4C7A100000002000000010000000471500000000000078DAED9D095C55D5BEC7
+      4C7A100000002000000010000000491500000000000078DAED9D095C55D5BEC7
       BDB72ECFF2637E6E9AA9851356CED7F2F54A4D7348BDDDB44BF6F4FACC9E1349
-      A9AF325371084441142750D350704051411010D01805157120151C5151704844
-      3406A750F9BDF5DF9C755C67B1F73EFBA05DB837CEE7F363EFB3F75EEBFB9FD6
-      5AFB700E1C00B550230BD5AA453F2ACA68FB850B01353D0EDBA80D5A6C233658
+      A9AF325371084471C209D034141C5054100404344641451C48054754141C1211
+      8D41D450F9BDF5DF9C755C67B1F73EFBA05DB837CEE7F363EFB3F75EEBFB9FD6
+      5AFB700E1C00B550230BD5AA453F2ACA68FBC58B01353D0EDBA80D5A6C233658
       635BB3C11A5BCF06A36C2D1B8CB2B56CA8E1D7F0AB925FD5E3AF3ACC3FD561FE
       FDFDAD75350FF9A1553FFF8CF6D6C6CF6FD9DEE8FCF15BB4B775FEAC695FD3FE
       DFA97D558FBFEA30FF5487F9F7F7F6A86EF7234E4E4EE8D2A58BA2418E8EA0E7
-      B6B48F8E8EC6FCF9F31505AE5B077A6EADCDFFF5E80112F1643689F6F5DA272E
-      5E0C12F1643689F6F5D851AC6D5A5A9A993B79F26433DF87EDFBFAF868C681B8
-      387F5E39C7B9A9A9A9667E0EDBCFCDC9D18C03F14B4B4BCDBED33ED942364C36
-      B1495A3150F86CCB7DE7C7C98654139BA41503E29F898951D8C421366D790CC2
-      C3C31559E3139B38B44F5B1E037E9D1EDF47883767F363640FF1F5E29F23C49B
-      B37324BE5E1D4E193D5A61917C4C6CE21197F3F56A70DFF6ED0A8B946362CB3C
-      BD1A2471FF791DF05C105BACBF824D9B2CB662FFBCD6C55CF07C98EDB973C772
-      2BF029EEDC67CE967DD7E353DCD57CB3F05D83CF6DE04C6E87CC3E52FE42B202
-      5F2BC615D8E7CE69F2B90D5C62CDC96CBEAFC6E3B2A80199CDF70DC8285B5395
+      B6B48F8A8AC2C2850B1505AC5F0F7A6EADCDFFF5E80112F1643689F6F5DA272C
+      5D0A12F1643689F6F5D891AC6D6A6AAA993B79F26433DF8BED7B7B7969C681B8
+      B8704139C7B9292929667E36DBCFC9CED68C03F14B4B4BCDBED33ED942364C36
+      B1495A3150F86CCB7DE7C7C98614139BA41503E29F8D8E56D8C421366D790CC2
+      C2C21459E3139B38B44F5B1E037E9D1EDF4B883767F363640FF1F5E29F2DC49B
+      B3B325BE5E1D4E193D5A6191BC4C6CE21197F3F56A70FF8E1D0A8B946D62CB3C
+      BD1A2471FF791DF05C105BACBFFCCD9B2DB662FFBCD6C55CF07C98EDB973C772
+      2BF029EEDC67CE967DD7E353DCD57CB3F05D83CF6DE04C6E87CC3E5AFE42B202
+      5F2BC615D8E7CF6BF2B90D5C62CDC96CBEAFC6E3B2A80199CDF70DC8285B5395
       64134B8DAD167B4DAE1A5B23F646626098AD15031BD9720C2AC5B531DF55A931
-      6C2EE46B30899E938CB68F6273215F8349F49CA4D7E6AB77DF05498D2B4AABFD
-      AE254B4052E38AD26207F807E0685C9C2AD797CD89745ECB06E2DE28B8615E03
-      65662E9B13E9BC960DC4CFCBBBAEF4FD66D751CA3E7F4E22B6353E8FBBA77724
-      C43C90886D8DCF7D275F695FE419E52B6B8E69FE177946F8C4E57CCEA27DDA92
-      3DD367A7A0DBC0934A7CD4F8C4E57CCEA27DCE3B98092C0880457C641BA86FDA
-      729F69EBE37F57E1CA92E3403650DFB4E53ED336A7A09C2B4B2D0E62CD512CC8
-      06CE233B785D709B641BC49AA358900D9C4776F0EBB84DB20D62AD53CC499CCD
-      99DC062D3E8F3F3FC6D99C291ED78A01E773FF65BFB5F8DC06CEE7FECB7EEBF1
-      C53C502CB462AFC517F340B1D08ABD1E5FB645CE011F0746E66462C839E0E3C0
-      085FB48198B6B0651B88692B5BAE4D5BD722B9368DAC45D5E1F7FFC1E37B7488
-      FBBA35B6AE70C6B41DBE2FE0C2DADA6517839F01FCFE04B8FDD1EAEF14D2D776
-      40067B2D78773FCEA0F805C6A9CDC4DA97B2F6399AED5BFFE33D0CB99A8C2BC9
-      6C1DDA3D123F4739E27F4E866270EA2A6C4D5EDABDEC27FF66654757342C3B15
-      51976C91DBCFFF31083B9572DFCD94C2148938F67307EEB39F25DD8187CD9851
-      0DD993BA648BD8363B6C38AEEE1D8B5F0BD6E1765E107C8B8F6178B037DC73A3
-      91919181FBF7EF2B3D0F717C7F3732FD5A23DDAF01C5E5D1EF5112D9D934F047
-      31E8C8755C84E56367640833AEB43553038A0BB5B5FBEFBEB818F3318ACEB963
-      EBB563CCC442C4FE9289F527B7233222128BC67583C7F451488E09C09CB1BDB0
-      7FFFFE321C59D5896241ED9D63E89E94EEF5655AF9E3E6217F5C394B3129C3E5
-      B440283BB8DF896241ED0FF874C5B55D9FE256AE37EE179DC64FD73371E8E7DD
-      484949C1F4F75F807DF397D1BC657334777040D316CD31FAADBAE8FD5E1F94FD
-      B4BAA3E27BD16AD66512D3F50AECB32153E0EAFE1DDCE7B8C3DDC3036EB3DDB1
-      E7872FB12168233BFBA0E356A7E6430E2DED89FC84E1B87DCA1D6FBCF106A64C
-      99A2B45DBAC00D4D19DBBE793385EDD0FA35B4EBD8116DDAB4018ACEA3ECD00F
-      FD90EA3E0425EB511EFF8B58B66C194E9D3AA5B42F29C8811B63BBBACF52D81E
-      F3E761215B23BDBDBD4DD6FDDA6FCBB0E648F5EE8DA8A52370F8C86174E9D91D
-      DD7BF5C4C3870FF179D767D1C4FE2585DFB6437B74EBD10D7FFDDBFBF890BD36
-      9BF4B74628CB583D0CF1EECCED0D0C96ACF4B86AFD1AAC095CAFEC1F583D1E33
-      5C672AFC058B17C17FAD3F82B786203C3212C7B74E23FF876D1EDAAC3476E63B
-      6C7ECF8387D75CAC58ED874D5B36E3E489139838FC3FF1FEC081E8F046270CFB
-      F4537C3D712226B179E8F371E3B065CD3CFCB57FDFDB889D558AECF285E54ADE
-      55DC7D506A8E7D66E2F708D9B60D8B97F9223E2909199999387EF2240E1C3AC4
-      CE5E43F0964DB7CB8EAF7E3E745C67FCF8E38FF8E8E38FF1E988FFC5279F0CA3
-      1A83D7F4E118FFE59718346810B6868662C3C68D58EAEBABE470CBA635E8D5AB
-      17F9F03C0E2D5778DBD9EBCDA4E45D484888579EE79D4D44FA9123888A8A32DB
-      54525C8C9C4BE5751A181888B2821DCF6D19D91E3367CEC48B2F35616A8CDA75
-      9EC151D6CE655C7F0C1B3E1C2D5F71C0121F1FF82CF565F716DE98E9EA86E020
-      7FF4E9D387BA790E298B909D9D0D97993398A6E38B09E394FEB30E6D417C6222
-      E6CCF5406151118A4A8A919F7F1DD917E877130FB191F9837D139F29BB1C6E4F
-      BE3CFDD4D3F8536D3BD4A95307376EDC80FB10073478F14538BCD20A3D584D0C
-      1A3C182346B1F567EC67F87A644FDC485AE2CCA2CCE635D8932F9F397D86B15F
-      3863C284090AFFE24E0F4C767181C75C4FAC653511B563079277EFC6DEB47DC8
-      48A11A2974DEF5AEDBD3D9F17EF54E84CE69D6A85123E5CD6F52FDFAF5317140
-      4B3464F168626F0FFB66F678B54D5BBCDDB50BFAF6EF8F25635F078EF839625D
-      CED36C2EA9075C6E366DDA348C62F691BEFDF65B6486CDC154168F19AEAE709D
-      E50A2FEF05F05BBD8AD5D71614A62D65FC524737B7C1762EE3C7D7FFE4A3016F
-      767BBDBDF3BAE96FE1D48A7E68F26203B87E370D7DDF69CEEA9FC67E0BB46CF5
-      0ADA7568877EEF75C3B12307D8F8FFA14B4ECE0EBBACF4F4FA09DBC3DEF45FBA
-      C819677F60D3CA66CC70998C0BE7CF6053803BAB7F1AFBB331C7732E162E5E88
-      CD2C77A6F1D785E68FB66DDBDA75EEDCB25EAB562F38B4B06FDCB75F97765D9D
-      3E7CFB233B3B3BCCFAEA6374EEF42A1C5E7D15AFB46E83CE9D3B22E7E4AE076C
-      EEEB5D7674550B6ABF60C102BBE5CBE7D4F3F49CE230DB757ADFCDAB16764D0D
-      F7FBC8D9D919B947A3B1DCD78B8D2D2FCC65B5B37CB9F27AE10133B2379B035B
-      484BC81F5F7BEDB5BA4D5B376D7C3138F899D4C0490D870E1D8A19D326E18D97
-      EA960DEBFD1724C547E3830FDE4FC3F1F54DCB4EF9D7151BB3B8FF71DEBC7975
-      DDE6BB352E5FEF8E378C8D8DC5B933C7B16CE69765F11B7C14AF43434368A168
-      CA6AB0AED65A38A0F38067BFF9666C03379771AD268D1ED29E6AFDDD1E3D4073
-      3ED243EAD1DA03843CA5D53E6C79D8B3C78EA535C8C93AD4EAF89E9DEDA9D6D7
-      AD5D0BD3FA57CFB4263FF5AFF67E45368B1A57A5DEEF98CDBC36C9569EC835CA
-      17792257E4FFE5333FC812F95A76F1FD65071E4296C8D7B28BB3F7B09B1559DC
-      0EE2A8D9C6F9C4527B703B88A3669B353E1771D46CB3C6373F66ABDB5659BE5C
-      0736F3A53A20BEF7555490C8513B26F26FD23D9E2491A3764C8F2F73C45A30C2
-      9739622D58E3AB71D462CFEB40E6AB71D462CFEB40E4F35A50636B8D11916FAE
-      0535B6C618E17CAD3AD0121F879CAF55075AE2E3B03AF02BCB16E7BECAB0F5E6
-      5F3DC973A9DAFCABA79A4F1D683F7A1DD878F983EC1DE8F7CD10BCF4CD089CDE
-      D0077EBEA3D03D750D3A472DFCDE5AFB2076231CCE721C72320E6E27F7B0BDCD
-      78783B1574B7BD1285BAEDDF49F043CFE43548BEB809BF64B922383F01234BD2
-      E1989782FEA723D06DAF3F3A85CED5CCDF3A7A4D611EDDE5AF71F69A5E996F65
-      A2BBAFE5C8D75CCFCF47FC5D99736EE787569803075E8E57B66FFEE88B366BA7
-      41F53E03518FE61C690E8C341DF3C36DB0574B50E3E7ED1EA13046446F50B6E1
-      A5F9987FFF82B2EF782D59D9BE9DB412ED36CFD2E0EF51187B8475EF86693FDA
-      B4F5C77D2CC1658BF6E14E0E4ADFF9A92395EDFDDB672C7C1F7E3F133F1D985A
-      CE4F5E81F621EE7058FAE5A37B9CFD5E26DE5E55FFCB5F999F35F14BE1832BF0
-      BA93696E1F3EA1B5056F5A6996B23D9A1588822B3F28FB9D43165A5CE3B04CE0
-      1F5D68C1CBB658F71F28FBACF62CAEF1BAFB881F3CA615767BFF17CE6DED8FEB
-      7B8763E8BD2318F9E018863EC8C42F879D31E06A12FE1EBD08EF1C588BD76316
-      A14DD077D83CECE547FCB4796C625B65AAB2642498EA2E41E11F4284521945A0
-      77A2BF67DB45C805921EE53060B03D222675A8507394F30197E2D0EF6C448573
-      E1A39B3FE2C7BA03A77C2BD41CE59CD8212AF5887D1EE6F6AB3E7CD1DC6FF703
-      EBD03B738BF979CFCC60F37EC788B9081AD7A5C2FD7FD9F619E67E699C6F1278
-      1B85FDA56CECE17080C5FD87E8D3CA8FEDD179E762BC95B4025D765BDE87B40F
-      F344EB4D6E70F09F8C9D9FB7341F177DBABFD39DE5B918AB598D05C0F23EC407
-      D7B01097E0852C207D6E85D720BCBFD70267B2FA9E6DEEBFEDF679E6FD16C1B3
-      60BF66AAEAEB1FDEDF02E430D6CFE6FE17A3C0BCEFC9C69DBB691CA8BD2E9073
-      1C39E615B488F646B3D845AAF77E565FEBA4CD67CC9B98C36A4EEDDE4FE5517B
-      C7380744B2DA0A1FD55CD986AE1882970FF8E3E5C36BD164FF2A6AF7ACD6FCEB
-      E4E4541B87BD94DA42AA47F9B6340EB31892E48A32FA4CC5B33A4B00BD1E6FC7
-      34FE52745FE486F4628B491FBC94B981B82E4C9D98FEACC3AFCBD48E693C10CC
-      8841CAFAE3C67EB2632E4C9D98FE6C6509FB83C98E464CCD4C6ACCF41CFD7EC2
-      DAFAC7FAFF83C98E464CCD4C6ACCF41C93B5F6725EEC548E595C277F764F7A6E
-      A7F6B929F198D41F24869DCAB10A7CDE9FD8AFE9B37B76F2310D7E8DFFD5C77F
-      3C8EFFD2BE2DFE43E26BC544D57FCE5689C1E3F85F4BC77F58F35FAD26E4EB6C
-      F1552D4EB6F8AA16275B7C35E2BF9EAF95F0DF6A4DD8E26B25C6BFD59AA8ACFF
-      06C77FADC719FF95AC7F9B8E19F1FF31E6BF7F7BFFB5B472E54A90D4EAD788B6
-      6DDB06D2FAF5EB1555E6EF000E1E3CA8B0CBDDB4AD3D3113121214B6A7A7A7A1
-      F6E4AFF27676511144BE305728C7F47C26167D6E58E473FFE91C1DD3628B4CB2
-      818BC7202424045A36F0587326FF0C35B785D8F479602D1BA84F2E31EFA25D24
-      3E1FC9EDA94F2E31EFA25D24E26BE543E61187EF2F5EBCD81C07BA462BE7228F
-      387C3F3434D41C07BA468EBB187BDAF2B88BE7C47AE0C7445F79EC69CBE32E9E
-      13EB811F233EEF5BCCB55AFCE93CCF0FBF86F8BC6F31D76AF1A7F33C3FFC1AD1
-      1FEA5F2DF77C5F8C09CF83E80FF5AF967BBE2FC684E7E1ECD9B31636C8E34E3C
-      C66B4F3C4E9F51116D90C79D788CD79E785C6DCE1173C2F7790CACD51F8FAF38
-      16B83D3CEE62FD89ECEBD7AF5BD420CF39CF0BCF87DAF8A3FEE9331B620DF29C
-      F3BCF07CA88D3FB1A6F89633C5B8F3ADD6DC27D61F678A71E75BBD39509E0BD4
-      EE65B4E65FDEB75C7FFC98D1B588FBAAE5AF91F547F4DBD6F67C5C8831B1457C
-      5C8831D1FAFC5FC69A99D8EB3E585599EC9CF5BF21CC01AEC4AA8B9DB3D67ED3
-      173DA1273F3F3F5599F93F6D849E4E9F3EAD2A6A4BFDDCBB774FF9BB37AE5F7F
-      FD55111DE7BA7BF7AE85EEDCB9A3D840FD54F6416D399FC668404080B235C27E
-      D2FC356BD620B77D7B654BFC810307EA4A95EFE363DE8D8C8CD4959AFFC4A6AD
-      35BF49B76FDF7EA2FECB39B7C67ED2FC7DFBF699F32FF3D5D84F9AAFE43F3757
-      D912532FF7C4BE75EB962EDF5AEEB5F24F71B0E637B1ADF16DF5DF68CC39FB49
-      F3E96F1729FFDC7F6BEC929292DF2CFFC4B536FEADF16D1DFFE437CFBF35BFB9
-      9E94FF72BE45BE16BBB8B8F889F0F91A5419F1F54F6B7DB326B5B57863462D17
-      A644A62CA662A63CA6134CB14C63ACADE51BB7B9B930253265311533E5319D60
-      8A65D26CCFFA6EC994CA748F091A2A618A63AAAFC26DC994CA748F091A2A618A
-      63AAAFC2CE9379E997A6E266C905A4E68C91ED38C7544F62E7C9BCD0C855888E
-      89C4D6C8EF653BCE31D513F8296AFE16965C526AB1A0E8945A2CC2047E8A9ABF
-      C4DEB16307A262C2D5621166624FD68AF9E1CBAE28BE95AFE63FA9906910EB67
-      B256CCC3B6AF464C4C949AFFA442A641AC8F089D7C2328E329E89C0F647D44E8
-      E49B6996CE39B740D6C761B5BE438E3F8F5DD98E38971FACE440837F90F57158
-      ADEFA06D731012E18B88A82025071AFC83AC8F6B6A7DCBF391063F9FF5714DAD
-      6F628AD2E0E79BF2F838FCC2C7E467A8F5BDED445323FC74D647865ADF9BB6CD
-      35C24FD7AB3F037CDDFA33C00FD41A7F5B8F37B4E06F3956C7A6F117B4CD43E2
-      CF561D7F5AF38F9C7F9518E8CE3F72FE556210A637FF5AE15B9D7FADF02DE6DF
-      AA5E7F54D65FCA472E5329D35DA66CD39A6C74FDA57CE4329532DD65CA36ADC9
-      56DB4BEF7941E73D30D5878B8B0BB4649CABF6FF1FF5EDB06425AA48D70E552E
-      D59C8E1D2A6C4B667C7CBCA61D15F915B9F256B241E257E4CA5BD1062DDFF958
-      93F996363C8A81EC3BB1D4F8963658C440952DFBAD61432D2DB6ECB79A0D6A7C
-      BDFC1BE1EBE5DF56BE7E3D5AE7EBD763F5E46BD95099FCCB6C6DBEBE0D95AD7F
-      3D76C531589127CAD6F12F4B67FCD7D29F772B3FFFE9CDC3D56CFEAF0EEB5FCD
-      A31AFD5B4403D27C4C9D3A15D654DDF9A7AF1568CA085FAF7D35E55B8DB91EDF
-      48CCAB3BDF40CC35EBCF48CCADD4DFEFB1E6AA15BF8AE79C9A47552C7435DF81
-      50A31AD5A846D5E5FFB1E9AEC1D6DA5B5B83AB3BBF46BFCFEFDAAB6C9BCA7CB7
-      93D8C6D6EF9792AFB7F5FBA5D4AE376A83D675466D30FAFD67B6B08DDA60C446
-      2D86D1F868316CC991CCB2B53E645665BE7FEC71BEFB4CEBFBCF1EF7FB2FFF59
-      FCAA8C7F55D65F558EBFAA9C7FAA7AFEADEAF5A7DAFDFF5FC72C17A644A62CA6
-      62A63CA6134CB14C563F3FE0E499E0C294C894C554CC94C77482299649BBBD63
-      564BA654A67B4CD05009531C537D156E4BA654A67B4CD05009531C537D15761E
-      E7B474CE4664DA4D5C2DB8850B3F97202CF5065E9F7841B4E31C533D899DC739
-      DF2C4E4468CC5EA4EC494352CA3E8444EF85CBD224D18E734CF5047E8AC8CEBF
-      79BBC2FB7FC52577D0E1ABF3A20D61023F4564EFD99B66F1F77FA47DFBD230C5
-      D7C28630137BB21873F295787B8F17E23DD75CBCF9ED0504C41528C7E89CC02F
-      641AC4FA992CC69C7C255E545C2A66ADDC85E9CB92B0317C8F728CCE09FC42A6
-      41AC8F0831C797AEDD5258DDA7E5988F3575CA568ED139A91E02591F11628E93
-      7797FBFBDDF7BBCCC7BE5E94A81CA373523D04B23E0E8B7D128BC49F3F37EC2C
-      827695FBBF3EB140E61F647D1C16FB2416893F1F373F119B23CBFD0F8AD823F3
-      0FB23EAE69D5FB7F0C3E83FDA78A1436D56193D1E7E46BF2C778241468D5BBB3
-      570262E2531536D5E1570B13E56BF24D7954E57B875D53D8548F52ED3DE2978F
-      7155BE7FC86E854DF528D59EC8CFD0E2D3F823BEE3DC8B5AF3413AEB23438B4F
-      E38FF89EAB7669CD07E972FD713D3FFCAC79ECD5F9C7192D7E85FAE39A303FD1
-      3CF6BEF0D29C8F02E5F1A7578B9254C79F5E2D4A2A1F7FD2FC23CAFCD90375BE
-      EAFC238AFBAFC10FD39A7F0DF075E75F037CCBF9B7AAD79F8AEB2FE52397A994
-      E92E53B6694D36BAFE523E72994A99EE32659BD6E40AEDFF1F334C636D
+      6C2EE46B30899E938CB68F6473215F8349F49CA4D7E6AB77DF05498D2B4AABFD
+      EE65CB4052E38AD262FBFBF9E3586CAC2AD79BCD89745ECB06E2DECCBF695E03
+      65660E9B13E9BC960DC4CFCDBDA1F4FD66D751CA3E7F4E22B6353E8FFB5CCF08
+      88792011DB1A9FFB4EBED2BEC833CA57D61CD3FC2FF28CF089CBF99C45FBB425
+      7BA6CF4E46B781A794F8A8F189CBF99C45FB9C77280358E40F8BF8C83650DFB4
+      E53ED3D6CBEFAEC29525C7816CA0BE69CB7DA66D767E3957965A1CC49AA35890
+      0D9C4776F0BAE036C936883547B1201B388FECE0D7719B641BC45AA79893389B
+      33B90D5A7C1E7F7E8CB339533CAE1503CEE7FECB7E6BF1B90D9CCFFD97FDD6E3
+      8B79A05868C55E8B2FE68162A1157B3DBE6C8B9C033E0E8CCCC9C49073C0C781
+      11BE6803316D61CB3610D356B65C9BB6AE45726D1A598BAAC3EFFF83C6F7E810
+      FB756B6C5BE98C693BBD5FC0C575B5CB2E053D03F8FE0970FBA3D5DF29A4ADEB
+      8074F65AF0EE019C45D10B8C539B89B52F65EDB335DBB7FEC77B18722D095793
+      D83AB467247E8E74C4FF9C0AC1E094D5D896E4D3BDEC27BF6665C756362C3B1D
+      5E976C91DB2FFC3110BB9472DFC394CC148158F67327EEB39FC5DD8187CD9851
+      0DD993BA648BD8362B7438AEED1B8B5FF3D7A3243710DE45C7313CC813EE3951
+      484F4FC7FDFBF7959E8738BEBF0719BEAD91E6DB80E2F2E8F72809EC6C2AF8A3
+      0874E4062EC1F2B12B22981957DA9AA901C585DADAFD775F5C8AFE1885E7DDB1
+      EDFA71666201627EC9C086533B10111E8125E3BAC163FA282445FB63CED85E38
+      70E040198EAEEE44B1A0F6CED1744F4AF7FA32ADFC71EBB01FAE9EA39894E14A
+      6A00941DDCEF44B1A0F607BDBAE2FAEE4F713BC713F70BCFE0A71B1938FCF31E
+      24272763FAFB2FC0BEF9CB68DEB2399A3B38A0698BE618FD565DF47EAF0FCA7E
+      5AD351F1BD700DEB3291E94605F6B9E0297075FF0EEE73DCE1EEE101B7D9EED8
+      FBC397D818B8899D7DD0719B53F321877D7A222F7E384A4EBBE38D37DEC09429
+      5394B63E8BDCD094B1ED9B3753D80EAD5F43BB8E1DD1A64D1BA0F002CA0EFFD0
+      0F29EE4350BC01E5F1BF84E5CB97E3F4E9D34AFBE2FC6CB831B6ABFB2C85EDB1
+      700116B335D2D3D3D364DDAFFDB60E6B8E14CFDE88F4198123478FA04BCFEEE8
+      DEAB271E3E7C88CFBB3E8B26F62F29FCB61DDAA35B8F6EF8EBDFDEC787ECB5D9
+      A4BF354259FA9A618873676E6F64B024A5C7D51BD6626DC00665FFE09AF198E1
+      3A53E12F5ABA047EEBFC10B42D1861111138B16D1AF93F6CCBD066A53133DF61
+      F37B2E3CE6CFC3CA35BED8BC750B4E9D3C8989C3FF13EF0F1C880E6F74C2B04F
+      3FC5D7132762129B873E1F370E5BD72EC05FFBF72D41CCAC5264952F2C5773AF
+      E1EE835273EC3312BE47F0F6ED58BADC1B71898948CFC8C08953A770F0F06176
+      F63A82B66E2E293BB1E6F990719DF1E38F3FE2A38F3FC6A723FE179F7C328C6A
+      0CF3A70FC7F82FBFC4A04183B02D24041B376D828FB7B792C3AD9BD7A257AF5E
+      E4C3F338BC42E1ED60AF37139376233E3E4E799E7B2E0169478F223232D26C53
+      715111B22F97D769404000CAF2773EB775647BCC9C39132FBED484A9316AD779
+      06C7583B9771FD316CF870B47CC501CBBCBCE0E5E3CDEE2D3C31D3D50D41817E
+      E8D3A70F75F31C9297202B2B0B2E3367304DC71713C629FD671EDE8AB88404CC
+      99E78182C242141617212FEF06B22ED2EF261E6213F307FB273E537625CC9E7C
+      79FAA9A7F1A7DA76A853A70E6EDEBC09F7210E68F0E28B7078A5157AB09A1834
+      7830468C62EBCFD8CFF0F5C89EB899B8CC994599CD6BB0275F3E73FA0C63BF70
+      C684091314FEA55D1E98ECE2028F7973B18ED544E4CE9D48DAB307FB52F7233D
+      996AA4C079F7BB6E4F67C5F9D63B1932A759A3468D9437BF49F5EBD7C7C4012D
+      D190C5A389BD3DEC9BD9E3D5366DF176D72EE8DBBF3F968D7D1D38EAEB88F5D9
+      4FB3B9A41E70A5D9B469D3308AD947FAF6DB6F91113A0753593C66B8BAC27596
+      2BE67B2E82EF9AD5ACBEB6A220D587F14B1DDDDC06DBB98C1F5FFF938F06BCD9
+      EDF5F6CEEBA7BF85D32BFBA1C98B0DE0FADD34F47DA739AB7F1AFB2DD0B2D52B
+      68D7A11DFABDD70DC78F1E64E3FF872ED9D93BED32D3D2EAC7EF087DD3CF6789
+      33CEFDC0A6952D98E13219172F9CC5667F7756FF34F66763CEDC7958BC7431B6
+      B0DC99C65F179A3FDAB66D6BD7B973CB7AAD5ABDE0D0C2BE71DF7E5DDA7575FA
+      F0ED8FECECEC30EBAB8FD1B9D3AB7078F555BCD2BA0D3A77EE88EC53BB1FB0B9
+      AF77D9B1D52DA8FDA2458BEC56AC98536FEEDC290EB35DA7F7DDB27A71D79430
+      DF8F9C9D9D91732C0A2BBCE7B3B1351FF358EDAC58A1BC5E78C08CECCDE6C016
+      D212F2C7D75E7BAD6ED3D64D1B5F0A0A7A26256052C3A1438762C6B44978E3A5
+      BA65C37AFF05897151F8E083F753716243D3B2D37E75C5C62CEE7F5CB060415D
+      B7856E8DCBD7BB130D63626270FEEC092C9FF96559DC462FC5EB9090605A289A
+      B21AACABB5160EE83CE0D96FBE19DBC0CD655CAB49A387B4A75A7FB7470FD09C
+      8FB4E07AB4F600C14F69B50F5D11FAECF1E3A90DB2330FB73AB177577BAAF5F5
+      EBD6C1B4FED533ADC94FFDABBD5F91C5A2C655A9F73B6633AF4DB29527728DF2
+      459EC815F97FF9CC17B244BE965D7C7FF9C1879025F2B5ECE2ECBDEC664516B7
+      83386AB6713EB1D41EDC0EE2A8D9668DCF451C35DBACF1CD8FD9EAB655962FD7
+      81CD7CA90E88EF790D152472D48E89FC5B748F2749E4A81DD3E3CB1CB1168CF0
+      658E580BD6F86A1CB5D8F33A90F96A1CB5D8F33A10F9BC16D4D85A6344E49B6B
+      418DAD3146385FAB0EB4C4C721E76BD58196F838AC0EFCCAB2C5B9AF326CBDF9
+      574FF25CAA36FFEAA9E65307DA8F5E07375DF9206B27FA7D33042F7D33026736
+      F681AFF728744F598BCE918BBFB7D63E90DD0887B11C079F8A85DBA9BD6C6F0B
+      1E96A480EEB657A140B7FD3BF1BEE899B416499736E3974C5704E5C56364711A
+      1C7393D1FF4C38BAEDF343A790799AF95B4FAF29CCA3BBFC35CE3ED32BF36D4C
+      74F7B502799AEBF985F0BF2B734E495E48853970E0953865FBE68FDE68B36E1A
+      54EF3310F968CE91E6C008D3315F9480BD5A821A3F77CF088531226AA3B20D2B
+      CDC3C2FB17957DC7EB49CAF6EDC45568B76596067FAFC2D82BAC7B374DFB51A6
+      AD1FEE6319AE58B40F737250FACE4B19A96CEF979CB5F07DF8FD0CFC74706A39
+      3F6925DA07BBC3C1E7CB47F73807E69B78FB54FD2F7F657ECEC42F8517AE62FE
+      9D0C73FBB009AD2D78D34A3395EDB1CC00E45FFD41D9EF1CBCD8E21A87E502FF
+      D8620B5E96C5BAFF40D967B56771CDFCBB8FF841635A618FE77FE1FCB6FEB8B1
+      6F3886DE3B8A910F8E63E8830CFC72C41903AE25E2EF514BF0CEC175783D7A09
+      DA047E872DC35E7EC44F5DC026B6D5A62A4B42BCA9EEE215FE61842B9551087A
+      27FA7BB65D821C20F1510EFD07DB237C52870A3547391F703916FDCE85573817
+      36BAF9237E8C3B70DABB42CD51CE891DAC528FD8EF616EBFFAC317CDFD763FB8
+      1EBD33B69A9FF7CC0832EF770C9F87C0715D2ADCFF97ED9861EE97C6F96681B7
+      49D8F761630F47FC2DEE3F449F567D6C8FCEBB96E2ADC495E8B2C7F23EA47DE8
+      5CB4DEEC0607BFC9D8F5794BF371D1A7FBBBDC599E8BB086D5983F2CEF43BC70
+      1D8B7119F39109A4CDABF01A84F7F75AC04C56DFB3CDFDB7DDB1C0BCDF226816
+      ECD74E557DFDC3FB5B846CC6FAD9DCFF52E49BF7E7B271E76E1A076AAF0BE41C
+      478C79052DA23CD12C6689EABD9FD5D73AA90B19F316E6B09A53BBF75379D4DE
+      39CE0111ACB6C2463557B6212B87E0E5837E78F9C83A3439B09ADA3DAB35FF3A
+      3939D5C691F94A6D21C5A37C5B1A8B590C497245197DA6E2599D25805E8FB763
+      1A7F39AA2F72827BB1C5A40F5ECAD8485C17A64E4C7FD6E1D7656AC7341E0862
+      C44065FD71633FD93117A64E4C7FB6B284FDC1644723A6662635667A8E7E3F61
+      6DFD63FDFFC1644723A6662635667A8EC95A7B392F762AC72CAE13DF4BF0F1F1
+      81F4DC4E3E265F27F5078961A772AC029FF727F64BFB325FEDBA1AFFAB9DFF78
+      1CFFA57D5BFC87C4D78A89AAFF9CAD1283C7F1BF968EFFB0E6BF5A4DC8D7D9E2
+      AB5A9C6CF1552D4EB6F86AC47F3D5F2BE1BFD59AB0C5D74A8C7FAB355159FF0D
+      8EFF5A8F33FE2B59FF361D33E2FF63CC7FFFF6FE6B69D5AA5520F1CFC0DBFAB9
+      82EDDBB783B461C3064595F93B8043870E29EC72376D6B4FCCF8F878853D77EE
+      5C43EDC95FE5EDECC242887CEE3F9DA3637A3E138B3E372CF2B9FF748E8E69B1
+      4526D9C0C563101C1C0C2D1B78AC39937F869ADB426CFA3CB0960DD427979877
+      D12E129F8FE4F6D427979877D12E12F1B5F221F388C3F7972E5D6A8E035DA395
+      7391471CBE1F1212628E035D23C75D8C3D6D79DCC573623DF063A2AF3CF6B4E5
+      7117CF89F5C08F119FF72DE65A2DFE749EE7875F437CDEB7986BB5F8D3799E1F
+      7E8DE80FF5AF967BBE2FC684E741F487FA57CB3DDF1763C2F370EEDC390B1BE4
+      71271EE3B5271EA7CFA88836C8E34E3CC66B4F3CAE36E78839E1FB3C06D6EA8F
+      C7571C0BDC1E1E77B1FE44F68D1B372C6A90E79CE785E7436DFC51FFF4990DB1
+      0679CE795E783ED4C69F58537CCB9962DCF9566BEE13EB8F33C5B8F3ADDE1C28
+      CF05E231BDB588FB27CF05E231A36B11F755CB5F23EB8FE8B7ADEDF9B8106362
+      8BF8B81063A2F5F9BFF4B533B1CF7DB0AA32D839EB7F43980D5C8D51173B67AD
+      FDE62F7A424FBEBEBEAA32F37FDA043D9D39734655D496FAB977EF9EF2776F5C
+      BFFEFAAB223ACE75F7EE5D0BDDB97347B181FAA9EC83DA723E8D517F7F7F656B
+      84FDA4F96BD7AE454EFBF6CA96F803070ED4952ADFCBCBBC1B1111A12B35FF89
+      4D5B6B7E934A4A4A9EA8FF72CEADB19F347FFFFEFDE6FCCB7C35F693E62BF9CF
+      C951B6C4D4CB3DB16FDFBEADCBB7967BADFC531CACF94D6C6B7C5BFD371A73CE
+      7ED27CFADB45CA3FF7DF1ABBB8B8F837CB3F71AD8D7F6B7C5BC73FF9CDF36FCD
+      6FAE27E5BF9C6F91AFC52E2A2A7A227CBE0655467CFDD35ADFAC496D2DDE945E
+      CB8529812993A9882997E924530CD3186B6BF9A6ED6E2E4C094C994C454CB94C
+      2799629834DBB3BE5B32A530DD6382868A996299EAAB705B32A530DD6382868A
+      996299EAABB073655EDAE5A9B8557C1129D963643BCE33D593D8B9322F246235
+      A2A223B02DE27BD98EF34CF5047EB29ABF05C597955ACC2F3CAD168B50819FAC
+      E62FB177EEDC89C8E830B558849AD893B5627EE48A2B8A6EE7A9F94F2A601AC4
+      FA99AC15F3D01D6B101D1DA9E63FA9806910EB235C27DF084C7F0A3AE703581F
+      E13AF9669AA573CE2D80F57144ADEFE013CF63779623CEE7052939D0E01F627D
+      1C51EB3B70FB1C04877B233C3250C98106FF10EBE3BA5ADFF27CA4C1CF637D5C
+      57EB9B98A234F879A63C3E0EBFE031F9E96A7D6F3FD9D4083F8DF591AED6F7E6
+      EDF38CF0D3F4EACF005FB7FE0CF003B4C6DFB6130D2DF85B8FD7B169FC056EF7
+      90F8B355C79FD6FC23E75F2506BAF38F9C7F951884EACDBF56F856E75F2B7C8B
+      F9B7AAD71F95F597F291C354CA749729CBB4261B5D7F291F394CA54C7799B24C
+      6BB2D5F6D27B5ED0790F4CF5E1E2E2022D19E7AAFDFF477D3B2C59092AD2B543
+      954B35A763870ADB92191717A76947457E45AEBC956C90F815B9F256B441CB77
+      3ED664BEA50D8F6220FB4E2C35BEA50D16315065CB7E6BD8504B8B2DFBAD6683
+      1A5F2FFF46F87AF9B795AF5F8FD6F9FAF5583DF95A365426FF325B9BAF6F4365
+      EB5F8F5D710C56E489B275FCCBD219FFB5F4E7DDCACF7F7AF370359BFFABC3FA
+      57F3A846FF16D180341F53A74E85355577FE99EBF99A32C2D76B5F4DF95663AE
+      C73712F3EACE371073CDFA3312732BF5F77BACB96AC5AFE239A7E651150B5DCD
+      7720D4A84635AA5175F97F6CBA6BB0B5F6D6D6E0EACEAFD1EFF3BBF62ADBA632
+      DFED24B6B1F5FBA5E4EB6DFD7E29B5EB8DDAA0759D511B8C7EFF992D6CA33618
+      B1518B61343E5A0C5B7224B36CAD0F995599EF1F7B9CEF3ED3FAFEB3C7FDFECB
+      7F16BF2AE35F95F55795E3AF2AE79FAA9E7FAB7AFDA976FFFFD731D385298129
+      93A9882997E924530C93D5CF0F38CD8D77614A60CA642A62CA653AC914C3A4DD
+      DE31B325530AD33D2668A8982996A9BE0AB725530AD33D2668A8982996A9BE0A
+      3B97735A3A672122F516AEE5DFC6C59F8B119A7213AF4FBC28DA719EA99EC4CE
+      E59C6F962620247A1F92F7A62231793F82A3F6C1C52751B4E33C533D819F2CB2
+      F36E955478FFAFA8F80E3A7C7541B42154E0278BECBDFB522DFEFE8FB47F7F2A
+      A6785BD8106A624F16634EBE126FDF8902BCE79A8337BFBD08FFD87CE5189D13
+      F8054C83583F93C59893AFC48B8C4DC1AC55BB317D79223685ED558ED139815F
+      C03488F5112EE6F8F2F5DB0AABFBB46CF3B1A64E59CA313A27D54300EB235CCC
+      71D29E727FBFFB7EB7F9D8D74B129463744EAA8700D6C711B14F6291F8F3E786
+      9D43E0EE72FF3724E4CBFC43AC8F23629FC422F1E7E31626604B44B9FF81E17B
+      65FE21D6C775AD7AFF8FC16771E074A1C2A63A6C32FABC7C4DDE188FF87CAD7A
+      779E1F8FE8B814854D75F8D5E204F99A3C531E55F99EA1D71536D5A3547B8FF8
+      E5635C95EF17BC4761533D4AB527F2D3B5F834FE88EF38EF92D67C90C6FA48D7
+      E2D3F823FEDCD5BBB5E68334B9FEB89E1F7ECE3CF6EAFCE3AC16BF42FD714D58
+      98601E7B5FCCD79C8F02E4F1A7578B9254C79F5E2D4A2A1F7FD2FC23CAFCD903
+      75BEEAFC238AFBAFC10FD59A7F0DF075E75F037CCBF9B7AAD79F8AEB2FE52387
+      A994E92E5396694D36BAFE523E72984A99EE326599D6E40AEDFF1F66F793F1
     }
   end
   object REcordBtnTimer: TLFPTimer
@@ -7745,29 +8651,21 @@ object FWebRadioMain: TFWebRadioMain
     Interval = 500
     UseTimerThread = True
     OnTimer = RecordBtnTimerTimer
-    Left = 488
-    Top = 280
-  end
-  object MsgTimer: TLFPTimer
-    Enabled = False
-    Interval = 25
-    UseTimerThread = True
-    OnTimer = MsgTimerTimer
-    Left = 32
-    Top = 280
+    Left = 688
+    Top = 8
   end
   object VuTimer: TLFPTimer
     Enabled = False
     Interval = 25
     UseTimerThread = True
     OnTimer = VuTimerTimer
-    Left = 456
-    Top = 280
+    Left = 648
+    Top = 8
   end
   object UniqueInstance1: TUniqueInstance
     Enabled = True
-    Left = 576
-    Top = 280
+    Left = 768
+    Top = 8
   end
   object TrayRadio: TTrayIcon
     PopUpMenu = PMnuTray
@@ -12345,8 +13243,8 @@ object FWebRadioMain: TFWebRadioMain
     }
     Visible = True
     OnClick = PTMnuRestoreClick
-    Left = 416
-    Top = 280
+    Left = 608
+    Top = 8
   end
   object PMnuTray: TPopupMenu
     OnPopup = PMnuTrayPopup

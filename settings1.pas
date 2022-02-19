@@ -32,6 +32,7 @@ type
     FStartup: Boolean;
     FStartMini: Boolean;
     FHideInTaskbar: Boolean;
+    FEqualVisible: Boolean;
     FShowBtnBar: Boolean;
     FRestart: Boolean;
     FLangStr: String;
@@ -64,6 +65,7 @@ type
     procedure SetHideInTaskbar(b: Boolean);
     procedure SetShowBtnBar(b: Boolean);
     procedure SetRestart(b: boolean);
+    procedure SetEqualVisible(b: boolean);
     procedure SetLangStr (s: string);
     procedure SetRadioFont(s: string);
     procedure SetDataFolder(s: string);
@@ -96,6 +98,7 @@ type
     property NoChkNewVer: Boolean read FNoChkNewVer write SetNoChkNewVer;
     property Startup: Boolean read FStartup write SetStartup;
     property StartMini: Boolean read FStartMini write SetStartMini;
+    property EqualVisible: boolean read FEqualVisible write SetEqualVisible;
     property HideInTaskbar: Boolean read FHideInTaskbar write SetHideInTaskbar;
     property ShowBtnBar: Boolean read FShowBtnBar write SetShowBtnBar;
     property Restart: boolean read FRestart write SetRestart;
@@ -258,6 +261,13 @@ begin
   if Assigned(FOnChange) then FOnChange(Self);
 end;
 
+procedure TConfig.SetEqualVisible(b: boolean);
+begin
+  if FEqualVisible=b then exit;
+  FEqualVisible:= b;
+  if Assigned(FOnChange) then FOnChange(Self);
+end;
+
 procedure TConfig.SetLangStr (s: string);
 begin
   if FLangStr = s then exit;
@@ -388,7 +398,6 @@ var
   j: Integer;
 begin
   Try
-
       TDOMElement(iNode).SetAttribute ('version', FVersion);
       TDOMElement(iNode).SetAttribute ('lastversion', FLastVersion);
       TDOMElement(iNode).SetAttribute ('savsizepos', BoolToString(FSavSizePos));
@@ -400,6 +409,7 @@ begin
       TDOMElement(iNode).SetAttribute ('hideintaskbar', BoolToString(FHideInTaskbar));
       TDOMElement(iNode).SetAttribute ('showbtnbar', BoolToString(FShowBtnBar));
       TDOMElement(iNode).SetAttribute ('restart',BoolToString(FRestart));
+      TDOMElement(iNode).SetAttribute ('equalvisible',BoolToString(FEqualVisible));
       TDOMElement(iNode).SetAttribute ('langstr', FLangStr);
       TDOMElement(iNode).SetAttribute ('radiofont', FRadioFont);
       TDOMElement(iNode).SetAttribute ('datafolder', FDataFolder);
@@ -470,6 +480,7 @@ begin
     if UpCaseAttrib='HIDEINTASKBAR' then FHideInTaskbar:= StringToBool(iNode.Attributes.Item[i].NodeValue);
     if UpCaseAttrib='SHOWBTNBAR' then FShowBtnBar:= StringToBool(iNode.Attributes.Item[i].NodeValue);
     if UpCaseAttrib='RESTART' then FRestart:= StringToBool(iNode.Attributes.Item[i].NodeValue);
+    if UpCaseAttrib='EQUALVISIBLE' then FEqualVisible:= StringToBool(iNode.Attributes.Item[i].NodeValue);
     if UpCaseAttrib='LANGSTR' then FLangStr:= iNode.Attributes.Item[i].NodeValue;
     if UpCaseAttrib='RADIOFONT' then FRadioFont:= iNode.Attributes.Item[i].NodeValue;
     if UpCaseAttrib='DATAFOLDER' then FDataFolder:= iNode.Attributes.Item[i].NodeValue;
@@ -535,7 +546,8 @@ end;
 
 procedure TFSettings.FormDestroy(Sender: TObject);
 begin
-  //if assigned (Settings) then Settings.free;
+  inherited;
+  if assigned (Settings) then Settings.free;
 end;
 
 procedure TFSettings.FormShow(Sender: TObject);

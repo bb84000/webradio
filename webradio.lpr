@@ -10,7 +10,7 @@ uses
   athreads,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, webradio1, settings1, Radios1, lazbbaboutupdate, equalizer1
+  Forms, webradio1, settings1, Radios1
   { you can add units after this };
 
 {$R *.res}
@@ -24,8 +24,6 @@ begin
   Application.CreateForm(TFWebRadioMain, FWebRadioMain);
   Application.CreateForm(TFSettings, FSettings);
   Application.CreateForm(TFRadios, FRadios);
-  Application.CreateForm(TAboutBox, AboutBox);
-  Application.CreateForm(TFEqualizer, FEqualizer);
   Application.Run;
 end.
 
