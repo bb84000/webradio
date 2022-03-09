@@ -16,9 +16,9 @@ Win32Proc, windows,
 {$ENDIF} LCLIntf, LCLType, Classes, SysUtils, Forms, Controls, Graphics,
 Dialogs, ExtCtrls, StdCtrls, Menus, lazd_bass, lazd_bass_wma, lazd_bass_aac,
 lazd_bassenc, lazd_bassenc_mp3, lazd_bassenc_aac, lazd_bassenc_ogg,
-lazd_bass_flac, lazbbcontrols, settings1, radios1,
-lazbbosver, lazbbutils, lazUTF8, lazbbinifiles, registry, lazbbaboutdlg,//lazbbaboutupdate,
-lazbbautostart, LResources, ComCtrls, Buttons, ColorSpeedButton, UniqueInstance,
+lazd_bass_flac, lazbbcontrols, lazbbscrollcontrols, lazbbtrackbar, settings1,
+radios1, lazbbosver, lazbbutils, lazUTF8, lazbbinifiles, registry,
+lazbbaboutdlg, lazbbautostart, LResources, ComCtrls, Buttons, ColorSpeedButton, UniqueInstance,
 fptimer, variants, BGRABitmap, BGRABitmapTypes, LazFileUtils, Types;
 
 const
@@ -29,25 +29,20 @@ const
   BASS_TAG_HLS_EXTINF  = $14000;
 
   // Stream identifiers (different from Bass ctype
-  WMA_STRM= 1;   // BASS_CTYPE_STREAM_WMA = $10300;
+  WMA_STRM= 1;      // BASS_CTYPE_STREAM_WMA = $10300;
   WMA_MP3_STRM= 2;  //  BASS_CTYPE_STREAM_WMA_MP3  = $10301;
-  MP3_STRM= 3;   // BASS_CTYPE_STREAM_MP3 = $10005;
-  OGG_STRM= 4;   // BASS_CTYPE_STREAM_OGG = $10002;
-  AAC_STRM= 5;   // BASS_CTYPE_STREAM_AAC = $10b00;
-  MP4_STRM= 6;   // BASS_CTYPE_STREAM_MP4 = $10b01;
-  WAV_STRM= 7;   // BASS_CTYPE_STREAM_WAV = $40000;
-  FLAC_STRM= 8;  //BASS_CTYPE_STREAM_FLAC = $10900; BASS_CTYPE_STREAM_FLAC_OGG    = $10901;
-  UNK_STRM= 9;
+  MP3_STRM= 3;      // BASS_CTYPE_STREAM_MP3 = $10005;
+  OGG_STRM= 4;      // BASS_CTYPE_STREAM_OGG = $10002;
+  AAC_STRM= 5;      // BASS_CTYPE_STREAM_AAC = $10b00;
+  MP4_STRM= 6;      // BASS_CTYPE_STREAM_MP4 = $10b01;
+  WAV_STRM= 7;      // BASS_CTYPE_STREAM_WAV = $40000;
+  FLAC_STRM= 8;     //BASS_CTYPE_STREAM_FLAC = $10900; BASS_CTYPE_STREAM_FLAC_OGG    = $10901;
+  FLAC_OGG_STRM= 9; //BASS_CTYPE_STREAM_FLAC_OGG    = $10901;
+  UNK_STRM= 10;
 
   // Correpondance between Bass streams IDF and names
-  StreamName: array [WMA_STRM..UNK_STRM] of String = (' WMA',' WMA-MP3', ' MP3',' OGG',' AAC', ' MP4', ' WAV', ' FLAC', ' UNK');
-  StreamTypes: array of array [0..1] of Integer =
-              ((BASS_CTYPE_STREAM_WMA, WMA_STRM), (BASS_CTYPE_STREAM_WMA_MP3, WMA_MP3_STRM),
-               (BASS_CTYPE_STREAM_MP3, MP3_STRM), (BASS_CTYPE_STREAM_OGG, OGG_STRM),
-               (BASS_CTYPE_STREAM_AAC, AAC_STRM), (BASS_CTYPE_STREAM_MP4, MP4_STRM),
-               (BASS_CTYPE_STREAM_WAV, WAV_STRM), (BASS_CTYPE_STREAM_FLAC, FLAC_STRM),
-               (-1, UNK_STRM));
-
+  StreamName: array [WMA_STRM..UNK_STRM] of String = (' WMA',' WMA-MP3', ' MP3',' OGG',
+                     ' AAC', ' MP4', ' WAV', ' FLAC', ' FLAC-OGG', ' UNK');
 type
 
  // Wave format header missing in FPC/ Lazarus
@@ -155,6 +150,11 @@ type
   { TFWebRadioMain }
 
   TFWebRadioMain = class(TForm)
+    TBVolume: TbbTrackBar;
+    LFPTimer1: TLFPTimer;
+    LTag: TbbScrollLabel;
+    LRadioIcyName: TbbScrollLabel;
+    LRadioName: TbbScrollLabel;
     PnlMain: TPanel;
     // Equalizer stuff
     PEqualizer: TPanel;
@@ -179,9 +179,6 @@ type
     // Display
     PnlDisplay: TPanel;
     ImgLogo: TImage;
-    LRadioName: TLabelSCroll;
-    LRadioIcyName: TLabelSCroll;
-    LTag: TLabelSCroll;
     LStatus: TLabel;
     LStereo: TLabel;
     LBitrateFrequ: TLabel;
@@ -197,7 +194,6 @@ type
     // Volume panel etc.
     PnlVolume: TPanel;
     SignalMeterL, SignalMeterR: TSignalMeter;
-    TBVolume: TTrackBar;
     SBPause, SBPlay, SBStop, SBRecord, SBMute: TSpeedButton;
     LLeft, LRight, Lposition: TLabel;
     PBLength: TProgressBar;
@@ -247,6 +243,7 @@ type
     procedure SBStopClick(Sender: TObject);
     procedure TBEqChange(Sender: TObject);
      procedure TBVolumeChange(Sender: TObject);
+     procedure TBVolumePositionChange(Sender: TObject);
     procedure VuTimerTimer(Sender: TObject);
   private
     CanClose: boolean;
@@ -443,16 +440,19 @@ procedure TRadioEvents.setBitrate(i: Integer);
 // Convert CanalInfo.Ctype to webradio stream type
 
 function GetStreamType(cType: DWORD): Integer;
-var
-  i: integer;
 begin
-  result:= -1;
-  for i:=0 to high(StreamTypes) do
-    if StreamTypes[i,0]=cType then
-    begin
-      result:= StreamTypes[i,1];
-      break;
-    end;
+  result:= UNK_STRM;
+  case cType of
+    BASS_CTYPE_STREAM_WMA: result:= WMA_STRM;
+    BASS_CTYPE_STREAM_WMA_MP3: result:= WMA_MP3_STRM;
+    BASS_CTYPE_STREAM_MP3: result:= MP3_STRM;
+    BASS_CTYPE_STREAM_OGG: result:= OGG_STRM;
+    BASS_CTYPE_STREAM_AAC: result:= AAC_STRM;
+    BASS_CTYPE_STREAM_MP4: result:= MP4_STRM;
+    BASS_CTYPE_STREAM_WAV: result:= WAV_STRM;
+    BASS_CTYPE_STREAM_FLAC: result:= FLAC_STRM;
+    BASS_CTYPE_STREAM_FLAC_OGG: result:= FLAC_OGG_STRM;
+  end;
 end;
 
 //Convert Pchar tags to strings as we can
@@ -591,6 +591,13 @@ begin
              p:= Pos(',', meta);
              if (p = 0) then exit;
              s:= Copy(meta, p+1, length(meta)-1);
+           end else
+           begin
+              meta:= BASS_ChannelGetTags(chan, BASS_TAG_FLAC_METADATA);
+              if meta<>nil then
+              begin
+                s:= Copy(meta, 1, length(meta)-1);
+              end;
            end;
         end;
      end;
@@ -723,8 +730,6 @@ begin
     RadioEvent.Hint:= HintStr;
     // get the stream title and set sync for subsequent titles
     DoMeta();
-    //len:= BASS_ChannelGetLength(chan, BASS_POS_BYTE);
-    //SimulateMsg(WP_Length, true, len);
     // play it!
     BASS_ChannelPlay(chan, FALSE);
    end;
@@ -762,47 +767,30 @@ var
   P: Pointer;
   Float_Time: Double;
   len, bitrate : Integer;
-  filtyp: Integer;
+  Strm_Type: Integer;
 begin
   if cthread <> 0 then cthread:=0;
   BASS_StreamFree(chan);
-  chan:= BASS_StreamCreateFile(
-     False,
-     PChar(filename),
-     0,
-     0,
-     BASS_STREAM_AUTOFREE );
-    //SimulateMsg(WP_Connecting, True, filename);
-    RadioEvent.Connecting:= filename;
+  chan:= BASS_StreamCreateFile(False, PChar(filename), 0, 0, BASS_STREAM_AUTOFREE );
+     RadioEvent.Connecting:= filename;
    BASS_ChannelGetInfo(Chan, CanalInfo);
-   Case CanalInfo.ctype of
-      BASS_CTYPE_STREAM_WMA : filtyp:= 1;
-      BASS_CTYPE_STREAM_MP3 : filtyp:= 2;
-      BASS_CTYPE_STREAM_OGG : filtyp:= 3;
-      BASS_CTYPE_STREAM_AAC : filtyp:= 4;
-      BASS_CTYPE_STREAM_WAV_PCM : filtyp:= 5;
-      BASS_CTYPE_STREAM_WAV_FLOAT : filtyp:= 5;
-   end;
+   Strm_Type:= GetStreamType(CanalInfo.ctype);
    SetEqual(true);
-   //SimulateMsg(WP_Connected, true, filtyp);
-   RadioEvent.Connected:= filtyp;
+   RadioEvent.Connected:= Strm_Type;
    float_time:=BASS_ChannelBytes2Seconds(chan,BASS_ChannelGetLength(chan, BASS_POS_BYTE)); // playback duration
    len:=BASS_StreamGetFilePosition(chan,BASS_FILEPOS_END); // file length
    fileduration:= float_time;
    bitrate:= Trunc(len/(125*float_time)+0.5); // bitrate (Kbps)
-   //SimulateMsg(WP_BitRate, true, Bitrate);
    RadioEvent.Bitrate:= Bitrate;
    // todo use idv3v2
    if BASS_ChannelGetTags(chan, BASS_TAG_ID3) = nil then
    begin
      caption:= ExtractFileName(filename);
-     //SimulateMsg(WP_Title, true, ' ');
      RadioEvent.Title:= ' ';
    end else
    begin
      P:= BASS_ChannelGetTags(chan, BASS_TAG_ID3);
      caption:= TAG_ID3(P^).title;
-     // SimulateMsg(WP_Title, true, String(TAG_ID3(P^).artist)+' - '+String(TAG_ID3(P^).album));
      RadioEvent.Title:= String(TAG_ID3(P^).artist)+' - '+String(TAG_ID3(P^).album);
    end;
    try
@@ -811,11 +799,10 @@ begin
    end;
    CurRadio.Name:= '';
    if length(caption)< 2 then caption:= Extractfilename(filename);
-   //SimulateMsg(WP_RadioName, true, Caption);
    RadioEvent.Name:= Caption;
    BASS_ChannelPlay( chan, false);
    IsRadio:= False;
-   // Set generic logi
+   // Set generic logo
    ImgLogo.Stretch:= true;
    ImgLogo.Picture.LoadFromLazarusResource('webradio256');
    SetEqual (CBEqualize.Checked);
@@ -920,7 +907,7 @@ begin
     begin
       Trayradio.Hint:= Caption+#13#10+s
      //If not TrayRadio.applicationvisible then TrayRadio.BalloonHint (Caption, s);
-     end else Trayradio.Hint:= Caption;
+    end else Trayradio.Hint:= Caption;
     if (not Iconized) then
     begin
       LTag.Caption:= CurRadioTitle;
@@ -955,8 +942,12 @@ begin
       PostMessage(HWND_BROADCAST, WM_FONTCHANGE, 0, 0) ;
       Application.ProcessMessages;
     end;
+    LRadioName.Font.Name:= 'DotMatrix';
   {$ENDIF}
   inherited;
+  LRadioName.ParentFont:= false;
+  LRadioName.Font.Size:= 18;
+
   RadioEvent:= TRadioEvents.Create;
   RadioEvent.OnErrorChange:= @RadioErrorChange;
   RadioEvent.OnConnectingChange:= @RadioConnectingChange;
@@ -1219,6 +1210,7 @@ begin
   FSettings.Settings.LangStr:= LangStr;
   // Check inifile with URLs, if not present, then use default
   IniFile:= TBbInifile.Create('webradio.ini');
+
   AboutBox.ChkVerURL := IniFile.ReadString('urls', 'ChkVerURL','https://github.com/bb84000/webradio/releases/latest');
   AboutBox.UrlWebsite:= IniFile.ReadString('urls', 'UrlWebSite','https://www.sdtp.com');
   AboutBox.UrlSourceCode:=IniFile.ReadString('urls', 'UrlSourceCode','https://github.com/bb84000/webradio');
@@ -1282,7 +1274,7 @@ begin
   begin
     TBE:= FindComponent('TBEq'+IntToStr(i)) as TTrackBar;
     TBE.OnChange:= nil;
-    TBE.Position:= FSettings.Settings.EquFreqs[i]+15;
+    TBE.Position:= FSettings.Settings.EquFreqs[i];
     TBE.OnChange:= @TBEqChange;
   end;
   CBEqualize.Checked:= FSettings.Settings.EquEnabled;
@@ -1312,8 +1304,9 @@ begin
   end;
   if CurRadio.uid=0 then CurRadio.url:= FSettings.Settings.LastUrl;
   LastVol:= FSettings.Settings.LastVolume;
+
   TBVolume.Position:= LastVol;
-  TBVolumeChange(nil);
+  //TBVolumeChange(nil);
   if CurRadio.uid > 0 then
   begin
   // Search if there is a preset for the saved radio
@@ -1390,7 +1383,7 @@ begin
       WinState := TWindowState(StrToInt('$' + Copy(Settings.WState, 1, 4)));
       self.Top := StrToInt('$' + Copy(Settings.WState, 5, 4));
       self.Left := StrToInt('$' + Copy(Settings.WState, 9, 4));
-      //self.Height := StrToInt('$' + Copy(Settings.WState, 13, 4));
+      //self.Height := StrToInt('$' + Copy(Settings.WState, 13, 4));    // Not used, app cannot be resized
       //self.Width := StrToInt('$' + Copy(Settings.WState, 17, 4));
       self.WindowState := WinState;
       PrevLeft:= self.left;
@@ -1404,7 +1397,6 @@ begin
     end;
     self.clientwidth:= PnlVolume.Left+PnlVolume.Width+PnlPresets.left;
     TrayRadio.visible:= Settings.HideInTaskbar;
-    //if self.width < 625 then self.width:= 625 ; // Change when equakuzer will bei present
     if settings.StartMini then
     begin
       //Application.Minimize;
@@ -1454,7 +1446,6 @@ begin
   Result := False;
   if (Typ= Setting) or (Typ = All) then
   begin
-    //FSettings.Settings.DataFolder:= WebRadioAppsData;
     FSettings.Settings.WState:= '';
     if Top < 0 then Top:= 0;
     if Left < 0 then Left:= 0;
@@ -1671,12 +1662,13 @@ var
   i: integer;
 begin
   // trackbar moved
+  if CBEqualize.Enabled then SetEqual(False);
   try
     i:= StringToInt(Copy(TTrackBar(SEnder).name, 5, 1));
-    FSettings.Settings.EquFreqs[i]:= TTrackBar(SEnder).position-15;
+    FSettings.Settings.EquFreqs[i]:= TTrackBar(SEnder).position;
   except
   end;
-
+  SetEqual(CBEqualize.Enabled);
 end;
 
 
@@ -1991,7 +1983,7 @@ begin
   for i:= 1 to 9 do
   begin
     TTB:= FindComponent('TBEq'+InttoStr(i)) as TTrackBar;
-    TTB.Position:= 15;
+    TTB.Position:= 0;
   end;
 end;
 
@@ -2030,8 +2022,15 @@ end;
 procedure TFWebRadioMain.TBVolumeChange(Sender: TObject);
 begin
   LastVol:= TBVolume.Position;
-  FSettings.Settings.LastVolume:= LastVol;
-  BASS_SetConfig(BASS_CONFIG_GVOL_STREAM, LastVol * 100);
+  TBVolume.Hint:= Format('Volume : %d %%', [LastVol]);
+  //Label1.Caption:= (InttoStr(LastVol));
+  //FSettings.Settings.LastVolume:= LastVol;
+  if bBassLoaded then  BASS_SetConfig(BASS_CONFIG_GVOL_STREAM, LastVol * 100);
+end;
+
+procedure TFWebRadioMain.TBVolumePositionChange(Sender: TObject);
+begin
+
 end;
 
 // Tray menu
@@ -2135,13 +2134,13 @@ begin
     if FSettings.Settings.Startup then SetAutostart(progname, Application.exename)
     else UnSetAutostart(progname);
     if bBassLoaded then BASS_Free();
+    FSettings.Settings.LastVolume:= TBVolume.Position;
     if RadiosChanged or (FSettings.Settings.version='') then SaveConfig(All) else
     if SettingsChanged then  SaveConfig(Setting) ;
     try
       if chan <> 0 then BASS_StreamFree(chan);
     except
     end;
-
     // Delete memory font
     {$IFDEF WINDOWS}
        RemoveFontMemResourceEx(DMFontRes );
@@ -2332,7 +2331,6 @@ begin
       PMnuOpenRadio.Caption:= ReadString(LangStr, 'PMnuOpenRadio.Caption', PMnuOpenRadio.Caption);;
       PMnuReadFile.Caption:= ReadString(LangStr, 'PMnuReadFile.Caption', PMnuReadFile.Caption);
       PMnuOpenURL.Caption:= ReadString(LangStr, 'PMnuOpenURL.Caption', PMnuOpenURL.Caption);
-      //PMnuEqualizer.Caption:= ReadString(LangStr, 'PMnuEqualizer.Caption', PMnuEqualizer.Caption);
       PMnuSettings.Caption:= ReadString(LangStr, 'PMnuSettings.Caption', PMnuSettings.Caption);
       PMnuRadList.Caption:= ReadString(LangStr, 'PMnuRadList.Caption', PMnuRadList.Caption);
       PMnuHelp.Caption:= ReadString(LangStr, 'PMnuHelp.Caption', PMnuHelp.Caption);
@@ -2348,7 +2346,6 @@ begin
       SBOpenRadio.hint:= PMnuOpenRadio.Caption;
       SBReadFile.Hint:= PMnuReadFile.Caption;
       SBOpenUrl.Hint:= PMnuOpenURL.Caption;
-      //SBEqualizer.Hint:= PMnuEqualizer.Caption;
       SBSEtings.Hint:= PMnuSettings.Caption;
       SBRadList.Hint:= PMnuRadList.Caption;
       SBAbout.Hint:= PMnuAbout.Caption;

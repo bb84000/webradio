@@ -17,8 +17,8 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <MinorVersionNr Value="7"/>
-      <BuildNr Value="5"/>
-      <StringTable Comments="Web radio player" CompanyName="sdtp - bb95" FileDescription="Tuner radio web - Web radio tuner" InternalName="WebRadio" LegalCopyright="sdtp - bb95" LegalTrademarks="sdtp - bb95" OriginalFilename="WebRadio.exe" ProductName="WebRadio" ProductVersion="0.7.0.5"/>
+      <BuildNr Value="6"/>
+      <StringTable Comments="Web radio player" CompanyName="sdtp - bb95" FileDescription="Tuner radio web - Web radio tuner" InternalName="WebRadio" LegalCopyright="sdtp - bb95" LegalTrademarks="sdtp - bb95" OriginalFilename="WebRadio.exe" ProductName="WebRadio" ProductVersion="0.7.0.6"/>
     </VersionInfo>
     <BuildModes>
       <Item Name="Default" Default="True"/>
@@ -72,17 +72,6 @@
         <UnitName Value="Radios1"/>
       </Unit>
       <Unit>
-        <Filename Value="..\lazbbunits\lazbbaboutupdate.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="AboutBox"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-      </Unit>
-      <Unit>
-        <Filename Value="pb_slider.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit>
-      <Unit>
         <Filename Value="history.txt"/>
         <IsPartOfProject Value="True"/>
       </Unit>
@@ -91,32 +80,10 @@
         <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>
-        <Filename Value="lazd_bassenc_aac.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit>
-      <Unit>
         <Filename Value="equalizer1.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="FEqualizer"/>
         <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-      </Unit>
-      <Unit>
-        <Filename Value="uhtextscroll.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="uHTextScroll"/>
-      </Unit>
-      <Unit>
-        <Filename Value="..\lazbbunits\lazbbinput.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="InputDlg"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-      </Unit>
-      <Unit>
-        <Filename Value="..\lazbbunits\lazbbutils1.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="Form1"/>
         <ResourceBaseClass Value="Form"/>
       </Unit>
     </Units>

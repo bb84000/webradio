@@ -74,4 +74,8 @@ Version 0.7.0.5 - 19/02/2022
 - Equalizer now in main window. Equalizer menu click shows or hides it.
 - Changed AlertDlg, InputDlg and AboutBox code with runtime dialogs creation.
 
+Version 0.7.0.6 - 09/03/2022
+- Optimisation of code
+- Revert to IDE designed Aboutbox. Unit name changed to lazbbaboutboxdlg
+- Use new defined TbbTrackBar on volume potentiometer
 
