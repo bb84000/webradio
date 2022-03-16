@@ -79,3 +79,8 @@ Version 0.7.0.6 - 09/03/2022
 - Revert to IDE designed Aboutbox. Unit name changed to lazbbaboutboxdlg
 - Use new defined TbbTrackBar on volume potentiometer
 
+Version 0.7.0.7 - 16/03/2022
+- New version of volume controle potentiometer
+- Bug correction: Radio name display once connected
+
+

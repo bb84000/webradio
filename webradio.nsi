@@ -16,7 +16,7 @@
   !define lazarus_dir "C:\Users\Bernard\Documents\Lazarus"
   !define source_dir "${lazarus_dir}\webradio"
 
-
+  ManifestSupportedOS all
   RequestExecutionLevel admin
   
   ;Windows vista.. 10 manifest
@@ -130,6 +130,7 @@
 
 ; The stuff to install
 Section "" ;No components page, name is not important
+
   SetShellVarContext all
   SetOutPath "$INSTDIR"
 

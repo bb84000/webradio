@@ -1,6 +1,6 @@
 {*******************************************************************************
   Webradio1 : main unit code
-  bb - sdtp - february 2022
+  bb - sdtp - march 2022
   Using Un4seen BASS libraries www.un4seen.com
 *******************************************************************************}
 
@@ -730,8 +730,10 @@ begin
     RadioEvent.Hint:= HintStr;
     // get the stream title and set sync for subsequent titles
     DoMeta();
+
     // play it!
     BASS_ChannelPlay(chan, FALSE);
+    RadioEvent.OnNameChange(nil);
    end;
   cthread := 0;
 end;
@@ -858,8 +860,10 @@ procedure TFWebRadioMain.RadioConnectedChange(Sender: TObject);
 begin
   if CanalInfo.chans < 2 then LStereo.caption:= sMonoCaption else LStereo.caption:= sStereoCaption ;
   sFrequencyCaption := IntToStr(CanalInfo.freq)+' Hz';
-  if ((RadioEvent.Connected>0) and (RadioEvent.Connected<=UNK_STRM)) then LStatus.Caption:= sConnectedStr+StreamName[RadioEvent.Connected]
-    else LStatus.Caption:= sConnectedStr;
+  if ((RadioEvent.Connected>0) and (RadioEvent.Connected<=UNK_STRM)) then
+  begin
+    LStatus.Caption:= sConnectedStr+StreamName[RadioEvent.Connected]
+  end else LStatus.Caption:= sConnectedStr;
 end;
 
 procedure TFWebRadioMain.RadioNameChange(Sender: TObject);
@@ -1612,7 +1616,7 @@ begin
   s:= InputDlg(DefaultCaption, sEnterUrl, '', [OKBtn, CancelBtn], 0 );
   if length(s) > 0 then
   try
-    CurRadio.Name:='';
+    CurRadio.Name:=s;
     Curradio.uid:= 0;
     Curradio.url:= s;
     Curradio.favicon:='';

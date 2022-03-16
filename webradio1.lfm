@@ -7147,7 +7147,7 @@ object FWebRadioMain: TFWebRadioMain
         Height = 120
         Top = 3
         Width = 32
-        ColorFore = clHighlight
+        ColorFore = clYellow
         ColorBack = cl3DLight
         SignalUnit = 'Units'
         ValueMax = 100
@@ -7171,7 +7171,7 @@ object FWebRadioMain: TFWebRadioMain
         Top = 3
         Width = 32
         Caption = 'SignalMeterR'
-        ColorFore = clHighlight
+        ColorFore = clYellow
         ColorBack = cl3DLight
         SignalUnit = 'Units'
         ValueMax = 100
@@ -7183,7 +7183,7 @@ object FWebRadioMain: TFWebRadioMain
         GapBottom = 10
         LeftMeter = 10
         BarThickness = 10
-        MarkerColor = clNone
+        MarkerColor = clYellow
         ShowMarker = False
         ShowTopText = False
         ShowValueMin = False
@@ -7311,7 +7311,7 @@ object FWebRadioMain: TFWebRadioMain
         Left = 68
         Height = 110
         Top = 8
-        Width = 30
+        Width = 34
         OnPositionChange = TBVolumeChange
         Orientation = tbVertical
         Reversed = True
@@ -7319,18 +7319,21 @@ object FWebRadioMain: TFWebRadioMain
         Max = 100
         Frequency = 10
         KeyIncrement = 1
-        SliderColor = clMenuHighlight
-        SliderColorDown = clActiveCaption
-        SliderColorHover = clBlue
+        SliderColor = clBtnFace
+        SliderBorderColor = clActiveBorder
+        SliderColorDown = clGradientActiveCaption
+        SliderColorHover = clBtnHighlight
+        SliderSize = 13
+        SliderStyle = ssButton
         RulerColor = cl3DLight
         RulerBorderColor = clActiveBorder
-        RulerSize = 9
-        ScaleMarks = tmTopLeft
+        RulerSize = 10
+        ScaleMarks = tmBoth
         ScaleColor = clGray
         ScaleSize = 6
-        ShowHint = True
         ColorParent = False
         TabOrder = 1
+        ShowHint = True
         TabStop = True
       end
     end
