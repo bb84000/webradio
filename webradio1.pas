@@ -150,6 +150,15 @@ type
   { TFWebRadioMain }
 
   TFWebRadioMain = class(TForm)
+    TbbEq1: TbbTrackBar;
+    TbbEq2: TbbTrackBar;
+    TbbEq3: TbbTrackBar;
+    TbbEq4: TbbTrackBar;
+    TbbEq5: TbbTrackBar;
+    TbbEq6: TbbTrackBar;
+    TbbEq7: TbbTrackBar;
+    TbbEq8: TbbTrackBar;
+    TbbEq9: TbbTrackBar;
     TBVolume: TbbTrackBar;
     LFPTimer1: TLFPTimer;
     LTag: TbbScrollLabel;
@@ -161,7 +170,6 @@ type
     CBEqualize: TCheckBox;
     LdB, LdB1, LdB2, LdB3, LdB4, LdB5, LdB6, LdB7, LdB8, LdB9: TLabel;
     LHzCaption, LHz1, LHz2, LHz3, LHz4, LHz5, LHz6, LHz7, LHz8, LHz9: TLabel;
-    TBEq1, TBEq2, TBEq3, TBEq4, TBEq5, TBEq6, TBEq7, TBEq8, TBEq9: TTrackBar;
     LZero, LReset: TLabel;
     SBReset: TSpeedButton;
     // Buttons on buttonbar
@@ -218,6 +226,7 @@ type
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure PEqualizer1Click(Sender: TObject);
     procedure PMnuEqualizerClick(Sender: TObject);
     procedure PMnuRadListClick(Sender: TObject);
     procedure PMnuChooseRadioClick(Sender: TObject);
@@ -241,9 +250,8 @@ type
     procedure SBRecordClick(Sender: TObject);
     procedure SBResetClick(Sender: TObject);
     procedure SBStopClick(Sender: TObject);
-    procedure TBEqChange(Sender: TObject);
-     procedure TBVolumeChange(Sender: TObject);
-     procedure TBVolumePositionChange(Sender: TObject);
+    procedure TbbEqPosChange(Sender: TObject);
+    procedure TBVolumeChange(Sender: TObject);
     procedure VuTimerTimer(Sender: TObject);
   private
     CanClose: boolean;
@@ -743,6 +751,7 @@ end;
 procedure TFWebRadioMain.SetEqual(b: boolean);
 var
   i: Integer;
+  TLAB: TLabel;
 begin
   For i:= 1 to high(fx) do
   begin
@@ -758,6 +767,8 @@ begin
         equParam.fgain :=  Fsettings.Settings.EquFreqs[i]; //TBE.Position-15
       end;
     end else BASS_ChannelRemoveFX(chan, fx [i]);
+    TLAB:= FindComponent('LdB'+InttoStr(i)) as TLabel;
+    TLAB.Caption:= INttoStr(Fsettings.Settings.EquFreqs[i]);
   end;
   LEqualizer.visible:= b;
 end;
@@ -1048,6 +1059,11 @@ begin
   end;
 end;
 
+procedure TFWebRadioMain.PEqualizer1Click(Sender: TObject);
+begin
+
+end;
+
 // Intercept minimize system system command to correct
 // wrong window placement on restore from tray
 
@@ -1115,6 +1131,8 @@ begin
   LEqualizer.visible:= CBEqualize.checked;
   SetEqual(CBEqualize.checked);
 end;
+
+
 
 procedure TFWebRadioMain.InitButtons;
 begin
@@ -1202,7 +1220,7 @@ var
   bass_timout: Integer;
   IniFile: TBbIniFile;
   TSB: TColorSpeedButton;
-  TBE: TTRackbar;
+  tbbe: TbbTrackBar;
 begin
   if initialized then exit;
   // Now, main settings
@@ -1276,10 +1294,10 @@ begin
   // Equalizer
   for i:= 1 to 9 do
   begin
-    TBE:= FindComponent('TBEq'+IntToStr(i)) as TTrackBar;
-    TBE.OnChange:= nil;
-    TBE.Position:= FSettings.Settings.EquFreqs[i];
-    TBE.OnChange:= @TBEqChange;
+    tbbe:= FindComponent('TbbEq'+IntToStr(i)) as TbbTrackBar;
+    tbbe.OnPositionChange:= nil;;
+     tbbe.Position:=  FSettings.Settings.EquFreqs[i];  ;
+    tbbe.OnPositionChange:= @TbbEqPosChange;
   end;
   CBEqualize.Checked:= FSettings.Settings.EquEnabled;
   SetEqual(false);
@@ -1369,6 +1387,8 @@ begin
   PnlDisplay.Color:= FSettings.Settings.DisplayBack;
   PnlDisplay.Font.Color:= FSettings.Settings.DisplayText;
   LRadioName.Font.Color:= FSettings.Settings.DisplayText;
+  SignalMeterL.ColorFore:= FSettings.Settings.DisplayText;
+  SignalMeterR.ColorFore:= FSettings.Settings.DisplayText;
   Color:= FSettings.Settings.GenBack;
   PnlMain.Font.Color:= FSettings.Settings.GenText;
 end;
@@ -1661,21 +1681,20 @@ begin
   Stopped:= True;
 end;
 
-procedure TFWebRadioMain.TBEqChange(Sender: TObject);
+procedure TFWebRadioMain.TbbEqPosChange(Sender: TObject);
 var
   i: integer;
 begin
   // trackbar moved
   if CBEqualize.Enabled then SetEqual(False);
   try
-    i:= StringToInt(Copy(TTrackBar(SEnder).name, 5, 1));
-    FSettings.Settings.EquFreqs[i]:= TTrackBar(SEnder).position;
+    i:= StringToInt(Copy(TbbTrackBar(Sender).name, 6, 1));
+    FSettings.Settings.EquFreqs[i]:= TbbTrackBar(Sender).position;
+
   except
   end;
   SetEqual(CBEqualize.Enabled);
 end;
-
-
 
 procedure TFWebRadioMain.SBPlayClick(Sender: TObject);
 begin
@@ -1982,11 +2001,11 @@ end;
 procedure TFWebRadioMain.SBResetClick(Sender: TObject);
 var
   i: integer;
-  TTB: TTrackbar;
+  TTB: TbbTrackbar;
 begin
   for i:= 1 to 9 do
   begin
-    TTB:= FindComponent('TBEq'+InttoStr(i)) as TTrackBar;
+    TTB:= FindComponent('TbbEq'+InttoStr(i)) as TbbTrackBar;
     TTB.Position:= 0;
   end;
 end;
@@ -2030,11 +2049,6 @@ begin
   //Label1.Caption:= (InttoStr(LastVol));
   //FSettings.Settings.LastVolume:= LastVol;
   if bBassLoaded then  BASS_SetConfig(BASS_CONFIG_GVOL_STREAM, LastVol * 100);
-end;
-
-procedure TFWebRadioMain.TBVolumePositionChange(Sender: TObject);
-begin
-
 end;
 
 // Tray menu
@@ -2196,7 +2210,7 @@ begin
     end else
     begin                // vertical image
       newh:= 64;
-      newl:= trunc(94*ar);
+      newl:= trunc(64*ar);
     end;
     BGRAReplace (MyBmp, MyBmp.resample(newl, newh) );
     ImgLogo.Stretch:= false;

@@ -35,7 +35,7 @@ type
     procedure SetSortType (Value: TChampsCompare);
     procedure DoSort;
     function SaveItem(iNode: TDOMNode; sname, svalue: string): TDOMNode;
-    function charsum(s: string): int64;
+    //function charsum(s: string): int64;
   public
     Duplicates : TDuplicates;
     constructor Create (AppName: String);
@@ -91,6 +91,7 @@ type
     SBAddRadio: TSpeedButton;
     SBDeleteRadio: TSpeedButton;
     procedure EEditRadioChange(Sender: TObject);
+    procedure ERadioChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -110,6 +111,8 @@ type
 
   public
     DefRadio, CurRadio: TRadio;
+    RadioUID: Integer;
+    RadioFavicon: String;
     Radios: TRadiosList;
     WebradioAppsData: String;
     sConfirmDeleteRadio: String;
@@ -255,13 +258,13 @@ begin
  Clear;
 end;
 
-function TRadiosList.charsum(s: string): int64;
+{function TRadiosList.charsum(s: string): int64;
 var
  i: integer;
 begin
   result:=0;
   for i:=1 to length(s) do result:=result+ord(s[i]);
-end;
+end; }
 
 
 procedure TRadiosList.AddRadio(Radio : TRadio);
@@ -269,7 +272,7 @@ var
  K: PRadio;
 begin
   new(K);
-  Radio.UID:= charsum(Radio.Name+Radio.url)+charsum(DateTimeToStr(now));
+  if Radio.UID= 0 then Radio.UID:= charsum(Radio.Name+Radio.url)+charsum(DateTimeToStr(now));
   K^:= Radio;
   add(K);
   DoSort;
@@ -348,6 +351,8 @@ begin
        RadNode.AppendChild(SaveItem(RadNode, 'order', IntToStr(GetItem(i).order)));
        RadNode.AppendChild(SaveItem(RadNode, 'tag', BoolToString(GetItem(i).tag)));
        RadNode.AppendChild(SaveItem(RadNode, 'uid', IntToStr(GetItem(i).uid)));
+       RadNode.AppendChild(SaveItem(RadNode, 'favicon', GetItem(i).favicon));
+
      except
        Result:= False;
      end;
@@ -561,6 +566,9 @@ begin
   EUrl.Text:= '';
   EComment.Text:= '';
   EFavicon.Text:= '';
+  EName.OnChange:= @ERadioChange;
+  EUrl.OnChange:= @ERadioChange;
+  //RadioUID:= 0;  //charsum(Radio.Name+Radio.url)+charsum(DateTimeToStr(now));
 end;
 
 procedure TFRadios.SBEditRadioClick(Sender: TObject);
@@ -600,8 +608,17 @@ begin
   BtnOK.Enabled:= false;
 end;
 
+procedure TFRadios.ERadioChange(Sender: TObject);
+begin
+  RadioUID:= CharSum(EName.text+EURL.Text)+charsum(DateTimeToStr(now));
+  //LUID.Caption:= InttoStr(RadioUID);
+end;
+
 procedure TFRadios.SBCancelChangesClick(Sender: TObject);
 begin
+  RadioFavicon:='';
+  EName.OnChange:= nil;
+  EUrl.OnChange:= nil;
   NewRadio:= False;
   DefBtnState;
   LBRadios.OnSelectionChange:= @LBRadiosSelectionChange;
@@ -626,46 +643,67 @@ end;
 
 
 procedure TFRadios.SBFaviconClick(Sender: TObject);
-var
-  s: String;
 begin
+  RadioFavicon:='';
   if OPDLogo.Execute then
   begin
-    s:= OPDLogo.FileName;
-    if fileexists(s) then
+    //RadioFavicon:= OPDLogo.FileName;
+    if fileexists(OPDLogo.FileName) then
     begin
       // check if file already exists
-      CopyFile(s, WebradioAppsData+PathDelim+'images'+PathDelim+ExtractFileName(s));
-      EFavicon.Text:= ExtractFileName(s);
-    end;
+      //CopyFile(s, WebradioAppsData+PathDelim+'images'+PathDelim+ExtractFileName(s));
+      RadioFavicon:= OPDLogo.FileName;
+      EFavicon.Text:= ExtractFileName(RadioFavicon);
+    end else ;
   end;
 end;
 
 procedure TFRadios.SBValidRadioClick(Sender: TObject);
 var
   tmpRadio: TRadio;
+  faviconext: string;
+  i: integer;
 begin
-   if NewRadio then
+  if NewRadio then
    begin
+     EName.OnChange:= nil;
+     EUrl.OnChange:= nil;
      tmpRadio.name:= EName.Text;
      tmpRadio.url:= EUrl.Text;
      tmpRadio.comment:= EComment.Text;
-     tmpRadio.favicon:= EFavicon.Text;
+     tmpRadio.UID:= RadioUID;
+     if length(RadioFavicon)>0 then
+     begin
+       faviconext:= ExtractFileExt(RadioFavicon);
+       CopyFile(RadioFavicon, WebradioAppsData+PathDelim+'images'+PathDelim+IntToStr(RadioUID)+faviconext);
+       tmpRadio.favicon:= IntToStr(RadioUID)+faviconext; //EFavicon.Text;
+     end;
      Radios.AddRadio(tmpRadio)
    end else
    begin
      Curradio.name:= EName.Text;
      Curradio.url:= EUrl.Text;
      Curradio.comment:= EComment.Text;
-     Curradio.favicon:= EFavicon.Text;
+     if length(RadioFavicon)>0 then
+     begin
+       faviconext:= ExtractFileExt(RadioFavicon);
+       CopyFile(RadioFavicon, WebradioAppsData+PathDelim+'images'+PathDelim+IntToStr(CurRadio.UID)+faviconext);
+       CurRadio.favicon:= IntToStr(CurRadio.UID)+faviconext; //EFavicon.Text;
+     end;
      Radios.ModifyRadio(LBRadios.ItemIndex, CurRadio);
    end;
    DefBtnState;
    LBRadios.OnSelectionChange:= @LBRadiosSelectionChange;
   PopulateList;
   try
-    if NewRadio then LBRadios.ItemIndex:= LBRadios.Count-1
-    else LBRadios.ItemIndex:= prevradio;;
+    if NewRadio then
+    begin
+      for i:= 0 to LBRadios.count-1 do
+      begin
+        if LBRadios.Items[i]= tmpRadio.name then break;
+      end;
+      LBRadios.ItemIndex:= i; // LBRadios.Count-1;
+    end else LBRadios.ItemIndex:= prevradio;
   except
     LBRadios.ItemIndex:= prevradio;
   end;

@@ -7152,7 +7152,7 @@ object FWebRadioMain: TFWebRadioMain
         SignalUnit = 'Units'
         ValueMax = 100
         Digits = 0
-        Increment = 10
+        Increment = 5
         ShowIncrements = False
         Transparent = False
         GapTop = 10
@@ -7176,7 +7176,7 @@ object FWebRadioMain: TFWebRadioMain
         SignalUnit = 'Units'
         ValueMax = 100
         Digits = 0
-        Increment = 10
+        Increment = 5
         ShowIncrements = False
         Transparent = False
         GapTop = 10
@@ -7346,150 +7346,6 @@ object FWebRadioMain: TFWebRadioMain
       ClientHeight = 220
       ClientWidth = 314
       TabOrder = 2
-      object TBEq1: TTrackBar
-        Left = 25
-        Height = 137
-        Top = 25
-        Width = 25
-        Frequency = 3
-        LineSize = 3
-        Max = 15
-        Min = -15
-        OnChange = TBEqChange
-        Orientation = trVertical
-        Position = 0
-        Reversed = True
-        TickMarks = tmTopLeft
-        TabOrder = 0
-      end
-      object TBEq2: TTrackBar
-        Left = 55
-        Height = 137
-        Top = 25
-        Width = 25
-        Frequency = 3
-        LineSize = 3
-        Max = 15
-        Min = -15
-        OnChange = TBEqChange
-        Orientation = trVertical
-        Position = 0
-        Reversed = True
-        TickMarks = tmTopLeft
-        TabOrder = 1
-      end
-      object TBEq3: TTrackBar
-        Left = 85
-        Height = 137
-        Top = 25
-        Width = 25
-        Frequency = 3
-        LineSize = 3
-        Max = 15
-        Min = -15
-        OnChange = TBEqChange
-        Orientation = trVertical
-        Position = 0
-        Reversed = True
-        TickMarks = tmTopLeft
-        TabOrder = 2
-      end
-      object TBEq4: TTrackBar
-        Left = 115
-        Height = 137
-        Top = 25
-        Width = 25
-        Frequency = 3
-        LineSize = 3
-        Max = 15
-        Min = -15
-        OnChange = TBEqChange
-        Orientation = trVertical
-        Position = 0
-        Reversed = True
-        TickMarks = tmTopLeft
-        TabOrder = 3
-      end
-      object TBEq5: TTrackBar
-        Left = 145
-        Height = 137
-        Top = 25
-        Width = 25
-        Frequency = 3
-        LineSize = 3
-        Max = 15
-        Min = -15
-        OnChange = TBEqChange
-        Orientation = trVertical
-        Position = 0
-        Reversed = True
-        TickMarks = tmTopLeft
-        TabOrder = 4
-      end
-      object TBEq6: TTrackBar
-        Left = 175
-        Height = 137
-        Top = 25
-        Width = 25
-        Frequency = 3
-        LineSize = 3
-        Max = 15
-        Min = -15
-        OnChange = TBEqChange
-        Orientation = trVertical
-        Position = 0
-        Reversed = True
-        TickMarks = tmTopLeft
-        TabOrder = 5
-      end
-      object TBEq7: TTrackBar
-        Left = 205
-        Height = 137
-        Top = 25
-        Width = 25
-        Frequency = 3
-        LineSize = 3
-        Max = 15
-        Min = -15
-        OnChange = TBEqChange
-        Orientation = trVertical
-        Position = 0
-        Reversed = True
-        TickMarks = tmTopLeft
-        TabOrder = 6
-      end
-      object TBEq8: TTrackBar
-        Left = 235
-        Height = 137
-        Top = 25
-        Width = 25
-        Frequency = 3
-        LineSize = 3
-        Max = 15
-        Min = -15
-        OnChange = TBEqChange
-        Orientation = trVertical
-        Position = 0
-        Reversed = True
-        TickMarks = tmTopLeft
-        TabOrder = 7
-      end
-      object TBEq9: TTrackBar
-        Left = 265
-        Height = 137
-        Top = 25
-        Width = 25
-        Frequency = 3
-        LineSize = 3
-        Max = 15
-        Min = -15
-        OnChange = TBEqChange
-        Orientation = trVertical
-        Position = 0
-        Reversed = True
-        TickMarks = tmTopLeft
-        TabOrder = 8
-      end
       object CBEqualize: TCheckBox
         Left = 8
         Height = 19
@@ -7498,7 +7354,7 @@ object FWebRadioMain: TFWebRadioMain
         AutoSize = False
         Caption = 'Activer l''égaliseur'
         OnChange = CBEqualizeChange
-        TabOrder = 9
+        TabOrder = 0
       end
       object LHzCaption: TLabel
         Left = 8
@@ -7606,7 +7462,7 @@ object FWebRadioMain: TFWebRadioMain
         Caption = '0'
       end
       object LdB1: TLabel
-        Left = 38
+        Left = 35
         Height = 15
         Top = 165
         Width = 20
@@ -7615,7 +7471,7 @@ object FWebRadioMain: TFWebRadioMain
         Caption = '0'
       end
       object LdB2: TLabel
-        Left = 68
+        Left = 65
         Height = 15
         Top = 165
         Width = 20
@@ -7624,7 +7480,7 @@ object FWebRadioMain: TFWebRadioMain
         Caption = '0'
       end
       object LdB3: TLabel
-        Left = 98
+        Left = 95
         Height = 15
         Top = 165
         Width = 20
@@ -7701,6 +7557,249 @@ object FWebRadioMain: TFWebRadioMain
         Width = 79
         AutoSize = False
         Caption = 'Remetre à zéro'
+      end
+      object TbbEq1: TbbTrackBar
+        Left = 30
+        Height = 140
+        Top = 25
+        Width = 30
+        Orientation = tbVertical
+        Reversed = True
+        Min = -15
+        Max = 15
+        Frequency = 3
+        KeyIncrement = 1
+        SliderColor = clBtnFace
+        SliderBorderColor = clActiveBorder
+        SliderColorDown = clGradientActiveCaption
+        SliderColorHover = clBtnHighlight
+        SliderSize = 11
+        SliderStyle = ssButton
+        RulerColor = cl3DLight
+        RulerBorderColor = clActiveBorder
+        RulerSize = 10
+        ScaleMarks = tmTopLeft
+        ScaleColor = clGray
+        ScaleSize = 6
+        ColorParent = False
+        TabOrder = 1
+        TabStop = True
+      end
+      object TbbEq2: TbbTrackBar
+        Left = 60
+        Height = 140
+        Top = 25
+        Width = 30
+        Orientation = tbVertical
+        Reversed = True
+        Min = -15
+        Max = 15
+        Frequency = 3
+        KeyIncrement = 1
+        SliderColor = clBtnFace
+        SliderBorderColor = clActiveBorder
+        SliderColorDown = clGradientActiveCaption
+        SliderColorHover = clBtnHighlight
+        SliderSize = 11
+        SliderStyle = ssButton
+        RulerColor = cl3DLight
+        RulerBorderColor = clActiveBorder
+        RulerSize = 10
+        ScaleMarks = tmTopLeft
+        ScaleColor = clGray
+        ScaleSize = 6
+        ColorParent = False
+        TabOrder = 2
+        TabStop = True
+      end
+      object TbbEq3: TbbTrackBar
+        Left = 88
+        Height = 140
+        Top = 25
+        Width = 30
+        Orientation = tbVertical
+        Reversed = True
+        Min = -15
+        Max = 15
+        Frequency = 3
+        KeyIncrement = 1
+        SliderColor = clBtnFace
+        SliderBorderColor = clActiveBorder
+        SliderColorDown = clGradientActiveCaption
+        SliderColorHover = clBtnHighlight
+        SliderSize = 11
+        SliderStyle = ssButton
+        RulerColor = cl3DLight
+        RulerBorderColor = clActiveBorder
+        RulerSize = 10
+        ScaleMarks = tmTopLeft
+        ScaleColor = clGray
+        ScaleSize = 6
+        ColorParent = False
+        TabOrder = 3
+        TabStop = True
+      end
+      object TbbEq4: TbbTrackBar
+        Left = 120
+        Height = 140
+        Top = 25
+        Width = 30
+        Orientation = tbVertical
+        Reversed = True
+        Min = -15
+        Max = 15
+        Frequency = 3
+        KeyIncrement = 1
+        SliderColor = clBtnFace
+        SliderBorderColor = clActiveBorder
+        SliderColorDown = clGradientActiveCaption
+        SliderColorHover = clBtnHighlight
+        SliderSize = 11
+        SliderStyle = ssButton
+        RulerColor = cl3DLight
+        RulerBorderColor = clActiveBorder
+        RulerSize = 10
+        ScaleMarks = tmTopLeft
+        ScaleColor = clGray
+        ScaleSize = 6
+        ColorParent = False
+        TabOrder = 4
+        TabStop = True
+      end
+      object TbbEq5: TbbTrackBar
+        Left = 150
+        Height = 140
+        Top = 25
+        Width = 30
+        Orientation = tbVertical
+        Reversed = True
+        Min = -15
+        Max = 15
+        Frequency = 3
+        KeyIncrement = 1
+        SliderColor = clBtnFace
+        SliderBorderColor = clActiveBorder
+        SliderColorDown = clGradientActiveCaption
+        SliderColorHover = clBtnHighlight
+        SliderSize = 11
+        SliderStyle = ssButton
+        RulerColor = cl3DLight
+        RulerBorderColor = clActiveBorder
+        RulerSize = 10
+        ScaleMarks = tmTopLeft
+        ScaleColor = clGray
+        ScaleSize = 6
+        ColorParent = False
+        TabOrder = 5
+        TabStop = True
+      end
+      object TbbEq6: TbbTrackBar
+        Left = 180
+        Height = 140
+        Top = 25
+        Width = 30
+        Orientation = tbVertical
+        Reversed = True
+        Min = -15
+        Max = 15
+        Frequency = 3
+        KeyIncrement = 1
+        SliderColor = clBtnFace
+        SliderBorderColor = clActiveBorder
+        SliderColorDown = clGradientActiveCaption
+        SliderColorHover = clBtnHighlight
+        SliderSize = 11
+        SliderStyle = ssButton
+        RulerColor = cl3DLight
+        RulerBorderColor = clActiveBorder
+        RulerSize = 10
+        ScaleMarks = tmTopLeft
+        ScaleColor = clGray
+        ScaleSize = 6
+        ColorParent = False
+        TabOrder = 6
+        TabStop = True
+      end
+      object TbbEq7: TbbTrackBar
+        Left = 210
+        Height = 140
+        Top = 25
+        Width = 30
+        Orientation = tbVertical
+        Reversed = True
+        Min = -15
+        Max = 15
+        Frequency = 3
+        KeyIncrement = 1
+        SliderColor = clBtnFace
+        SliderBorderColor = clActiveBorder
+        SliderColorDown = clGradientActiveCaption
+        SliderColorHover = clBtnHighlight
+        SliderSize = 11
+        SliderStyle = ssButton
+        RulerColor = cl3DLight
+        RulerBorderColor = clActiveBorder
+        RulerSize = 10
+        ScaleMarks = tmTopLeft
+        ScaleColor = clGray
+        ScaleSize = 6
+        ColorParent = False
+        TabOrder = 7
+        TabStop = True
+      end
+      object TbbEq8: TbbTrackBar
+        Left = 240
+        Height = 140
+        Top = 25
+        Width = 30
+        Orientation = tbVertical
+        Reversed = True
+        Min = -15
+        Max = 15
+        Frequency = 3
+        KeyIncrement = 1
+        SliderColor = clBtnFace
+        SliderBorderColor = clActiveBorder
+        SliderColorDown = clGradientActiveCaption
+        SliderColorHover = clBtnHighlight
+        SliderSize = 11
+        SliderStyle = ssButton
+        RulerColor = cl3DLight
+        RulerBorderColor = clActiveBorder
+        RulerSize = 10
+        ScaleMarks = tmTopLeft
+        ScaleColor = clGray
+        ScaleSize = 6
+        ColorParent = False
+        TabOrder = 8
+        TabStop = True
+      end
+      object TbbEq9: TbbTrackBar
+        Left = 270
+        Height = 140
+        Top = 25
+        Width = 30
+        Orientation = tbVertical
+        Reversed = True
+        Min = -15
+        Max = 15
+        Frequency = 3
+        KeyIncrement = 1
+        SliderColor = clBtnFace
+        SliderBorderColor = clActiveBorder
+        SliderColorDown = clGradientActiveCaption
+        SliderColorHover = clBtnHighlight
+        SliderSize = 11
+        SliderStyle = ssButton
+        RulerColor = cl3DLight
+        RulerBorderColor = clActiveBorder
+        RulerSize = 10
+        ScaleMarks = tmTopLeft
+        ScaleColor = clGray
+        ScaleSize = 6
+        ColorParent = False
+        TabOrder = 9
+        TabStop = True
       end
     end
   end

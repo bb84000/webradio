@@ -80,7 +80,12 @@ Version 0.7.0.6 - 09/03/2022
 - Use new defined TbbTrackBar on volume potentiometer
 
 Version 0.7.0.7 - 16/03/2022
-- New version of volume controle potentiometer
+- New version of volume control potentiometer
 - Bug correction: Radio name display once connected
 
-
+Version 0.7.0.8 - 28/03/2022
+- SignalMeters colors changed with display text color
+- Enabled equalizer channels values
+- Changed Equalizer potentiometers with TbbTrackBar
+- Corrected logo diplay with vertical images
+- Changed radios logos file names

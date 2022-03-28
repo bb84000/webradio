@@ -1,5 +1,5 @@
 ;Installation script for WebRadio
-; bb - sdtp - February 2022
+; bb - sdtp - March 2022
 ;--------------------------------
   Unicode true
 
@@ -16,11 +16,9 @@
   !define lazarus_dir "C:\Users\Bernard\Documents\Lazarus"
   !define source_dir "${lazarus_dir}\webradio"
 
-  ManifestSupportedOS all
-  RequestExecutionLevel admin
-  
   ;Windows vista.. 10 manifest
   ManifestSupportedOS all
+  RequestExecutionLevel admin
 
   ;!define MUI_LANGDLL_ALWAYSSHOW                     ; To display language selection dialog
   !define MUI_ICON "${source_dir}\webradio.ico"
@@ -34,8 +32,9 @@
   var exe_to_del
   var dll_to_inst       ; "32.dll" or "64.dll"
   var dll_to_del
-  var instnewfolder     ; if old Delphi 32 bits version, instrall 32 bit new version in another folder
+  var instnewfolder     ; if old Delphi 32 bits version, install 32 bit new version in another folder
   var instfolder
+  var sysfolder         ; system 32 folder
 ;--------------------------------
 ; Interface Settings
 
@@ -146,6 +145,11 @@ Section "" ;No components page, name is not important
   File "/oname=bassenc64.dll" "${lazarus_dir}\Bass\x64\bassenc.dll"
   File "/oname=bass32.dll" "${lazarus_dir}\Bass\bass.dll"
   File "/oname=bassenc32.dll" "${lazarus_dir}\Bass\bass.dll"
+  File "/oname=libeay3264.dll" "${lazarus_dir}\openssl\win64\libeay32.dll"
+  File "/oname=ssleay3264.dll" "${lazarus_dir}\openssl\win64\ssleay32.dll"
+  File "/oname=libeay3232.dll" "${lazarus_dir}\openssl\win32\libeay32.dll"
+  File "/oname=ssleay3232.dll" "${lazarus_dir}\openssl\win32\ssleay32.dll"
+  ;File "${lazarus_dir}\openssl\OpenSSL License.txt"
   ; Install plugins
   CreateDirectory "$INSTDIR\plugins"
   SetOutPath "$INSTDIR\plugins"
@@ -168,17 +172,21 @@ Section "" ;No components page, name is not important
      StrCpy $dll_to_inst "64.dll"
      StrCpy $exe_to_del "32.exe"
      StrCpy $dll_to_del "32.dll"
+     StrCpy $sysfolder "$WINDIR\sysnative"
   ${Else}
      StrCpy $exe_to_inst "32.exe"
      StrCpy $dll_to_inst "32.dll"
      StrCpy $exe_to_del "64.exe"
      StrCpy $dll_to_del "64.dll"
+     StrCpy $sysfolder "$WINDIR\system32"
   ${EndIf}
   SetOutPath "$INSTDIR"
   ; Delete old files if they exist as we can not rename if the file exists
   Delete /REBOOTOK "$INSTDIR\webradio.exe"
   Delete /REBOOTOK "$INSTDIR\bass.dll"
   Delete /REBOOTOK "$INSTDIR\bassenc.dll"
+  Delete /REBOOTOK "$INSTDIR\libeay32.dll"
+  Delete /REBOOTOK "$INSTDIR\\ssleay32.dll"
   Delete /REBOOTOK "$INSTDIR\plugins\bass_aac.dll"
   Delete /REBOOTOK "$INSTDIR\plugins\basswma.dll"
   Delete /REBOOTOK "$INSTDIR\plugins\bassflac.dll"
@@ -189,6 +197,17 @@ Section "" ;No components page, name is not important
   Rename /REBOOTOK "$INSTDIR\webradiowin$exe_to_inst" "$INSTDIR\webradio.exe"
   Rename /REBOOTOK "$INSTDIR\bass$dll_to_inst" "$INSTDIR\bass.dll"
   Rename /REBOOTOK "$INSTDIR\bassenc$dll_to_inst" "$INSTDIR\bassenc.dll"
+  ; Install ssl libraries if not already in system folder
+  IfFileExists "$sysfolder\libeay32.dll" ssl_lib_found ssl_lib_not_found
+  ssl_lib_not_found:
+    File "${lazarus_dir}\openssl\OpenSSL License.txt"
+    Rename /REBOOTOK "$INSTDIR\libeay32$dll_to_inst" "$INSTDIR\libeay32.dll"
+    Rename /REBOOTOK "$INSTDIR\ssleay32$dll_to_inst" "$INSTDIR\\ssleay32.dll"
+    Goto ssl_lib_set
+  ssl_lib_found:
+    Delete "$INSTDIR\libeay32$dll_to_inst"
+    Delete "$INSTDIR\ssleay32$dll_to_inst"
+  ssl_lib_set:
   Rename /REBOOTOK "$INSTDIR\plugins\bass_aac$dll_to_inst" "$INSTDIR\plugins\bass_aac.dll"
   Rename /REBOOTOK "$INSTDIR\plugins\basswma$dll_to_inst" "$INSTDIR\plugins\basswma.dll"
   Rename /REBOOTOK "$INSTDIR\plugins\bassflac$dll_to_inst" "$INSTDIR\plugins\bassflac.dll"
@@ -199,6 +218,8 @@ Section "" ;No components page, name is not important
   Delete "$INSTDIR\webradiowin$exe_to_del"
   Delete "$INSTDIR\bass$dll_to_del"
   Delete "$INSTDIR\bassenc$dll_to_del"
+  Delete "$INSTDIR\libeay32$dll_to_del"
+  Delete "$INSTDIR\ssleay32$dll_to_del"
   Delete "$INSTDIR\plugins\bass_aac$dll_to_del"
   Delete "$INSTDIR\plugins\basswma$dll_to_del"
   Delete "$INSTDIR\plugins\bassflac$dll_to_del"
@@ -257,11 +278,11 @@ Delete "$INSTDIR\webradio.lng"
 Delete "$INSTDIR\webradio.ini"
 Delete /REBOOTOK "$INSTDIR\bass.dll"
 Delete /REBOOTOK "$INSTDIR\bassenc.dll"
-;Delete "$INSTDIR\libeay32.dll"
-;Delete "$INSTDIR\ssleay32.dll"
+Delete "$INSTDIR\libeay32.dll"
+Delete "$INSTDIR\ssleay32.dll"
 Delete "$INSTDIR\licensf.txt"
 Delete "$INSTDIR\license.txt"
-;Delete "$INSTDIR\OpenSSL License.txt"
+Delete "$INSTDIR\OpenSSL License.txt"
 Delete "$INSTDIR\uninst.exe"
 RMDir /r "$INSTDIR\help"
 RMDir /r "$INSTDIR\plugins"
