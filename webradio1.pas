@@ -1,6 +1,6 @@
 {*******************************************************************************
   Webradio1 : main unit code
-  bb - sdtp - march 2022
+  bb - sdtp - april 2022
   Using Un4seen BASS libraries www.un4seen.com
 *******************************************************************************}
 
@@ -150,6 +150,8 @@ type
   { TFWebRadioMain }
 
   TFWebRadioMain = class(TForm)
+    PMnuSearchRadios: TMenuItem;
+    SBSearchRadios: TSpeedButton;
     TbbEq1: TbbTrackBar;
     TbbEq2: TbbTrackBar;
     TbbEq3: TbbTrackBar;
@@ -235,6 +237,7 @@ type
     procedure PMnuOpenURLClick(Sender: TObject);
     procedure PMnuQuitClick(Sender: TObject);
     procedure PMnuReadFileClick(Sender: TObject);
+    procedure PMnuSearchRadiosClick(Sender: TObject);
     procedure PTMnuRestoreClick(Sender: TObject);
     procedure PMnuSettingsClick(Sender: TObject);
     procedure PMnuTrayPopup(Sender: TObject);
@@ -291,10 +294,10 @@ type
     sRecordingHint, sStopRecordingHint: String;
     sNoradio: String;
     sNopreset: string;
+    sShowEqualizer, SHideEqualizer: String;
     HttpErrMsgNames: array [0..16] of string;
     PrevTop, PrevLeft: integer;
     SettingsChanged, RadiosChanged: Boolean;
-    sShowEqualizer, sHideEqualizer: String;
     FileLength: Int64;
     VuTimercount: int64;
     LastVol: Integer;
@@ -323,7 +326,7 @@ type
     procedure InitButtons;
     procedure Initialize;
     procedure LoadSettings(Filename: string);
-    procedure PlayRadio (radio:TRadio);
+
     procedure ModLangue;
     procedure CheckUpdate(days: iDays);
     procedure ShowBtnBar;
@@ -348,12 +351,14 @@ type
     procedure RadioHintChange(Sender: TObject);
     procedure RadioProgressChange(Sender: TObject);
     procedure RadioConnectedChange(Sender: TObject);
+    procedure FRadiosOnPlay(Sender: Tobject; rad: Tradio);
   public
     BassWMA, BassAAC, BassFLAC, BassEnc, BassEncMP3: HPlugin;
     StreamSave:boolean;
     mp3file: String;
     DefaultCaption: String;
     BassErrArr: array [0..48] of String;
+    procedure PlayRadio (radio:TRadio);
   end;
 
 // Global variables
@@ -1023,7 +1028,6 @@ begin
      OSTarget := '64 bits';
      PluginsDir:= WRExecPath+PathDelim+'Plugins'+PathDelim;
   {$ENDIF}
-
   // Chargement des chaînes de langue...
   LangFile := TBbIniFile.Create(WRExecPath + LowerCase(ProgName)+'.lng');
   OSVersion:= TOSVersion.Create(LangStr, LangFile);
@@ -1054,9 +1058,10 @@ begin
     if assigned(FileStream) then FileStream.free;
     if cthread <> 0 then cthread:= 0;
     if assigned(LangFile) then FreeAndNil(LangFile);
-    if assigned(LangNums) then FreeAndNil(LangNums)
+    if assigned(LangNums) then FreeAndNil(LangNums);
   except
   end;
+
 end;
 
 procedure TFWebRadioMain.PEqualizer1Click(Sender: TObject);
@@ -1140,6 +1145,7 @@ begin
   CropBitmap(ILButtons, PMnuOpenRadio.Bitmap, true, 4);
   CropBitmap(ILButtons, PMnuReadFile.Bitmap, true, 5);
   CropBitmap(ILButtons, PMnuOpenURL.Bitmap, true, 6);
+  CropBitmap(ILButtons, PMnuSearchRadios.Bitmap, true, 16);
   CropBitmap(ILButtons, PMnuEqualizer.Bitmap, true, 7);
   CropBitmap(ILButtons, PMnuSettings.Bitmap, true, 8);
   CropBitmap(ILButtons, PMnuRadList.Bitmap, true, 9);
@@ -1157,6 +1163,7 @@ begin
   ILButtons.GetBitmap(7, SBEqualizer.Glyph);
   ILButtons.GetBitmap(8, SBSEtings.Glyph);;
   ILButtons.GetBitmap(9, SBRadList.Glyph);
+  ILButtons.GetBitmap(16,SBSearchRadios.Glyph);
   ILButtons.GetBitmap(15, SBHelp.Glyph);
   ILButtons.GetBitmap(10, SBAbout.Glyph);
   ILButtons.GetBitmap(11, SBQuit.Glyph);
@@ -1227,6 +1234,7 @@ begin
   FSettings.Settings.AppName:= LowerCase(ProgName);
   FSettings.LOSVer.Caption:= OsVersion.VerDetail;
   FRadios.Radios.AppName := LowerCase(ProgName);
+  FRadios.OnPlay:= @FRadiosOnPlay;
   ConfigFileName:= WebRadioAppsData+'settings.xml';
   RadiosFileName:= WebRadioAppsData+'wradios.xml';
   FSettings.Settings.LangStr:= LangStr;
@@ -1308,19 +1316,18 @@ begin
      PEqualizer.Left:= PnlVolume.Left+PnlVolume.width+PnlPresets.left;
      self.Clientwidth:= PnlVolume.Left+PnlVolume.width+PEqualizer.Width+2*PnlPresets.left;
      PMnuEqualizer.Caption:= sHideEqualizer;
-     SBEqualizer.Hint:= sHideEqualizer;
    end else
    begin
      self.clientwidth:= PnlVolume.Left+PnlVolume.Width+PnlPresets.left;
      PMnuEqualizer.Caption:= sShowEqualizer;
-     SBEqualizer.Hint:= sShowEqualizer;
    end;
+   SBEqualizer.Hint:= PMnuEqualizer.Caption;
    CBEqualize.checked:= FSEttings.Settings.EquEnabled;
    LEqualizer.visible:= FSettings.Settings.EquEnabled;
   LoadPresets;
   Application.Title:=Caption;
   try
-    CurRadio:= FRadios.FindbyUID(FSettings.Settings.LastRadio);
+    CurRadio:= FRadios.Radios.FindbyUID(FSettings.Settings.LastRadio);
   except
     CurRadio.url:= FSettings.Settings.LastUrl;
   end;
@@ -1360,7 +1367,7 @@ begin
     TSB:= FindComponent('SBPreset' + IntToStr(i)) as TColorSpeedButton;
     if TSB <> nil then
     begin
-      tmpradio:= FRadios.FindbyUID(FRadios.Radios.Presets[i]);
+      tmpradio:= FRadios.Radios.FindbyUID(FRadios.Radios.Presets[i]);
       if tmpradio.uid>0 then
       begin
         TSB.Font.Style:= [fsBold];
@@ -1510,6 +1517,11 @@ begin
   end;
 end;
 
+procedure TFWebRadioMain.FRadiosOnPlay(Sender: Tobject; rad: Tradio);
+begin
+  PlayRadio(rad);
+end;
+
 procedure TFWebRadioMain.FormChangeBounds(Sender: TObject);
 begin
    SettingsChanged:= FSettings.Settings.SavSizePos;
@@ -1543,6 +1555,8 @@ end;
 
 procedure TFWebRadioMain.PMnuRadListClick(Sender: TObject);
 begin
+  FRadios.ShowMode:= smEdit ;
+  FRadios.Caption:= PMnuRadList.Caption;
   FRadios.showmodal;
   LoadPresets;
 end;
@@ -1670,6 +1684,13 @@ begin
   end;
 end;
 
+procedure TFWebRadioMain.PMnuSearchRadiosClick(Sender: TObject);
+begin
+  FRadios.ShowMode:= smSearch;
+  FRadios.Caption:= PMnuSearchRadios.Caption;
+  FRadios.showmodal; ;
+end;
+
 procedure TFWebRadioMain.SBStopClick(Sender: TObject);
 begin
   LPause.Caption:= sStopCaption;
@@ -1723,10 +1744,11 @@ begin
     CropBitmap(ILButtons, PMnuDeletePreset.Bitmap, false, 14);
   end else
   begin
+    s:= FRadios.Radios.FindbyUID(uid).name;
     PMnuDeletePreset.visible:= true;
-    PMnuDeletePreset.Caption:= Format(sMnuDeletePreset, [TmpPreset]);
+    PMnuDeletePreset.Caption:= Format(sMnuDeletePreset, [s]);
     CropBitmap(ILButtons, PMnuDeletePreset.Bitmap, true, 14);
-    TColorSpeedButton(Sender).Hint:= FRadios.FindbyUID(uid).name;
+    TColorSpeedButton(Sender).Hint:= s;
   end;
 end;
 
@@ -1879,7 +1901,7 @@ begin
   s:= Copy(TColorSpeedButton(SEnder).Name, 9, 2);
   i:= StringToInt(s);
   uid:= FRadios.Radios.Presets[i];
-  CurRadio:= FRadios.FindbyUID(uid);
+  CurRadio:= FRadios.Radios.FindbyUID(uid);
   FSettings.Settings.LastRadio:= CurRadio.uid;
   if CurRadio.uid > 0 then
   begin
@@ -2184,6 +2206,7 @@ var
   ar: double;
   s: string;
 begin
+  Curradio:= radio;
   ThreadId:= 0;
   Isradio:= true;
   url:= radio.url;
@@ -2326,7 +2349,7 @@ begin
       sMutedHint:= ReadString(LangStr, 'sMutedHint', 'Cliquer pour rétablir le son');
       SBMute.Hint:= sMuteHint;
       ODAudio.Title:= ReadString(LangStr, 'ODAudio.Title', ODAudio.Title);
-      sMnuDeletePreset:= ReadString(LangStr, 'sMnuDeletePreset', 'Supprimer la présélection %d');
+      sMnuDeletePreset:= ReadString(LangStr, 'sMnuDeletePreset', 'Supprimer la présélection %s');
       sMuteMenu:= ReadString(LangStr, 'sMuteMenu', 'Couper le son');
       sMutedMenu:= ReadString(LangStr, 'sMutedMenu', 'Rétablir le son');
       sRecordingHint:= ReadString(LangStr, 'sRecordingHint', 'Cliquer pour enregistrer la radio');
@@ -2344,11 +2367,14 @@ begin
       sShowEqualizer:= ReadString(LangStr,'sShowEqualizer', 'Afficher l''égaliseur');
       sHideEqualizer:= ReadString(LangStr,'sHideEqualizer', 'Masquer l''égaliseur');
       sCannotGetNewVer:=ReadString(LangStr,'CannotGetNewVer','Recherche de nouvelle version impossible');
-
-      //Menus and buttons
+      if Fsettings.Settings.EqualVisible then PMnuEqualizer.Caption:= sHideEqualizer
+      else PMnuEqualizer.Caption:= sShowEqualizer ;
+      SBEqualizer.Hint:= PMnuEqualizer.Caption;
+            //Menus and buttons
       PMnuOpenRadio.Caption:= ReadString(LangStr, 'PMnuOpenRadio.Caption', PMnuOpenRadio.Caption);;
       PMnuReadFile.Caption:= ReadString(LangStr, 'PMnuReadFile.Caption', PMnuReadFile.Caption);
       PMnuOpenURL.Caption:= ReadString(LangStr, 'PMnuOpenURL.Caption', PMnuOpenURL.Caption);
+      PMnuSearchRadios.Caption:= ReadString(LangStr, 'PMnuSearchRadios.Caption', PMnuSearchRadios.Caption);
       PMnuSettings.Caption:= ReadString(LangStr, 'PMnuSettings.Caption', PMnuSettings.Caption);
       PMnuRadList.Caption:= ReadString(LangStr, 'PMnuRadList.Caption', PMnuRadList.Caption);
       PMnuHelp.Caption:= ReadString(LangStr, 'PMnuHelp.Caption', PMnuHelp.Caption);
@@ -2366,6 +2392,8 @@ begin
       SBOpenUrl.Hint:= PMnuOpenURL.Caption;
       SBSEtings.Hint:= PMnuSettings.Caption;
       SBRadList.Hint:= PMnuRadList.Caption;
+      SBSearchRadios.Hint:= PMnuSearchRadios.Caption;
+      SBHelp.Hint:= PMnuHelp.Caption;
       SBAbout.Hint:= PMnuAbout.Caption;
       SBQuit.Hint:= PMnuQuit.Caption;
 
@@ -2426,19 +2454,30 @@ begin
       FRadios.CancelBtn:= CancelBtn;
       FRadios.OPDLogo.Title:= ReadString(LangStr, 'FRadios.OPDLogo.Title', 'Ouvrir une image');
       FRadios.sConfirmDeleteRadio:= ReadString(LangStr,'FRadios.sConfirmDeleteRadio', 'Voulez-vous vraiment supprimer la radio %s ?');
+      FRadios.sRadioBrowserUnavail:= ReadString(LangStr,'FRadios.sRadioBrowserUnavail', 'Site Radio browser non disponible');
+      FRadios.sNoRadioFound:= ReadString(LangStr,'FRadios.sNoRadioFound', 'Aucune radio trouvée');
       FRadios.SBAddRadio.Hint:= ReadString(LangStr,'FRadios.SBAddRadio.Hint', FRadios.SBAddRadio.Hint);
       FRadios.SBEditRadio.Hint:= ReadString(LangStr,'FRadios.SBEditRadio.Hint', FRadios.SBEditRadio.Hint);
-      FRadios.SBValidRadio.Hint:= ReadString(LangStr,'FRadios.SBValidRadio.Hint', FRadios.SBValidRadio.Hint);
-      FRadios.SBCancelChanges.Hint:= ReadString(LangStr,'FRadios.SBCancelChanges.Hint', FRadios.SBCancelChanges.Hint);
+      FRadios.SBPlayRadio.Hint:= ReadString(LangStr,'FRadios.SBPlayRadio.Hint', FRadios.SBPlayRadio.Hint);
+      FRadios.BtnCancel.Caption:= CancelBtn;
+      FRadios.BtnApply.Caption:= ReadString(LangStr,'FRadios.BtnApply.Caption', FRadios.BtnApply.Caption);
+      FRadios.BtnApply.Hint:= ReadString(LangStr,'FRadios.BtnApply.Hint', FRadios.BtnApply.Hint);
+      FRadios.BtnCancel.Hint:= ReadString(LangStr,'FRadios.BtnCancel.Hint', FRadios.BtnCancel.Hint);
       FRadios.SBDeleteRadio.Hint:= ReadString(LangStr,'FRadios.SBDeleteRadio.Hint', FRadios.SBDeleteRadio.Hint);
+      FRadios.LLimit.Caption:= ReadString(LangStr,'FRadios.LLimit.Caption', FRadios.LLimit.Caption);
+      FRadios.SBSearchBrwRadio.Hint:= ReadString(LangStr,'FRadios.SBSearchBrwRadio.Hint', FRadios.SBSearchBrwRadio.Hint);
+      FRadios.LSearchName.Caption:= ReadString(LangStr,'FRadios.LSearchName.Caption', FRadios.LSearchName.Caption);
+      FRadios.LSearchCountry.Caption:= ReadString(LangStr,'FRadios.LSearchCountry.Caption', FRadios.LSearchCountry.Caption);
       FRadios.Lname.Caption:= ReadString(LangStr,'FRadios.Lname.Caption', FRadios.Lname.Caption);
       FRadios.LUrl.Caption:= ReadString(LangStr,'FRadios.LUrl.Caption', FRadios.LUrl.Caption);
       FRadios.LComment.Caption:= ReadString(LangStr,'FRadios.LComment.Caption', FRadios.LComment.Caption);
       FRadios.LFavicon.Caption:= ReadString(LangStr,'FRadios.LFavicon.Caption', FRadios.LFavicon.Caption);
       FRadios.LPresets.Caption:= ReadString(LangStr,'FRadios.LPresets.Caption', FRadios.LPresets.Caption);
+      FRadios.LRadioBrowser.Caption:= ReadString(LangStr,'FRadios.LRadioBrowser.Caption', FRadios.LRadioBrowser.Caption);
       FRadios.EFavicon.Hint:= ReadString(LangStr,'FRadios.EFavicon.Hint', FRadios.EFavicon.Hint);
       CBEqualize.Caption:= ReadString(LangStr,'CBEqualize.Caption', CBEqualize.Caption);
-       LReset.Caption:= ReadString(LangStr,' LReset.Caption', LReset.Caption);
+
+      LReset.Caption:= ReadString(LangStr,'LReset.Caption', LReset.Caption);
 
       // BASS Errors
       sErrBassLoaded:= ReadString(LangStr, 'sErrBassLoaded', 'BASS.DLL non chargé.%sExécution du programme impossible');

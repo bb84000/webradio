@@ -10,7 +10,7 @@ uses
   athreads,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, webradio1, settings1, Radios1
+  Forms, indylaz, webradio1, settings1, Radios1
   { you can add units after this };
 
 {$R *.res}

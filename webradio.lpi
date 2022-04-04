@@ -18,9 +18,8 @@
     </General>
     <VersionInfo>
       <UseVersionInfo Value="True"/>
-      <MinorVersionNr Value="7"/>
-      <BuildNr Value="8"/>
-      <StringTable Comments="Web radio player" CompanyName="sdtp - bb95" FileDescription="Tuner radio web - Web radio tuner" InternalName="WebRadio" LegalCopyright="sdtp - bb95" LegalTrademarks="sdtp - bb95" OriginalFilename="WebRadio.exe" ProductName="WebRadio" ProductVersion="0.7.0.8"/>
+      <MinorVersionNr Value="8"/>
+      <StringTable Comments="Web radio player" CompanyName="sdtp - bb95" FileDescription="Tuner radio web - Web radio tuner" InternalName="WebRadio" LegalCopyright="sdtp - bb95" LegalTrademarks="sdtp - bb95" OriginalFilename="WebRadio.exe" ProductName="WebRadio" ProductVersion="0.8.0.0"/>
     </VersionInfo>
     <BuildModes>
       <Item Name="Default" Default="True"/>
@@ -33,6 +32,9 @@
       <FormatVersion Value="2"/>
     </RunParams>
     <RequiredPackages>
+      <Item>
+        <PackageName Value="indylaz"/>
+      </Item>
       <Item>
         <PackageName Value="uniqueinstance_package"/>
       </Item>
@@ -102,8 +104,8 @@
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <CodeGeneration>
-      <TargetCPU Value="x86_64"/>
-      <TargetOS Value="win64"/>
+      <TargetCPU Value="i386"/>
+      <TargetOS Value="win32"/>
       <Optimizations>
         <OptimizationLevel Value="2"/>
       </Optimizations>

@@ -89,3 +89,8 @@ Version 0.7.0.8 - 28/03/2022
 - Changed Equalizer potentiometers with TbbTrackBar
 - Corrected logo diplay with vertical images
 - Changed radios logos file names
+
+Version 0.8.0.0 - 04/04/2022
+- Changed delete preset menu: radio name instead preset number
+- Added radio search using www.radio-browser.info API
+

@@ -34,7 +34,7 @@ sMuteMenu=Mute the sound
 sMutedMenu=Unmute the sound
 sNopreset=Click the rightr mouse button to assign a radio to this button
 sNoradio=No selected radio;
-sMnuDeletePreset=Deleete the preset %d
+sMnuDeletePreset=Delete the preset %s
 ODAudio.Title=Open an audio file
 sRecordingHint=Click to record the radio
 sStopRecordingHint=Click to stop recording
@@ -50,11 +50,14 @@ sEnterUrl=Enter a radio's URL
 sUse64bit=Use the 64bit version of the program
 sShowEqualizer=Display equalizer
 sHideEqualizer=Hide Equalizer
+CBEqualize.Caption=Enable the equalizer
+LReset.Caption=Reset levels
 
 ;Menus
 PMnuOpenRadio.Caption=Open radio in the list
 PMnuReadFile.Caption=Open audio file
 PMnuOpenURL.Caption=Open radio Url
+PMnuSearchRadios.Caption=Search radios
 PMnuEqualizer.Caption=Equalizer
 PMnuSettings.Caption=Options
 PMnuRadList.Caption=Radios list
@@ -79,19 +82,27 @@ AboutBox.LWebSite.Caption=Web site home page
 AboutBox.LSourceCode.Caption=Source code Web page
 
 ; Radios form
-FRadios.Caption=Radios list
 FRadios.OPDLogo.Title=Select an image
 FRadios.sConfirmDeleteRadio=Do you want really delete the radio %s ?
+FRadios.sRadioBrowserUnavail=Radio browser site unavailable
+FRadios.sNoRadioFound=No radio found
 FRadios.SBAddRadio.Hint=Add a radio
 FRadios.SBEditRadio.Hint=Edit the selected radio
-FRadios.SBValidRadio.Hint=Valid changes
-FRadios.SBCancelChanges.Hint=Cancel changes
+FRadios.BtnApply.Caption=Apply
+FRadios.BtnApply.Hint=Apply changes
+FRadios.BtnCancel.Hint=Cancel changes
 FRadios.SBDeleteRadio.Hint=Delete the selected radio
+FRadios.SBPlayRadio.Hint=Play selected radio
+FRadios.SBSearchBrwRadio.Hint=Search radio
+FRadios.LLimit.Caption=Limit
+FRadios.LSearchName.Caption=Name
+FRadios.LSearchCountry.Caption=Country
 FRadios.Lname.Caption=Name
 FRadios.LUrl.Caption=URL
 FRadios.LComment.Caption=Comment
 FRadios.LFavicon.Caption=Logo file
 FRadios.LPresets.Caption=Presets
+FRadios.LRadioBrowser.Caption=Search done on wwww.radio-browser.info
 FRadios.EFavicon.Hint=Click on the button at the reight of tne field to select an image
 
 ; Misc
@@ -121,8 +132,7 @@ FSettings.sMnuCopy=Copy
 FSettings.sMnuPaste=Paste
 FSettings.RBnative.Caption=NATIVE
 
-CBEqualize.Caption=Enable the equalizer
-LReset.Caption=Reset levels
+
 
 ;Errors
 sErrBassLoaded=Bass library not loaded.%sProgram execution impossible
@@ -250,7 +260,7 @@ sMuteHint=Cliquer pour couper le son
 sMutedHint=Cliquer pour rétablir le son
 sMuteMenu=Couper le son
 sMutedMenu=Rétablir le son
-sMnuDeletePreset=Supprimer la présélection %d
+sMnuDeletePreset=Supprimer la présélection %s
 sNopreset=Cliquez sur le bouton droit de la souris pour attribuer une radio à ce bouton
 sNoradio=Aucune radio sélectionnée
 sRecordingHint=Cliquer pour enregistrer la radio
@@ -273,6 +283,7 @@ sHideEqualizer=Masquer l''égaliseur
 PMnuOpenRadio.Caption=Ouvrir une radio dans la liste
 PMnuRadList.Caption=Liste des radios
 PMnuOpenURL.Caption=Ouvrir un Url de radio
+PMnuSearchRadios.Caption=Rechercher des radios
 PMnuEqualizer.Caption=Egaliseur
 PMnuReadFile.Caption=Lire un fichier audio
 PMnuSettings.Caption=Préférences
@@ -297,19 +308,27 @@ AboutBox.LWebSite.Caption=Page d'accueil du site Web
 AboutBox.LSourceCode.Caption=Page Web du code source
 
 ; Radios form
-FRadios.Caption=Liste des radios
 FRadios.OPDLogo.Title=Sélectionner une image
 FRadios.sConfirmDeleteRadio=Voulez-vous vraiment supprimer la radio %s ?
+FRadios.sRadioBrowserUnavail=Sute Radio browser indisponible
+FRadios.sNoRadioFound=Aucune radio trouvée
 FRadios.SBAddRadio.Hint=Ajouter une radio
 FRadios.SBEditRadio.Hint=Modifier la radio sélectionnée
-FRadios.SBValidRadio.Hint=Valider les modifications
-FRadios.SBCancelChanges.Hint=Annuler les modifications
+FRadios.BtnApply.Caption=Appliquer
+FRadios.BtnApply.Hint=Valider les modifications
+FRadios.BtnCancel.Hint=Annuler les modifications
 FRadios.SBDeleteRadio.Hint=Supprimer la radio sélectionnée
+FRadios.SBPlayRadio.Hint=Ecouter la radio sélectionnée
+FRadios.SBSearchBrwRadio.Hint=Rechercher une radio
+FRadios.LLimit.Caption=Limite
+FRadios.LSearchName.Caption=Nom
+FRadios.LSearchCountry.Caption=Pays
 FRadios.Lname.Caption=Nom
 FRadios.LUrl.Caption=URL
 FRadios.LComment.Caption=Commentaire
 FRadios.LFavicon.Caption=Fichier logo
 FRadios.LPresets.Caption=Présélections
+FRadios.LRadioBrowser.Caption=Recherche effectuée sur wwww.radio-browser.info
 FRadios.EFavicon.Hint=Cliquez sur le bouton à droite de ce champ pour sélectionner une image
 
 CBEqualize.Caption=Activer l'égaliseur

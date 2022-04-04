@@ -15,7 +15,7 @@
   font-size: larger;
 }
 </style> </head>
-  <body style="                                                                background-color: #ff9900;">
+  <body style="                                                                 background-color: #ff9900;">
     <summary><br>
     </summary>
     <table style="margin-left: auto; margin-right: auto; background-image: url(&quot;images/bkground.jpg&quot;); width: 900px; padding-left: 20px; padding-right: 20px;"
@@ -31,8 +31,8 @@
             <a href="https://github.com/bb84000/webradio/raw/main/webradio.zip"><b
                 class="bigger">Download last version</b></a><br>
             &nbsp;<br>
-            <div style="text-align: center;"><img style="border: 0px solid ; width: 617px; height: 323px;"
-                usemap="#wraden" alt="" src="images/webradioext_en.jpg"><br>
+            <div style="text-align: center;"><img style="border: 0px solid ; " usemap="#wraden"
+                alt="" src="images/webradioext_en.jpg"><br>
             </div>
             <div style="text-align: center;">Place the mouse cursor on an
               element of the image to see its action's name. <br>
@@ -287,8 +287,8 @@
               alt="" src="images/btnradiolist.jpg" align="middle"><br>
           </td>
           <td><a name="btnradiolist"></a><b>Edit the radios list</b><br>
-            <img style="border: 0px solid ; width: 579px; height: 285px;" usemap="#rlisten"
-              src="images/radiolist_en.jpg" hspace="5" vspace="5" align="left">
+            <img style="border: 0px solid ; " usemap="#rlisten" src="images/radiolist_en.jpg"
+              hspace="5" vspace="5" align="left">
             <div style="text-align: justify;">To <b><a name="btnaddradio"></a>add
                 a radio</b>, click the <img style="width: 22px; height: 22px;"
                 alt="" src="images/btnaddradio.jpg" class="imgcenter"> button,
@@ -318,8 +318,13 @@
               the dropdown list and click the <img style="width: 22px; height: 22px;"
                 alt="" src="images/btndelradio.jpg" class="imgcenter"> button.
               You will have to conform your choice to effectively delete the
-              radio.<br>
-              <br>
+              radio.</div>
+            <div style="text-align: justify;"><br>
+            </div>
+            <div style="text-align: justify;">To <b>play the selected radio</b>,
+              click the <img src="images/btnplayradio.jpg" alt="" align="top">
+              button.</div>
+            <div style="text-align: justify;"> <br>
               When a radio is selected, an image of the its eventual preset
               button is shown. When you delete a radio, its eventual preset is
               also deleted. </div>
@@ -332,12 +337,45 @@
           </td>
         </tr>
         <tr>
+          <td><img src="images/btnsearchradio.jpg" alt=""><br>
+          </td>
+          <td><a name="btnsearchradio"></a><b>Search radio</b> <br>
+            <img usemap="#srchradiosen" alt="" src="images/searchradio_en.jpg" hspace="5"
+              vspace="5" align="left"> <b>Open the search window</b><br>
+            <br>
+            Search is done on the <a href="http://www.radio-browser.info" target="_blank">www.radio-browser.info</a>
+            site. <br>
+            <br>
+            Search can be done by <b>name</b> or name part and/or by <b>country</b>.
+            The maximum count of results is fixed in the <b>Limit</b> field. <br>
+            The selected radio <b>name</b> and <b>Url</b> are given in the
+            related fields. The eventual link to the radio's icon is shown in
+            the <b>Commen</b>t field. <br>
+            <br>
+            Click the <img style="width: 22px; height: 22px;" alt="" src="images/btnaddradio.jpg"
+              align="top"> button to add the radio to the radio's list. Then
+            click the <b>Apply</b>&nbsp; <img style="width: 22px; height: 22px;"
+              alt="" src="images/btnvalidradio.jpg" align="top"> button to valid
+            the operation or the <b>Cancel</b> <img style="width: 22px; height: 22px;"
+              alt="" src="images/btncanceledit.jpg" align="top">&nbsp; button to
+            cancel operation.<br>
+            <br>
+            Click the <img src="images/btnplayradio.jpg" alt="" align="top">
+            button to <b>play</b> the selected radio. </td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
           <td style="vertical-align: top;"><img style="width: 34px; height: 24px;"
               alt="" src="images/btnsettings.jpg" align="top"><br>
           </td>
           <td style="vertical-align: top;"> <b><a name="btnsettings"></a>Settings</b>
             <br>
-            <div style="text-align: justify;"><img style="border: 0px solid ; width: 561px; height: 474px;"
+            <div style="text-align: justify;"><img style="border: 0px solid ; "
                 usemap="#settingsen" src="images/settings_en.jpg" hspace="5" vspace="5"
                 align="left"><b>Open the Settings window</b><br>
               <br>
@@ -405,8 +443,8 @@
               cases, the settings are defined before each recording in a dialog
               box displayed by the system, the program settings are ignored. The
               NATIVE format records the radio stream as is it transmitted,
-              without re-encoding. Recorded files may mon be playable with some 
-			  players.<br>
+              without re-encoding. Recorded files may mon be playable with some
+              players.<br>
               <br>
               <a name="recbitrate"></a><b>Bitrate</b> : Select the maximum
               recording bitrate in the dropdown list. The most used bitrates for
@@ -549,15 +587,17 @@
     <br>
     <br>
     <map name="wraden">
-      <area shape="rect" coords="50,61,18,38" href="#btnopenradio" title="Open a radio from list">
-      <area shape="rect" coords="95,61,63,38" href="#btnopenfile" title="Play an audio file">
-      <area shape="rect" coords="139,61,108,38" href="#btnopenurl" title="Open a radio's URL">
-      <area shape="rect" coords="184,61,153,38" href="#btnequal" title="Open the equalizer's window">
-      <area shape="rect" coords="229,61,201,38" href="#btnsettings" title="Settings">
-      <area shape="rect" coords="274,61,246,38" href="#btnradiolist" title="Edit the radios's list">
-      <area shape="rect" coords="319,61,291,38" href="#btnhelp" title="Open the program's help">
-      <area shape="rect" coords="364,61,336,38" href="#btnabout" title="Open the About... dialog">
-      <area shape="rect" coords="409,61,381,38" href="#btnquitte" title="Quit">
+      <area shape="rect" coords="17,37,50,61" href="#btnopenradio" title="Open a radio from list">
+      <area shape="rect" coords="62,37,95,61" href="#btnopenfile" title="Play" an=""
+        audio="" file""="">
+      <area shape="rect" coords="107,37,140,61" href="#btnopenurl" title="Open a radio's URL">
+      <area shape="rect" coords="152,37,185,61" href="#btnequal" title="Display equalizer">
+      <area shape="rect" coords="197,37,230,61" href="#btnsettings" title="Settings">
+      <area shape="rect" coords="242,372,75,61" href="#btnradiolist" title="Edit the radios's list">
+      <area shape="rect" coords="287,37,320,61" href="#btnsearchradio" title="Search a radio">
+      <area shape="rect" coords="332,37,365,61" href="#btnhelp" title="Open the program's help">
+      <area shape="rect" coords="377,37,410,61" href="#btnabout" title="Open the About... dialog">
+      <area shape="rect" coords="422,37,455,61" href="#btnquitte" title="Quit">
       <area shape="rect" coords="30,222,470,245" href="#btnpreset" title="Preset button enabled. The preset radio's name is displayed when the mouse's cursor is on the button">
       <area shape="rect" coords="30,262,112,288" href="#btnpreset" title="Preset button enabled. The preset radio's name is displayed when the mouse's cursor is on the button">
       <area shape="rect" coords="122,262,470,288" href="#btnpresetd" title="Preset button disabled. No radio is assigned to this button">
@@ -573,11 +613,32 @@
       <area shape="rect" coords="498,215,600,250" href="#fileprogress" title="Playing file progress bar">
     </map>
     <map name="rlisten">
-      <area shape="rect" coords="230,37,210,58" href="#btnaddradio" title="Add a radio">
-      <area shape="rect" coords="260,37,240,58" href="#btneditradio" title="Edit a radio">
-      <area shape="rect" coords="290,37,270,58" href="#btncanceledit" title="Cancel changes">
-      <area shape="rect" coords="320,37,300,58" href="#btnvalidedit" title="Valid changes">
-      <area shape="rect" coords="350,37,330,58" href="#btndelradio" title="Delete a radio">
+      <area shape="rect" coords="12,37,34,58" href="#btnaddradio" title="Add a radio">
+      <area shape="rect" coords="42,37,64,58" href="#btneditradio" title="Edit selected radio">
+      <area shape="rect" coords="74,37,96,58" href="#btndelradio" title="Delete selected radio">
+      <area shape="rect" coords="104,37,126,58" href="#btnplayradio" title="Play selected radio">
+      <area shape="rect" coords="261,36,375,58" href="#searchnameedit" title="Search by name">
+      <area shape="rect" coords="542,37,564,58" href="#btnsearch" title="Start search">
+      <area shape="rect" coords="148,241,230,269" href="#btnok" title="Close dialog">
+      <area shape="rect" coords="258,241,340,269" href="#btncanceledit" title="Cancel changes">
+      <area shape="rect" coords="362,241,445,269" href="#btnvalidedit" title="Apply changes">
+      <area shape="rect" coords="564,82,269,105" href="#" title="Radio's name">
+      <area shape="rect" coords="564,112,269,135" href="#" title="Radio's Web address (URL)">
+      <area shape="rect" coords="564,142,269,165" href="#" title="Comment">
+      <area shape="rect" coords="564,172,269,195" href="#" title="Radio logo file name. Click button on the right to select">
+    </map>
+    <map name="srchradiosen">
+      <area shape="rect" coords="12,37,34,58" href="#btnaddradio" title="Add a radio">
+      <area shape="rect" coords="42,37,64,58" href="#btneditradio" title="Edit selected radio">
+      <area shape="rect" coords="74,37,96,58" href="#btndelradio" title="Delete selected radio">
+      <area shape="rect" coords="104,37,126,58" href="#btnplayradio" title="Play selected radio">
+      <area shape="rect" coords="176,37,220,58" href="#searchlimit" title="Search limit">
+      <area shape="rect" coords="261,36,375,58" href="#searchnameedit" title="Search by name">
+      <area shape="rect" coords="425,36,536,58" href="#searchcountryedit" title="Search by country">
+      <area shape="rect" coords="542,37,564,58" href="#btnsearch" title="Start search">
+      <area shape="rect" coords="148,241,230,269" href="#btnok" title="Close dialog">
+      <area shape="rect" coords="258,241,340,269" href="#btncanceledit" title="Cancel changes">
+      <area shape="rect" coords="362,241,445,269" href="#btnvalidedit" title="Apply changes">
       <area shape="rect" coords="564,82,269,105" href="#" title="Radio's name">
       <area shape="rect" coords="564,112,269,135" href="#" title="Radio's Web address (URL)">
       <area shape="rect" coords="564,142,269,165" href="#" title="Comment">

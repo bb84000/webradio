@@ -1,3 +1,7 @@
+{*******************************************************************************
+  radios1 - Radios list and FRadios form
+  bb - sdtp - april 2022
+********************************************************************************}
 unit Radios1;
 
 {$mode ObjFPC}{$H+}
@@ -7,7 +11,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, Grids,
   StdCtrls, Buttons, ExtDlgs, laz2_DOM, laz2_XMLRead, laz2_XMLWrite, lazbbutils,
-  fileutil;
+  fileutil, IdDNSResolver, fphttpclient, fpopenssl, openssl, opensslsockets, lclintf ;
 
 type
 
@@ -35,7 +39,6 @@ type
     procedure SetSortType (Value: TChampsCompare);
     procedure DoSort;
     function SaveItem(iNode: TDOMNode; sname, svalue: string): TDOMNode;
-    //function charsum(s: string): int64;
   public
     Duplicates : TDuplicates;
     constructor Create (AppName: String);
@@ -48,6 +51,7 @@ type
     procedure ModifyRadio (const i: integer; Radio: TRadio);
     procedure ModifyField (const i: integer; field: string; value: variant);
     function GetItem(const i: Integer): TRadio;
+    function FindbyUID(value: int64): TRadio;
     function GetItemFieldString(const i: Integer; field: string): String;
     function SaveToXMLnode(iNode: TDOMNode; typ: TSaveType= all): Boolean;
     function SaveToXMLfile(filename: string; typ: TSaveType= all): Boolean;
@@ -62,65 +66,98 @@ type
 
 
   { TFRadios }
+  // Event to play radio in main form
+  TOnPlayEvent = procedure(Sender: TObject; rad: TRadio) of object;
+
+  TShowMode = (smEdit, smSearch);
 
   TFRadios = class(TForm)
+
+    BtnCancel: TBitBtn;
     BtnOK: TBitBtn;
+    BtnApply: TBitBtn;
     EComment: TEdit;
+    ELimit: TEdit;
+    ESearchName: TEdit;
     EFavicon: TEdit;
     EName: TEdit;
+    ESearchCountry: TEdit;
     EUrl: TEdit;
+    LLimit: TLabel;
+    LRadioBrowser: TLabel;
+    LSearchName: TLabel;
+    LBRadios: TListBox;
     LPresets: TLabel;
     LComment: TLabel;
     LFavicon: TLabel;
-    LBRadios: TListBox;
     Lname: TLabel;
+    LSearchCountry: TLabel;
     LUrl: TLabel;
     OPDLogo: TOpenPictureDialog;
-    PTools: TPanel;
+    PButtons: TPanel;
     PMain: TPanel;
     PMain1: TPanel;
-    PButtons: TPanel;
+    PTools: TPanel;
+    SBAddRadio: TSpeedButton;
+    SBDeleteRadio: TSpeedButton;
+    SBPlayRadio: TSpeedButton;
     SBEditRadio: TSpeedButton;
     SBPreset3: TSpeedButton;
     SBPreset4: TSpeedButton;
-    SBValidRadio: TSpeedButton;
-    SBCancelChanges: TSpeedButton;
     SBFavicon: TSpeedButton;
     SBPreset1: TSpeedButton;
     SBPreset2: TSpeedButton;
-    SBAddRadio: TSpeedButton;
-    SBDeleteRadio: TSpeedButton;
+    SBSearchBrwRadio: TSpeedButton;
     procedure EEditRadioChange(Sender: TObject);
     procedure ERadioChange(Sender: TObject);
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure LBRadiosSelectionChange(Sender: TObject; User: boolean);
+    procedure LRadioBrowserClick(Sender: TObject);
+    procedure LRadioBrowserMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure LRadioBrowserMouseEnter(Sender: TObject);
+    procedure LRadioBrowserMouseLeave(Sender: TObject);
+    procedure LRadioBrowserMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
     procedure SBAddRadioClick(Sender: TObject);
-    procedure SBCancelChangesClick(Sender: TObject);
+    procedure BtnCancelClick(Sender: TObject);
     procedure SBDeleteRadioClick(Sender: TObject);
     procedure SBEditRadioClick(Sender: TObject);
     procedure SBFaviconClick(Sender: TObject);
-    procedure SBValidRadioClick(Sender: TObject);
+    procedure BtnApplyClick(Sender: TObject);
+    procedure SBPlayRadioClick(Sender: TObject);
+    procedure SBSearchBrwRadioClick(Sender: TObject);
   private
+    FOnPlay: TOnPlayEvent;
     NewRadio: Boolean;
     prevradio: Integer;
+    apiurl: String;
+    dns: TIdDNSResolver;
+    RadiosXML: TXMLDocument;
     procedure DefBtnState;
     procedure EditBtnState;
     procedure DisplayRadio;
-
+    function getRadioBrowserApi(host, apiname: string; qt: TQueryType): string;
   public
     DefRadio, CurRadio: TRadio;
     RadioUID: Integer;
     RadioFavicon: String;
     Radios: TRadiosList;
+    ShowMode: TShowMode;
+    BrwRadios: TRadiosList;
+    BrwSearch: Boolean;
     WebradioAppsData: String;
     sConfirmDeleteRadio: String;
+    sRadioBrowserUnavail: string;
+    sNoRadioFound: String;
     OKBtn, YesBtn, NoBtn, CancelBtn: String;
     function LoadRadios(filename: string): Boolean;
     function SaveRadios(filename:String): Boolean;
-    function FindbyUID (value: int64): TRadio;
-    procedure PopulateList;
+    procedure PopulateList(rdl: TRadiosList);
+    property OnPlay: TOnPlayEvent read FOnPlay write FOnPlay;
   end;
 
 var
@@ -258,15 +295,6 @@ begin
  Clear;
 end;
 
-{function TRadiosList.charsum(s: string): int64;
-var
- i: integer;
-begin
-  result:=0;
-  for i:=1 to length(s) do result:=result+ord(s[i]);
-end; }
-
-
 procedure TRadiosList.AddRadio(Radio : TRadio);
 var
  K: PRadio;
@@ -316,6 +344,22 @@ begin
   if field='FAVICON' then result:= TRadio(Items[i]^).favicon;
   if field='TAG' then result:= BoolToStr(TRadio(Items[i]^).tag);
   if field='UID' then result:= InttoStr(TRadio(Items[i]^).uid);
+end;
+
+function TRadiosList.FindbyUID(value: int64): Tradio;
+var
+  i: integer;
+  tmpuid: int64;
+begin
+  result:= Default(TRadio);
+  for i:= 0 to count-1 do
+  begin
+    if GetItem(i).uid = value then
+    begin
+      result:= GetItem(i);
+      break;
+    end;
+  end;
 end;
 
 function TRadiosList.SaveItem(iNode: TDOMNode; sname, svalue: string): TDOMNode;
@@ -462,15 +506,20 @@ end;
 
 
 // FRadios form
+
 procedure TFRadios.FormCreate(Sender: TObject);
 begin
+  inherited;
   Radios:= TRadiosList.Create('progname');
+  BrwRadios:= TRadiosList.Create('progname');
+  ShowMode:= smEdit;
 end;
 
 procedure TFRadios.FormDestroy(Sender: TObject);
 begin
   inherited;
   if assigned (Radios) then Radios.Free;
+  if assigned (BrwRadios) then BrwRadios.Free;
 end;
 
 function TFRadios.LoadRadios(filename: string): Boolean;
@@ -479,9 +528,7 @@ begin
   begin
     Radios.AddRadio(DefRadio);
     Radios.SaveToXMLFile(Filename);
-    //ShowModal;
   end else Radios.LoadXMLFile(Filename);
-
 end;
 
 function TFRadios.SaveRadios(filename: string): Boolean;
@@ -512,11 +559,22 @@ end;
 
 procedure TFRadios.DefBtnState;
 begin
-  SBAddRadio.Enabled:= true;
-  SBEditRadio.Enabled:= true;
-  SBDeleteRadio.Enabled:= true;
-  SBCancelChanges.Enabled:= False;
-  SBValidRadio.Enabled:= False;
+  case ShowMode of
+    smEdit: begin
+      SBAddRadio.Enabled:= true;
+      SBEditRadio.Enabled:= true;
+      SBDeleteRadio.Enabled:= true;
+      SBPlayRadio.enabled:= true;
+    end;
+    smSearch: begin
+      SBAddRadio.enabled:= false;
+      SBEditRadio.enabled:= false;
+      SBDeleteRadio.Enabled:= false;
+      SBPlayRadio.enabled:= false;
+    end;
+  end;
+  BtnCancel.Enabled:= False;
+  BtnApply.Enabled:= False;
   BtnOK.Enabled:= true;
   EName.ReadOnly:= true;
   EUrl.ReadOnly:= true;
@@ -528,23 +586,156 @@ end;
 procedure TFRadios.FormShow(Sender: TObject);
 var
   i: integer;
+  urls: TstringList;
+  headers: Tstrings;
+  cl: TFPHTTPClient;
 begin
-  PopulateList;
-  DefBtnState;
-  if LBRadios.Count >0 then
-  begin
-    CurRadio:= Radios.GetItem(0);
-    LBRadios.Selected[0]:= true;
-    DisplayRadio;
+  LBRadios.Clear;
+  EName.Text:='';
+  EUrl.Text:= '';
+  EComment.Text:= '';
+  EFavicon.Text:= '';
+  ESearchName.Text:= '';
+  ESearchCountry.Text:= '';
+  case ShowMode of
+    smEdit: begin
+      //LBRadios.MultiSelect:= false;
+      LPresets.visible:= true;
+      LRadioBrowser.visible:= false;
+      LSearchCountry.enabled:= false;
+      ESearchCountry.enabled:= false;
+      SBDeleteRadio.enabled:= true;
+      LLimit.Enabled:= False;
+      ELimit.Enabled:= false;
+      PopulateList(Radios);
+      if LBRadios.Count >0 then
+      begin
+        CurRadio:= Radios.GetItem(0);
+        LBRadios.Selected[0]:= true;
+        DisplayRadio;
+      end;
+    end;
+    smSearch: begin
+     //LBRadios.MultiSelect:= true;
+      LPresets.visible:= false;
+      LRadioBrowser.left:= LPresets.Left;
+      LRadioBrowser.visible:= true;
+      LSearchCountry.enabled:= true;
+      ESearchCountry.enabled:= true;
+      LLimit.Enabled:= true;
+      ELimit.Enabled:= true;
+      DefBtnState;
+      apiurl:= getRadioBrowserApi('8.8.8.8', '_api._tcp.radio-browser.info', [qtService]) ;
+      //apiurl:= getRadioBrowserApi('8.8.8.8', 'all.api.radio-browser.info', [qtA]) ;
+    end;
   end;
+end;
+
+
+
+
+function TFRadios.getRadioBrowserApi(host, apiname: string; qt: TQueryType): string;
+var
+  radiobrowserurls: TStringList;
+  i: integer;
+  r: TResultRecord;
+  urls: TstringList;
+  headers: TstringList;
+  cl: TFPHTTPClient;
+
+begin
+  result:= '';
+  radiobrowserurls:= TStringList.Create;
+  dns:= TIdDNSResolver.Create(self);
+  dns.Host:= host;
+  dns.QueryType := qt;
+  dns.Resolve(apiname);
+  for i := 0 to dns.QueryResult.Count-1  do
+  begin
+    r := dns.QueryResult[i];
+    case r.RecType of
+      qtA: begin
+        radiobrowserurls.Add(TARecord(r).IPAddress);
+      end;
+      qtService: begin
+        radiobrowserurls.Add(TSRVRecord(r).Target);
+       end;
+    end;
+  end;
+  if radiobrowserurls.Count>0 then
+  begin
+    cl := TFPHTTPClient.Create(nil);
+    cl.IOTimeout:= 5000;
+    cl.AllowRedirect:= true;
+    cl.AddHeader('User-Agent','Mozilla 5.0 (bb84000 - Webradio)');
+    for i:=0 to radiobrowserurls.Count-1 do
+    begin
+      if qt= [qtA] then
+      begin
+        dns.QueryType := [qtPTR];
+        dns.Resolve(radiobrowserurls.Strings[i]);
+        // we have IPs, convert to names
+        if dns.QueryResult.Count > 0 then
+        begin
+          r:= dns.QueryResult[0];
+          radiobrowserurls.Strings[i]:= TPTRRecord(r).HostName;
+        end;
+      end;
+      try
+        cl.GET('http://'+radiobrowserurls[i]);
+        if cl.ResponseStatusCode=200 then
+        begin
+          result:= radiobrowserurls[i];
+          break;
+       end;
+     except
+     end;
+    end;
+    if assigned(cl) then cl.free;
+  end;
+  if assigned(radiobrowserurls) then radiobrowserurls.Free;
 end;
 
 procedure TFRadios.LBRadiosSelectionChange(Sender: TObject; User: boolean);
 begin
   if LBRadios.Count = 0 then exit;
-  CurRadio := Radios.GetItem(LBRadios.ItemIndex);
+  case ShowMode of
+    smEdit: CurRadio := Radios.GetItem(LBRadios.ItemIndex);
+    smSearch: CurRadio := BrwRadios.GetItem(LBRadios.ItemIndex);
+  end;
   DisplayRadio;
 end;
+
+procedure TFRadios.LRadioBrowserClick(Sender: TObject);
+begin
+  OpenURL('www.radio-browser.info');
+end;
+
+procedure TFRadios.LRadioBrowserMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+      TLabel(Sender).font.style:= [fsBold];
+end;
+
+procedure TFRadios.LRadioBrowserMouseEnter(Sender: TObject);
+begin
+   TLabel(Sender).Cursor:=  crHandPoint;
+
+end;
+
+procedure TFRadios.LRadioBrowserMouseLeave(Sender: TObject);
+begin
+  TLabel(Sender).Cursor:= crDefault;
+
+end;
+
+procedure TFRadios.LRadioBrowserMouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+    TLabel(Sender).Font.style:= [];
+end;
+
+
 
 
 procedure TFRadios.SBAddRadioClick(Sender: TObject);
@@ -560,14 +751,25 @@ begin
     if TSB <> nil then TSB.visible:= false;
   end;
   EditBtnState;
-  prevradio:= LBRadios.ItemIndex;
-  LBRadios.OnSelectionChange:= nil;
-  EName.Text:= '';
-  EUrl.Text:= '';
-  EComment.Text:= '';
-  EFavicon.Text:= '';
-  EName.OnChange:= @ERadioChange;
-  EUrl.OnChange:= @ERadioChange;
+  Case ShowMode of
+    smEdit: begin
+      prevradio:= LBRadios.ItemIndex;
+      LBRadios.OnSelectionChange:= nil;
+      EName.Text:= '';
+      EUrl.Text:= '';
+      EComment.Text:= '';
+      EFavicon.Text:= '';
+      EName.OnChange:= @ERadioChange;
+      EUrl.OnChange:= @ERadioChange;
+    end;
+    smSearch: begin
+      LBRadios.OnSelectionChange:= nil;
+      EName.OnChange:= @ERadioChange;
+      EUrl.OnChange:= @ERadioChange;
+      ERadioChange(self);
+    end;
+  end;
+
   //RadioUID:= 0;  //charsum(Radio.Name+Radio.url)+charsum(DateTimeToStr(now));
 end;
 
@@ -583,8 +785,8 @@ begin
   SBAddRadio.Enabled:= false;
   SBEditRadio.Enabled:= False;
   SBDeleteRadio.Enabled:= false;
-  SBCancelChanges.Enabled:= true;
-  SBValidRadio.Enabled:= true;
+  BtnCancel.Enabled:= true;
+  BtnApply.Enabled:= true;
   BtnOK.Enabled:= false;
   EName.ReadOnly:= false;
   EUrl.ReadOnly:= false;
@@ -601,8 +803,8 @@ begin
   prevradio:= LBRadios.ItemIndex;
   SBDeleteRadio.Enabled:= false;
   SBAddRadio.Enabled:= false;
-  SBCancelChanges.Enabled:= true;
-  SBValidRadio.Enabled:= true;
+  BtnCancel.Enabled:= true;
+  BtnApply.Enabled:= true;
   LBRadios.OnSelectionChange:= nil;
   TEdit(Sender).Color := clGradientActiveCaption;
   BtnOK.Enabled:= false;
@@ -614,7 +816,14 @@ begin
   //LUID.Caption:= InttoStr(RadioUID);
 end;
 
-procedure TFRadios.SBCancelChangesClick(Sender: TObject);
+
+
+procedure TFRadios.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+  if not BtnOK.Enabled then CloseAction := caNone;
+end;
+
+procedure TFRadios.BtnCancelClick(Sender: TObject);
 begin
   RadioFavicon:='';
   EName.OnChange:= nil;
@@ -622,7 +831,7 @@ begin
   NewRadio:= False;
   DefBtnState;
   LBRadios.OnSelectionChange:= @LBRadiosSelectionChange;
-  PopulateList;
+  PopulateList(Radios);
   LBRadios.ItemIndex:= prevradio;
   LBRadios.Selected[LBRadios.ItemIndex]:=true;
 end;
@@ -635,7 +844,7 @@ begin
   begin
     DefBtnState;
     Radios.Delete(LBRadios.ItemIndex);
-    PopulateList;
+    PopulateList(Radios);
     LBRadios.ItemIndex:= 0;
   end;
 end;
@@ -658,7 +867,7 @@ begin
   end;
 end;
 
-procedure TFRadios.SBValidRadioClick(Sender: TObject);
+procedure TFRadios.BtnApplyClick(Sender: TObject);
 var
   tmpRadio: TRadio;
   faviconext: string;
@@ -694,22 +903,101 @@ begin
    end;
    DefBtnState;
    LBRadios.OnSelectionChange:= @LBRadiosSelectionChange;
-  PopulateList;
-  try
-    if NewRadio then
-    begin
-      for i:= 0 to LBRadios.count-1 do
-      begin
-        if LBRadios.Items[i]= tmpRadio.name then break;
-      end;
-      LBRadios.ItemIndex:= i; // LBRadios.Count-1;
-    end else LBRadios.ItemIndex:= prevradio;
-  except
-    LBRadios.ItemIndex:= prevradio;
-  end;
+   Case ShowMode of
+     smEdit: begin
+       PopulateList(Radios);
+       try
+         if NewRadio then
+         begin
+           for i:= 0 to LBRadios.count-1 do
+           begin
+             if LBRadios.Items[i]= tmpRadio.name then break;
+           end;
+           LBRadios.ItemIndex:= i; // LBRadios.Count-1;
+         end else LBRadios.ItemIndex:= prevradio;
+       except
+         LBRadios.ItemIndex:= prevradio;
+       end;
+     end;
+     smSearch: begin
+       //PopulateList(BrwRadios);
+     end;
+   end;
   NewRadio:= false;
   LBRadios.Selected[LBRadios.ItemIndex]:=true;
   BtnOK.Enabled:= true;
+end;
+
+procedure TFRadios.SBPlayRadioClick(Sender: TObject);
+begin
+  if assigned(FOnPlay) then FOnPlay(self, CurRadio);
+end;
+
+procedure TFRadios.SBSearchBrwRadioClick(Sender: TObject);
+var
+  cl: TFPHTTPClient;
+  Params : TStringList;
+  xml : TStringStream;
+  url, s: string;
+  RootNode, RadioNode :TDOMNode;
+  TmpRadio: TRadio;
+  UpCaseAttrib: string;
+  i: integer;
+begin
+  Case ShowMode of
+    smEdit: ShowMessage('Under construction');
+    smSearch: begin
+      if apiurl='' then
+      begin
+        showMessage(sRadioBrowserUnavail);
+        exit;
+      end;
+       Params:= TstringList.create;
+       Params.Text:='name='+ESearchName.text+LineEnding+'country='+ESearchCountry.Text+LineEnding+LineEnding+'limit='+ELimit.Text;
+       cl := TFPHTTPClient.Create(nil);
+       cl.IOTimeout:= 5000;
+       cl.AllowRedirect:= true;
+       cl.AddHeader('User-Agent','Mozilla 5.0 (bb84000 - Webradio)');
+       url:= 'http://'+apiurl+'/xml/stations/search';
+       s:= cl.FormPost(url, Params);
+       Application.ProcessMessages; //let loading complete
+       xml:= TStringStream.Create(s);
+       ReadXMLFile(RadiosXML, xml);
+       RootNode:= RadiosXML.DocumentElement;
+       BrwRadios.Reset;
+       LBRadios.Clear ;
+       TmpRadio:= Default(TRadio);
+       RadioNode := RootNode.FirstChild;
+       while (RadioNode <> nil)  do
+       begin
+        for i:= 0 to RadioNode.Attributes.Length-1 do
+        try
+          UpCaseAttrib:=UpperCase(RadioNode.Attributes.Item[i].NodeName);
+          if UpCaseAttrib='NAME' then TmpRadio.name:= RadioNode.Attributes.Item[i].NodeValue;
+          if UpCaseAttrib='URL_RESOLVED' then TmpRadio.url:= RadioNode.Attributes.Item[i].NodeValue;
+          if UpCaseAttrib='FAVICON' then TmpRadio.Comment:= RadioNode.Attributes.Item[i].NodeValue;
+        except
+        end;
+        BrwRadios.AddRadio(TmpRadio);
+        RadioNode := RadioNode.NextSibling;
+       end;
+       if BrwRadios.count > 0 then
+       begin
+         PopulateList(BrwRadios);
+         CurRadio:= BrwRadios.GetItem(0);
+         LBRadios.Selected[0]:= true;
+         DisplayRadio;
+         SBAddRadio.enabled:= true;
+         //SBEditRadio.enabled:= true;
+         SBPlayRadio.enabled:= true;
+       end else ShowMessage(sNoRadioFound);
+
+       if assigned(xml) then xml.free;
+       if assigned(cl) then cl.free;
+       if assigned(Params) then Params.free;
+
+    end;
+  end;
 end;
 
 procedure TFRadios.DisplayRadio;
@@ -744,6 +1032,7 @@ begin
     if TSB <> nil then TSB.visible:= false;
   end;
   // Now display only presets for this radio
+  if ShowMode = smEdit then
   for i:= 1 to 20 do
   begin
     if Radios.Presets[i]= uid then
@@ -755,48 +1044,24 @@ begin
         TSB.Caption:= InttoStr(i);
         TSB.Visible:= true;
       end;
+    end else
+    begin
+
     end;
   end;
-
-
 end;
 
-
-
-
-
-
-
-
-
-
-procedure TFRadios.PopulateList;
+procedure TFRadios.PopulateList(rdl: TRadiosList) ;
 var
   i, j: integer;
 begin
-  LBRadios.Clear; //SGRadios.RowCount:= Radios.count;
-  for i:= 0 to Radios.count-1 do
+  LBRadios.Clear;
+  for i:= 0 to rdl.count-1 do
   begin
-    LBRadios.Items.Add(Radios.GetItem(i).name);
+    LBRadios.Items.Add(rdl.GetItem(i).name);
   end;
 end;
 
-function TFRadios.FindbyUID(value: int64): TRadio;
-var
-  i: integer;
-  tmpuid: int64;
-begin
-  result:= default(TRadio);
-  for i:= 0 to Radios.count-1 do
-  begin
-    if Radios.GetItem(i).uid = value then
-    begin
-      result:= Radios.GetItem(i);
-      break;
-
-    end;
-  end;
-end;
 
 end.
 

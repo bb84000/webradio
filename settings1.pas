@@ -1,6 +1,6 @@
 {****************************************************************************** }
-{ settings1 - Modify FSettings form and record                                                }
-{ bb - sdtp - january 2022                                                     }
+{ settings1 - Modify FSettings form and record                                  }
+{ bb - sdtp - january 2022                                                      }
 {*******************************************************************************}
 
 unit settings1;

@@ -9,7 +9,8 @@ Play radio from a list (You have to create it with radio name, url and logo)<br>
 Up to 20 presets<br>
 Play radio url<br>
 Record playing radio (wav, mp3, ogg, acc)<br>
-Play media file (wav, mp3, ogg, acc)
+Play media file (wav, mp3, ogg, acc)<br>
+Search radios in  Radio-browser community database (http://radio-browser.info)
 
 ### Installation
 

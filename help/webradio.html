@@ -15,7 +15,7 @@
   font-size: larger;
 }
 </style> </head>
-  <body style="                                                 background-color: #ff9900;">
+  <body style="                                                    background-color: #ff9900;">
     <summary><br>
     </summary>
     <table style="margin-left: auto; margin-right: auto; background-image: url(&quot;images/bkground.jpg&quot;); width: 900px; padding-left: 20px; padding-right: 20px;"
@@ -32,8 +32,8 @@
             <a href="https://github.com/bb84000/webradio/raw/main/webradio.zip">
               <b class="bigger">Télécharger la dernière version</b></a><br>
             &nbsp;<br>
-            <div style="text-align: center;"><img style="border: 0px solid ; width: 617px; height: 323px;"
-                usemap="#wradfr" alt="" src="images/webradioext.jpg"><br>
+            <div style="text-align: center;"><img style="border: 0px solid ; " usemap="#wradfr"
+                alt="" src="images/webradioext.jpg"><br>
             </div>
             <div style="text-align: center;">Passez le curseur de la souris sur
               un élément de cette image pour voir le nom de son action. <br>
@@ -72,7 +72,7 @@
             <br>
             &nbsp;&nbsp;&nbsp; <b><a href="#volume">Les vu-mètre et le volume</a></b><br>
             <br>
-            <details>
+            <details open="">
               <summary><b><a href="#buttonsbar">La barre de boutons</a></b></summary>
               <ul>
                 <li><a href="#btnopenradio">Ouvrir une radio</a></li>
@@ -80,6 +80,8 @@
                 <li><a href="#btnopenurl">Ouvrir un Url</a></li>
                 <li><a href="#btnequal">Ouvrir la fenêtre de l'égaliseur</a></li>
                 <li><a href="#btnradiolist">Editer la liste des radios</a></li>
+                <li><a href="#btnsearchradio"><span style="color: #0000ee;">Rechercher
+                      une radio</span></a></li>
                 <li><a href="#btnsettings">Préférences</a></li>
                 <li><a href="#btnhelp">Aide</a></li>
                 <li><a href="#btnabout">A propos...</a></li>
@@ -265,7 +267,7 @@
           <td style="vertical-align: top;"><img style="width: 34px; height: 24px;"
               alt="" src="images/btnequal.jpg" align="middle"><br>
           </td>
-          <td><a name="btnequal"></a><b>Ouvrir la fenêtre de l'égaliseur</b><br>
+          <td><a name="btnequal"></a><b>Afficher l'égaliseur</b><br>
             <div style="text-align: justify;"><img style="width: 344px; height: 264px;"
                 alt="" src="images/equalizer.jpg" hspace="5" vspace="5" align="left">
               Régler le niveau des 9 bandes de l'égaliseur avec les
@@ -273,9 +275,7 @@
               que ces réglages soient appliqués aux radios et aux fichiers lus.
               <br>
               <br>
-              Cliquer sur le bouton "OK" pour valider ou sur le bouton "Annuler"
-              pour annuler ces réglages, les précédents réglages seront alors
-              appliqués.</div>
+            </div>
             <br>
             <br>
           </td>
@@ -291,8 +291,8 @@
               alt="" src="images/btnradiolist.jpg" align="middle"><br>
           </td>
           <td><a name="btnradiolist"></a><b>Editer la liste des radios</b><br>
-            <img style="border: 0px solid ; width: 579px; height: 285px;" usemap="#rlistfr"
-              alt="" src="images/radiolist.jpg" hspace="5" vspace="5" align="left">
+            <img style="border: 0px solid ;" usemap="#rlistfr" alt="" src="images/radiolist.jpg"
+              hspace="5" vspace="5" align="left">
             <div style="text-align: justify;">Pour <b><a name="btnaddradio"></a>ajouter
                 une radio</b>, cliquer sur le bouton <img style="width: 22px; height: 22px;"
                 alt="" src="images/btnaddradio.jpg" align="top">, puis entrez le
@@ -303,9 +303,10 @@
               supportés sont JPG et PNG. Utiliser de préférence ce dernier
               format pour respecter les zones transparentes des images. Une
               copie du ficher dans le dossier "Images" propre au programme.<br>
-              Validez la saisie en cliquant sur le bouton <img style="width: 22px; height: 22px;"
-                alt="" src="images/btnvalidradio.jpg" align="top">. Vous pouvez
-              abandonnez l'opération en cliquant sur le bouton <img style="width: 22px; height: 22px;"
+              Validez la saisie en cliquant sur le bouton <b>Appliquer</b> <img
+                style="width: 22px; height: 22px;" alt="" src="images/btnvalidradio.jpg"
+                align="top">. Vous pouvez abandonner l'opération en cliquant sur
+              le bouton <b>Annuler</b>&nbsp; <img style="width: 22px; height: 22px;"
                 alt="" src="images/btncanceledit.jpg" align="top">.<br>
               <br>
               Pour <b><a name="btneditradio"></a>modifier une radio</b>, la
@@ -320,11 +321,18 @@
               sélectionner dans la liste, puis cliquer sur le bouton <img style="width: 22px; height: 22px;"
                 alt="" src="images/btndelradio.jpg" align="top">. Vous devrez
               confirmer votre choix pour que la radio sélectionnée soit
-              effectivement supprimée.<br>
-              <br>
-              Lors qu'une radio est sélectionnée, la touche de présélection
-              éventuelle est indiquée. Lorsqu'une radio est supprimée, la
-              présélection éventuelle est également supprimée. </div>
+              effectivement supprimée.</div>
+            <div style="text-align: justify;"><br>
+            </div>
+            <div style="text-align: justify;">Pour<b> écouter la radio</b>
+              sélectionnée, cliquer sur le bouton <img src="images/btnplayradio.jpg"
+                alt="" align="top">.</div>
+            <div style="text-align: justify;"><br>
+            </div>
+            <div style="text-align: justify;"> Lorsqu'une radio est
+              sélectionnée, la touche de présélection éventuelle est indiquée.
+              Lorsqu'une radio est supprimée, la présélection éventuelle est
+              également supprimée. </div>
           </td>
         </tr>
         <tr align="justify">
@@ -334,14 +342,50 @@
           </td>
         </tr>
         <tr>
+          <td style="vertical-align: top;"><img src="images/btnsearchradio.jpg"
+              alt=""><br>
+          </td>
+          <td><a name="btnsearchradio"></a><b>Rechercher une radio</b><br>
+            <img style="border: 0px solid ; " usemap="#srchradiosfr" src="images/searchradio.jpg"
+              alt="" hspace="5" vspace="5" align="left"><b>Ouvre la fenêtre de
+              recherche de radio</b><br>
+            <br>
+            La recherche est effectuée sur le site <a href="http://www.radio-browser.info"
+              target="_blank">www.radio-browser.info</a>.<br>
+            <br>
+            La recherche peut se faire par <b>nom</b> ou partie de nom de
+            radios et/ou par <b>pays</b>. Le nombre maximum de résultats est
+            fixé dans le champ <b>Limite</b>.<br>
+            Le <b>nom</b> et l'<b>Url</b> de la radio sélectionnée sont
+            affichés dans les champs correspondants. Le lien éventuel vers l'<b>icone</b>
+            de la radio est fourni dans le champ <b>commentaire</b>. <br>
+            <br>
+            Cliquer sur le bouton <img style="width: 22px; height: 22px;" alt=""
+              src="images/btnaddradio.jpg" align="top"> pour ajouter la radio
+            sélectionnée à la liste des radios. Cliquer ensuite sur le bouton <b>Appliquer</b>&nbsp;
+            <img style="width: 22px; height: 22px;" alt="" src="images/btnvalidradio.jpg"
+              align="top"> pour valider l'opération ou sur le bouton <b>Annuler</b>
+            <img style="width: 22px; height: 22px;" alt="" src="images/btncanceledit.jpg"
+              align="top">&nbsp; pour l'abandonner.<br>
+            <br>
+            Pour<b> écouter la radio</b> sélectionnée, cliquer sur le bouton <img
+              src="images/btnplayradio.jpg" alt="" align="top">. </td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
           <td style="vertical-align: top;"><img style="width: 34px; height: 24px;"
               alt="" src="images/btnsettings.jpg" align="top"><br>
           </td>
           <td style="vertical-align: top; text-align: justify;"> <b><a name="btnsettings"></a>Préférences</b>
             <br>
-            <img style="border: 0px solid ; width: 561px; height: 474px;" usemap="#settingsfr"
-              alt="" src="images/settings.jpg" hspace="5" vspace="5" align="left"><b>Ouvre
-              la fenêtre des Préférences</b><br>
+            <img style="border: 0px solid ; " usemap="#settingsfr" alt="" src="images/settings.jpg"
+              hspace="5" vspace="5" align="left"><b>Ouvre la fenêtre des
+              Préférences</b><br>
             <br>
             Cette fenêtre permet de spécifier les principales préférences de
             fonctionnement du programme.<br>
@@ -410,9 +454,8 @@
             enregistrement à l'aide d'une boite de dialogue affichée par le
             système, les réglages du programme ne sont pas pris en compte. Le
             format NATIF enregistre directement le flux radio tel qu'il est
-            transmis, sans ré-encodage. Les fichiers obtenuus peuvent ne pas être
-			lisibles par tous les lecteurs. 
-            <br>
+            transmis, sans ré-encodage. Les fichiers obtenuus peuvent ne pas
+            être lisibles par tous les lecteurs. <br>
             <br>
             <a name="recbitrate"></a><b>Débit</b> : Choisissez le débit maximum
             de l'enregistrement dans la liste déroulante.Le débit le plus
@@ -565,16 +608,17 @@ logiciel
     <br>
     <br>
     <map name="wradfr">
-      <area shape="rect" coords="50,61,18,38" href="#btnopenradio" title="Ouvrir une radio dans la liste">
-      <area shape="rect" coords="95,61,63,38" href="#btnopenfile" title="Lire un fichier audio">
-      <area shape="rect" coords="139,61,108,38" href="#btnopenurl" title="Ouvrir un Url de radio">
-      <area shape="rect" coords="184,61,153,38" href="#btnequal" title="Affiche l'égaliseur">
-      <area shape="rect" coords="229,61,201,38" href="#btnsettings" title="Préférences">
-      <area shape="rect" coords="274,61,246,38" href="#btnradiolist" title="Liste des radios">
-      <area shape="rect" coords="319,61,291,38" href="#btnhelp" title="Affiche une aide du programme">
-      <area shape="rect" coords="364,61,336,38" href="#btnabout" title="Affiche la boite de dialogue A propos">
-      <area shape="rect" coords="409,61,381,38" href="#btnquitte" title="Quitte">
-      <area shape="rect" coords="30,222,470,245" href="#btnpreset" title="Boutons de présélection activés. Le nom de la radio présélectionnée est visible au passage de la souris">
+      <area shape="rect" coords="17,37,50,61" href="#btnopenradio" title="Ouvrir une radio dans la liste">
+      <area shape="rect" coords="62,37,95,61" href="#btnopenfile" title="Lire un fichier audio">
+      <area shape="rect" coords="107,37,140,61" href="#btnopenurl" title="Ouvrir un Url de radio">
+      <area shape="rect" coords="152,37,185,61" href="#btnequal" title="Affiche l'égaliseur">
+      <area shape="rect" coords="197,37,230,61" href="#btnsettings" title="Préférences">
+      <area shape="rect" coords="242,372,75,61" href="#btnradiolist" title="Liste des radios">
+      <area shape="rect" coords="287,37,320,61" href="#btnsearchradio" title="Recherche une radio">
+      <area shape="rect" coords="332,37,365,61" href="#btnhelp" title="Affiche une aide du programme">
+      <area shape="rect" coords="377,37,410,61" href="#btnabout" title="Affiche la boite de dialogue A propos">
+      <area shape="rect" coords="422,37,455,61" href="#btnquitte" title="Quitte">
+      <area shape="rect" coords="30,222,467,245" href="#btnpreset" title="Boutons de présélection activés. Le nom de la radio présélectionnée est visible au passage de la souris">
       <area shape="rect" coords="30,262,112,288" href="#btnpreset" title="Boutons de présélection activés. Le nom de la radio présélectionnée est visible au passage de la souris">
       <area shape="rect" coords="122,262,470,288" href="#btnpresetd" title="Boutons de présélection non activés. Aucune radio n'a été attribuée à ces boutons">
       <area shape="rect" coords="595,213,568,193" href="#btnmute" title="Bouton Mute">
@@ -589,11 +633,33 @@ logiciel
       <area shape="rect" coords="498,215,600,250" href="#fileprogress" title="Barre de progression de la lecture d'un fichier">
     </map>
     <map name="rlistfr">
-      <area shape="rect" coords="230,37,210,58" href="#btnaddradio" title="Ajouter une radio">
-      <area shape="rect" coords="260,37,240,58" href="#btneditradio" title="Modifier une radio">
-      <area shape="rect" coords="290,37,270,58" href="#btncanceledit" title="Annuler les modifications">
-      <area shape="rect" coords="320,37,300,58" href="#btnvalidedit" title="Valider les modifications">
-      <area shape="rect" coords="350,37,330,58" href="#btndelradio" title="Supprimer une radio">
+      <area shape="rect" coords="12,37,34,58" href="#btnaddradio" title="Ajouter une radio">
+      <area shape="rect" coords="42,37,64,58" href="#btneditradio" title="Modifier la radio sélectionnée">
+      <area shape="rect" coords="74,37,96,58" href="#btndelradio" title="Supprimer la radio sélectionnée">
+      <area shape="rect" coords="104,37,126,58" href="#btnplayradio" title="Ecouter la radio sélectionnée">
+      <area shape="rect" coords="261,36,375,58" href="#searchnameedit" title="Recherche par nom">
+      <area shape="rect" coords="542,37,564,58" href="#btnsearch" title="Lancer la recherche">
+      <area shape="rect" coords="148,241,230,269" href="#btnok" title="Fermer le dialogue">
+      <area shape="rect" coords="258,241,340,269" href="#btncanceledit" title="Annuler les modifications">
+      <area shape="rect" coords="362,241,445,269" href="#btnvalidedit" title="Appliquer les modifications">
+      <area shape="rect" coords="350,37,330,58" href="#" title="Supprimer une radio">
+      <area shape="rect" coords="564,82,269,105" href="#" title="Nom de la radio">
+      <area shape="rect" coords="564,112,269,135" href="#" title="Adresse Web (URL) de la radio">
+      <area shape="rect" coords="564,142,269,165" href="#" title="Commentaire">
+      <area shape="rect" coords="564,172,269,195" href="#" title="Nom du fichier logo. Cliquer sur le bouton à droite pour le choisir">
+    </map>
+    <map name="srchradiosfr">
+      <area shape="rect" coords="12,37,34,58" href="#btnaddradio" title="Ajouter une radio">
+      <area shape="rect" coords="42,37,64,58" href="#btneditradio" title="Modifier la radio sélectionnée">
+      <area shape="rect" coords="74,37,96,58" href="#btndelradio" title="Supprimer la radio sélectionnée">
+      <area shape="rect" coords="104,37,126,58" href="#btnplayradio" title="Ecouter la radio sélectionnée">
+      <area shape="rect" coords="176,37,220,58" href="#searchlimit" title="Limite de recherche">
+      <area shape="rect" coords="261,36,375,58" href="#searchnameedit" title="Recherche par nom">
+      <area shape="rect" coords="425,36,536,58" href="#searchcountryedit" title="Recherche par pays">
+      <area shape="rect" coords="542,37,564,58" href="#btnsearch" title="Lancer la recherche">
+      <area shape="rect" coords="148,241,230,269" href="#btnok" title="Fermer le dialogue">
+      <area shape="rect" coords="258,241,340,269" href="#btncanceledit" title="Annuler les modifications">
+      <area shape="rect" coords="362,241,445,269" href="#btnvalidedit" title="Appliquer les modifications">
       <area shape="rect" coords="564,82,269,105" href="#" title="Nom de la radio">
       <area shape="rect" coords="564,112,269,135" href="#" title="Adresse Web (URL) de la radio">
       <area shape="rect" coords="564,142,269,165" href="#" title="Commentaire">
