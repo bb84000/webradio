@@ -27,23 +27,23 @@ object FRadios: TFRadios
     object EUrl: TEdit
       Left = 92
       Height = 23
-      Top = 42
+      Top = 32
       Width = 296
       ParentShowHint = False
       ReadOnly = True
       TabOrder = 0
     end
     object LUrl: TLabel
-      Left = 16
+      Left = 14
       Height = 15
-      Top = 45
+      Top = 37
       Width = 21
       Caption = 'URL'
     end
     object EComment: TEdit
       Left = 92
       Height = 23
-      Top = 72
+      Top = 58
       Width = 296
       ParentShowHint = False
       ReadOnly = True
@@ -52,14 +52,14 @@ object FRadios: TFRadios
     object LComment: TLabel
       Left = 16
       Height = 15
-      Top = 75
+      Top = 63
       Width = 73
       Caption = 'Commentaire'
     end
     object LFavicon: TLabel
-      Left = 16
+      Left = 14
       Height = 15
-      Top = 105
+      Top = 89
       Width = 27
       Caption = 'Logo'
     end
@@ -67,7 +67,7 @@ object FRadios: TFRadios
       Left = 92
       Height = 23
       Hint = 'Cliquez sur le bouton à droite de ce champ pour sélectionner une image'
-      Top = 102
+      Top = 84
       Width = 270
       ParentShowHint = False
       ReadOnly = True
@@ -77,23 +77,23 @@ object FRadios: TFRadios
     object EName: TEdit
       Left = 92
       Height = 23
-      Top = 12
+      Top = 6
       Width = 296
       ParentShowHint = False
       ReadOnly = True
       TabOrder = 3
     end
     object Lname: TLabel
-      Left = 16
+      Left = 14
       Height = 15
-      Top = 15
+      Top = 11
       Width = 27
       Caption = 'Nom'
     end
     object SBFavicon: TSpeedButton
       Left = 365
       Height = 24
-      Top = 101
+      Top = 82
       Width = 24
       Glyph.Data = {
         36040000424D3604000000000000360000002800000010000000100000000100
@@ -136,7 +136,7 @@ object FRadios: TFRadios
     object LPresets: TLabel
       Left = 16
       Height = 15
-      Top = 135
+      Top = 141
       Width = 73
       AutoSize = False
       Caption = 'Présélections'
@@ -144,45 +144,65 @@ object FRadios: TFRadios
     object SBPreset1: TSpeedButton
       Left = 92
       Height = 22
-      Top = 132
+      Top = 138
       Width = 23
       Visible = False
     end
     object SBPreset2: TSpeedButton
       Left = 128
       Height = 22
-      Top = 132
+      Top = 138
       Width = 23
       Visible = False
     end
     object SBPreset3: TSpeedButton
       Left = 160
       Height = 22
-      Top = 132
+      Top = 138
       Width = 23
       Visible = False
     end
     object SBPreset4: TSpeedButton
       Left = 196
       Height = 22
-      Top = 132
+      Top = 138
       Width = 23
       Visible = False
     end
     object LRadioBrowser: TLabel
       Left = 225
       Height = 15
-      Top = 135
+      Top = 140
       Width = 300
       AutoSize = False
-      Caption = 'Recherche effectuée sur www.radio-browser.info'
+      Caption = 'Recherche effectuée sur radio-browser.info'
       Font.Color = clBlue
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       OnClick = LRadioBrowserClick
       OnMouseDown = LRadioBrowserMouseDown
       OnMouseEnter = LRadioBrowserMouseEnter
       OnMouseLeave = LRadioBrowserMouseLeave
       OnMouseUp = LRadioBrowserMouseUp
+    end
+    object LFaviconURL: TLabel
+      Left = 14
+      Height = 15
+      Top = 115
+      Width = 65
+      Caption = 'URL Favicon'
+    end
+    object EFaviconURL: TEdit
+      Left = 92
+      Height = 23
+      Top = 110
+      Width = 296
+      OnClick = EFaviconURLClick
+      ParentShowHint = False
+      ReadOnly = True
+      ShowHint = True
+      TabOrder = 4
     end
   end
   object PMain: TPanel
@@ -201,6 +221,8 @@ object FRadios: TFRadios
       Width = 174
       Align = alClient
       ItemHeight = 0
+      OnClick = LBRadiosClick
+      OnMouseMove = LBRadiosMouseMove
       OnSelectionChange = LBRadiosSelectionChange
       TabOrder = 0
     end
@@ -544,6 +566,7 @@ object FRadios: TFRadios
       Height = 23
       Top = 10
       Width = 115
+      OnChange = ESearchNameChange
       TabOrder = 0
     end
     object LSearchCountry: TLabel
@@ -668,6 +691,7 @@ object FRadios: TFRadios
     ClientHeight = 50
     ClientWidth = 577
     TabOrder = 3
+    OnClick = PButtonsClick
     object BtnOK: TBitBtn
       Left = 146
       Height = 30
@@ -843,5 +867,26 @@ object FRadios: TFRadios
     Title = 'Ouvrir une image'
     Left = 476
     Top = 216
+  end
+  object PMnuList: TPopupMenu
+    OnPopup = PMnuListPopup
+    Left = 24
+    Top = 216
+    object MnuAddRadio: TMenuItem
+      Caption = 'Ajouter'
+      OnClick = SBAddRadioClick
+    end
+    object MnuEditRadio: TMenuItem
+      Caption = 'Modifier'
+      OnClick = SBEditRadioClick
+    end
+    object MnuDeleteRadio: TMenuItem
+      Caption = 'Supprimer'
+      OnClick = SBDeleteRadioClick
+    end
+    object MnuPlayRadio: TMenuItem
+      Caption = 'Ecouter'
+      OnClick = SBPlayRadioClick
+    end
   end
 end

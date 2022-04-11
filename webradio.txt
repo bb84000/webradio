@@ -1,12 +1,62 @@
-  WebRadio - Tuner Radio Internet - Internet Radio Tuner
+Web Radio Tuner - Tuner radio Web
 
-  Application permettant la réception des radios diffusées sur Internet.
+French description at the end of Ebglish one
 
-  Application to receive radios broadcasted on Internet.
+Web radio Tuner is a program to play and record the radio streams on the Web from their address (url).
 
-  Currently in beta version, all functions are not yet implemented and some
-  crashs can occur.
+INSTALLATION
+Run InstallWebradio.exe, then follow instructions of the setup program.
 
-  bb - sdtp
+USAGE
+On the first use, the french radio "France Inter" is installed. You can  search and add radios in the
+radio's search dialog. You can change or delete radios in the radio list dialog.
+To preset a radio, click one of the preset buttons.
 
-  Uses Un4seen Development Bass libraries (https://www.un4seen.com/)
+The program can be run at windows start and minimized, click the Settings button to enable the function.
+
+In regular conditions, Web radio Tuner can run minimized in the system tray.
+It can onbly be closed by right click on its icon and choose Quit, or in its main windows,
+with Quit button or menu .
+
+UNINSTALL
+Use control panel's program management system to uninstall the program.
+
+NOTICE
+Web radio Tuner software can be used fee of charge.
+Use the program at your own risks.
+
+The program uses Un4seen BASS libraries (www.un4Seen.com).
+Search radios is done in Radio-browser community database (http://radio-browser.info)
+Sources (Windows and Linux) are available on [GitHub](https://github.com/bb84000/webradio)
+
+*********************************************************************************************
+
+Tuner radio Web
+
+English description on top of this document
+
+Tuner radio Web permet de lire et d'enregistrer les flux radio sur le Web à partir de leur adresse (url).
+
+INSTALLATION
+Exécuter InstallWebradio.exe, puis suivre les instructions du programme d'installation.
+
+UTILISATION
+A la première utilisation, la radio nationale française "France Inter" est installée. Vous pouvez chercher
+et ajouter des radios dans le dialogue de recherche de radios, modifier ou supprimer des radios dans la liste des radios.
+
+Pour présélectionner une radio, cliquez sur un des boutons de présélection.
+
+Dans des conditions normales, le Tuner radio Web peut être minimisé dans la zone de notification.
+Dans ce cas, il ne peut être fermé que par un clic doit sur son icône et le menu Quitte,
+ou dans sa fenêtre principale avec un clic sur le bouton Quitte.
+
+DESINSTALLATION
+Utiliser le système de gestion de programmes du panneau de configuration pour désinstaller le programme.
+
+NOTICE
+Le logiciel **Tuner radio Web**  peut être utilisé librement.
+L'utilisation du programme est à vos risques et périls.
+
+Le programme utilise les bibliothèques BASS de Un4seen (www.un4Seen.com).
+La recherche de radios est effectuée dans la base de données communautaire Radio-browser (http://radio-browser.info).
+Sources (Windows and Linux) disponibles sur [GitHub](https://github.com/bb84000/webradio)

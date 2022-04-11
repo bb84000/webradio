@@ -1157,6 +1157,10 @@ begin
   CropBitmap(ILButtons, PTMnuMute.Bitmap, true, 2);
   CropBitmap(ILButtons, PMnuChooseRadio.Bitmap, true, 4);
   CropBitmap(ILButtons, PMnuDeletePreset.Bitmap, true, 14);
+  CropBitmap(ILButtons, FRadios.MnuAddRadio.Bitmap, true, 17);
+  CropBitmap(ILButtons, FRadios.MnuEditRadio.Bitmap, true, 18);
+  CropBitmap(ILButtons, FRadios.MnuDeleteRadio.Bitmap, true, 19);
+  CropBitmap(ILButtons, FRadios.MnuPlayRadio.Bitmap, true, 20);
   ILButtons.GetBitmap(4, SBOpenRadio.Glyph);;
   ILButtons.GetBitmap(5, SBReadFile.Glyph);
   ILButtons.GetBitmap(6, SBOpenUrl.Glyph);
@@ -1240,10 +1244,15 @@ begin
   FSettings.Settings.LangStr:= LangStr;
   // Check inifile with URLs, if not present, then use default
   IniFile:= TBbInifile.Create('webradio.ini');
-
   AboutBox.ChkVerURL := IniFile.ReadString('urls', 'ChkVerURL','https://github.com/bb84000/webradio/releases/latest');
   AboutBox.UrlWebsite:= IniFile.ReadString('urls', 'UrlWebSite','https://www.sdtp.com');
   AboutBox.UrlSourceCode:=IniFile.ReadString('urls', 'UrlSourceCode','https://github.com/bb84000/webradio');
+  ChkVerInterval:= IniFile.ReadInt64('urls', 'ChkVerInterval', 3);
+  FRadios.sDNSHost:= IniFile.ReadString('urls', 'sDNSHost', '8.8.8.8');
+  FRadios.sARecAPI:= IniFile.ReadString('urls', 'sARecAPI', 'all.api.radio-browser.info');
+  FRadios.sSrvRecAPI:= IniFile.ReadString('urls', 'sSrvRecAPI', '_api._tcp.radio-browser.info');
+  FRadios.sRadioBrowserURL:= IniFile.ReadString('urls', 'sRadioBrowserURL', 'https://www.radio-browser.info');
+
   // Language dependent variables are updated in ModLangue procedure
   //AboutBox.Width:= 400; // to have more place for the long product name
   AboutBox.Image1.Picture.LoadFromLazarusResource('webradio32');
@@ -1253,7 +1262,7 @@ begin
   AboutBox.LUpdate.Hint := AboutBox.sLastUpdateSearch + ': ' + DateToStr(FSettings.Settings.LastUpdChk);
   AboutBox.Version:= Version;
   AboutBox.ProgName:= ProgName;
-  ChkVerInterval:= IniFile.ReadInt64('urls', 'ChkVerInterval', 3);
+
   if Assigned(IniFile) then IniFile.free;
   // Default display colors
   PnlDisplay.Color:= clBlack;
@@ -2122,9 +2131,9 @@ begin
        Lposition.Caption:= TimeToStr(float_time/86400)+' / '+TimeToStr(fileduration/86400);
      end else
     begin
-      // Playing radio: current position since radio plays or recording radio : recording time
-      if not recording then Lposition.Caption:= TimeToStr(float_time/86400)
-      else Lposition.Caption:= TimeToStr((now-Recording_beg)) ;
+      // Playing radio: current time or recording radio : recording time
+      if not recording then Lposition.Caption:= TimeToStr(now) //float_time/86400)
+      else Lposition.Caption:= TimeToStr(now-Recording_beg) ;
     end;
   except
   end;
@@ -2457,13 +2466,17 @@ begin
       FRadios.sRadioBrowserUnavail:= ReadString(LangStr,'FRadios.sRadioBrowserUnavail', 'Site Radio browser non disponible');
       FRadios.sNoRadioFound:= ReadString(LangStr,'FRadios.sNoRadioFound', 'Aucune radio trouvée');
       FRadios.SBAddRadio.Hint:= ReadString(LangStr,'FRadios.SBAddRadio.Hint', FRadios.SBAddRadio.Hint);
+      FRadios.MnuAddRadio.Caption:= ReadString(LangStr,'FRadios.MnuAddRadio.Caption', FRadios.MnuAddRadio.Caption);
       FRadios.SBEditRadio.Hint:= ReadString(LangStr,'FRadios.SBEditRadio.Hint', FRadios.SBEditRadio.Hint);
+      FRadios.MnuEditRadio.Caption:= ReadString(LangStr,'FRadios.MnuEditRadio.Caption', FRadios.MnuEditRadio.Caption);
+      FRadios.SBDeleteRadio.Hint:= ReadString(LangStr,'FRadios.SBDeleteRadio.Hint', FRadios.SBDeleteRadio.Hint);
+      FRadios.MnuDeleteRadio.Caption:= ReadString(LangStr,'FRadios.MnuDeleteRadio.Caption', FRadios.MnuDeleteRadio.Caption);
       FRadios.SBPlayRadio.Hint:= ReadString(LangStr,'FRadios.SBPlayRadio.Hint', FRadios.SBPlayRadio.Hint);
+      Fradios.MnuPlayRadio.Caption:= ReadString(LangStr,'Fradios.MnuPlayRadio.Caption', Fradios.MnuPlayRadio.Caption);
       FRadios.BtnCancel.Caption:= CancelBtn;
       FRadios.BtnApply.Caption:= ReadString(LangStr,'FRadios.BtnApply.Caption', FRadios.BtnApply.Caption);
       FRadios.BtnApply.Hint:= ReadString(LangStr,'FRadios.BtnApply.Hint', FRadios.BtnApply.Hint);
       FRadios.BtnCancel.Hint:= ReadString(LangStr,'FRadios.BtnCancel.Hint', FRadios.BtnCancel.Hint);
-      FRadios.SBDeleteRadio.Hint:= ReadString(LangStr,'FRadios.SBDeleteRadio.Hint', FRadios.SBDeleteRadio.Hint);
       FRadios.LLimit.Caption:= ReadString(LangStr,'FRadios.LLimit.Caption', FRadios.LLimit.Caption);
       FRadios.SBSearchBrwRadio.Hint:= ReadString(LangStr,'FRadios.SBSearchBrwRadio.Hint', FRadios.SBSearchBrwRadio.Hint);
       FRadios.LSearchName.Caption:= ReadString(LangStr,'FRadios.LSearchName.Caption', FRadios.LSearchName.Caption);
