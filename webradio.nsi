@@ -1,5 +1,5 @@
 ;Installation script for WebRadio
-; bb - sdtp - March 2022
+; bb - sdtp - October 2022
 ;--------------------------------
   Unicode true
 

@@ -99,3 +99,8 @@ Version 0.8.0.1 - 11/04/2022
 - Added search function in radios list
 - Added context menu to radio list and search radio dialogs
 
+Version 0.8.1.0 - 05/10/2022
+- Revert to RC resources
+- Uses TbbOsVersion component instead lazbbosver unit
+
+

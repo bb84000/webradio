@@ -15,12 +15,16 @@
         <TextDesc Value="Tuner radio web - Web radio tuner"/>
       </XPManifest>
       <Icon Value="0"/>
+      <Resources Count="2">
+        <Resource_0 FileName="DotMatrix.ttf" Type="RCDATA" ResourceName="DOTMATRIX"/>
+        <Resource_1 FileName="images\webradio32.png" Type="RCDATA" ResourceName="WEBRADIO32"/>
+      </Resources>
     </General>
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <MinorVersionNr Value="8"/>
-      <BuildNr Value="1"/>
-      <StringTable Comments="Web radio player" CompanyName="sdtp - bb95" FileDescription="Tuner radio web - Web radio tuner" InternalName="WebRadio" LegalCopyright="sdtp - bb95" LegalTrademarks="sdtp - bb95" OriginalFilename="WebRadio.exe" ProductName="WebRadio" ProductVersion="0.8.0.1"/>
+      <RevisionNr Value="1"/>
+      <StringTable Comments="Web radio player" CompanyName="sdtp - bb95" FileDescription="Tuner radio web - Web radio tuner" InternalName="WebRadio" LegalCopyright="sdtp - bb95" LegalTrademarks="sdtp - bb95" OriginalFilename="WebRadio.exe" ProductName="WebRadio" ProductVersion="0.8.1.0"/>
     </VersionInfo>
     <BuildModes>
       <Item Name="Default" Default="True"/>
@@ -105,8 +109,8 @@
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <CodeGeneration>
-      <TargetCPU Value="i386"/>
-      <TargetOS Value="win32"/>
+      <TargetCPU Value="x86_64"/>
+      <TargetOS Value="win64"/>
       <Optimizations>
         <OptimizationLevel Value="2"/>
       </Optimizations>

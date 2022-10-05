@@ -16,10 +16,11 @@ Win32Proc, windows,
 {$ENDIF} LCLIntf, LCLType, Classes, SysUtils, Forms, Controls, Graphics,
 Dialogs, ExtCtrls, StdCtrls, Menus, lazd_bass, lazd_bass_wma, lazd_bass_aac,
 lazd_bassenc, lazd_bassenc_mp3, lazd_bassenc_aac, lazd_bassenc_ogg,
-lazd_bass_flac, lazbbcontrols, lazbbscrollcontrols, lazbbtrackbar, settings1,
-radios1, lazbbosver, lazbbutils, lazUTF8, lazbbinifiles, registry,
-lazbbaboutdlg, lazbbautostart, LResources, ComCtrls, Buttons, ColorSpeedButton, UniqueInstance,
-fptimer, variants, BGRABitmap, BGRABitmapTypes, LazFileUtils, Types;
+lazd_bass_flac, lazbbcontrols, lazbbscrollcontrols, lazbbtrackbar,
+lazbbOsVersion, settings1, radios1, lazbbutils, lazUTF8,
+lazbbinifiles, registry, lazbbaboutdlg, lazbbautostart, lazbbResources,
+ComCtrls, Buttons, ColorSpeedButton, UniqueInstance, fptimer, variants,
+BGRABitmap, BGRABitmapTypes, LazFileUtils, Types;
 
 const
   // BASS constants
@@ -150,6 +151,7 @@ type
   { TFWebRadioMain }
 
   TFWebRadioMain = class(TForm)
+    OsVersion: TbbOsVersion;
     PMnuSearchRadios: TMenuItem;
     SBSearchRadios: TSpeedButton;
     TbbEq1: TbbTrackBar;
@@ -261,7 +263,6 @@ type
     Initialized: boolean;
     Iconized: boolean;
     OS, OSTarget, CRLF: string;
-    OsVersion: TOSVersion;
     sUse64bit: String;
     CompileDateTime: TDateTime;
     UserPath, UserAppsDataPath, MusicPath, WRExecPath:  String;
@@ -317,7 +318,7 @@ type
     RegularHeight: Integer;
     CurRadioTitle: string;
     DMFontRes: Cardinal;
-    ResFnt: TLazarusResourceStream;
+    ResFnt: TResourceStream;
     FontId: integer;
     FontCount: cardinal;
     sBitrateCaption, sFrequencyCaption: String;
@@ -957,7 +958,7 @@ begin
     FontId := Screen.Fonts.IndexOf('DotMatrix');
     if FontId < 0 then
     begin
-      ResFnt:= TLazarusResourceStream.Create('DotMatrix', nil);    // Uses Lazarus Resource instead of "Windows" resource
+      ResFnt:= TResourceStream.Create(HINSTANCE, 'DOTMATRIX', lazbbResources.RT_RCDATA);
       DMFontRes:= AddFontMemResourceEx(ResFnt.Memory, ResFnt.Size, nil, @FontCount);
       PostMessage(HWND_BROADCAST, WM_FONTCHANGE, 0, 0) ;
       Application.ProcessMessages;
@@ -1030,7 +1031,6 @@ begin
   {$ENDIF}
   // Chargement des chaînes de langue...
   LangFile := TBbIniFile.Create(WRExecPath + LowerCase(ProgName)+'.lng');
-  OSVersion:= TOSVersion.Create(LangStr, LangFile);
   version := GetVersionInfo.ProductVersion;
   LangNums := TStringList.Create;
   WebRadioAppsData := UserAppsDataPath + PathDelim + ProgName + PathDelim;
@@ -1236,7 +1236,7 @@ begin
   if initialized then exit;
   // Now, main settings
   FSettings.Settings.AppName:= LowerCase(ProgName);
-  FSettings.LOSVer.Caption:= OsVersion.VerDetail;
+
   FRadios.Radios.AppName := LowerCase(ProgName);
   FRadios.OnPlay:= @FRadiosOnPlay;
   ConfigFileName:= WebRadioAppsData+'settings.xml';
@@ -1255,7 +1255,7 @@ begin
 
   // Language dependent variables are updated in ModLangue procedure
   //AboutBox.Width:= 400; // to have more place for the long product name
-  AboutBox.Image1.Picture.LoadFromLazarusResource('webradio32');
+  bbLoadfromResource(AboutBox.Image1, 'WEBRADIO32');
   AboutBox.LProductName.Caption := GetVersionInfo.FileDescription;
   AboutBox.LCopyright.Caption := GetVersionInfo.CompanyName + ' - ' + DateTimeToStr(CompileDateTime);
   AboutBox.LVersion.Caption := 'Version: ' + Version + ' (' + OS + OSTarget + ')';
@@ -2328,16 +2328,33 @@ begin
    AboutBox.LUpdate.Hint:= AboutBox.sLastUpdateSearch + ': ' + DateToStr(FSettings.Settings.LastUpdChk);
 end;
 
-// Porcedure to translate IDE texts
+// Procedure to translate IDE texts
 
 procedure TFWebRadioMain.ModLangue;
+var
+  i: Integer;
+  A: TStringArray;
 begin
   LangStr:=FSettings.Settings.LangStr;
-  OSVersion.localize(LangStr, LangFile);
-  AboutBox.LVersion.Hint:= OSVersion.VerDetail;
   With LangFile do
     begin
-       // Form
+      with OsVersion do
+      begin
+        ProdStrs.Strings[1]:= ReadString(LangStr,'Home','Famille'); ;
+        ProdStrs.Strings[2]:= ReadString(LangStr,'Professional','Entreprise');
+        ProdStrs.Strings[3]:= ReadString(LangStr,'Server','Serveur');
+        for i:= 0 to Win10Strs.count-1 do
+        begin
+          A:= Win10Strs.Strings[i].split('=');
+          Win10Strs.Strings[i]:= A[0]+'='+ReadString(LangStr,A[0],A[1]);
+        end;
+        for i:= 0 to Win11Strs.count-1 do
+        begin
+          A:= Win11Strs.Strings[i].split('=');
+          Win11Strs.Strings[i]:= A[0]+'='+ReadString(LangStr,A[0],A[1]);
+        end;
+      end;
+      // Form
       DefaultCaption:= ReadString(LangStr, 'DefaultCaption', Caption);
       OKBtn:= ReadString(LangStr, 'OKBtn','OK');
       YesBtn:=ReadString(LangStr,'YesBtn','Oui');
@@ -2411,12 +2428,12 @@ begin
       AboutBox.sLastUpdateSearch:=ReadString(LangStr,'AboutBox.LastUpdateSearch','Dernière recherche de mise à jour');
       AboutBox.sUpdateAvailable:=ReadString(LangStr,'AboutBox.UpdateAvailable','Nouvelle version %s disponible');
       AboutBox.sNoUpdateAvailable:=ReadString(LangStr,'AboutBox.NoUpdateAvailable','Le Tuner radio Web est à jour');
-
       AboutBox.LProductName.Caption:= DefaultCaption;
       AboutBox.LProgPage.Caption:= ReadString(LangStr,'AboutBox.LProgPage.Caption', AboutBox.LProgPage.Caption);
       AboutBox.UrlProgSite:= ReadString(LangStr,'AboutBox.UrlProgSite','https://github.com/bb84000/webradio/wiki/Accueil');
       AboutBox.LWebSite.Caption:= ReadString(LangStr,'AboutBox.LWebSite.Caption', AboutBox.LWebSite.Caption);
       AboutBox.LSourceCode.Caption:= ReadString(LangStr,'AboutBox.LSourceCode.Caption', AboutBox.LSourceCode.Caption);
+      AboutBox.LVersion.Hint:= OSVersion.VerDetail;
       if not AboutBox.checked then AboutBox.LUpdate.Caption:=ReadString(LangStr,'AboutBox.LUpdate.Caption',AboutBox.LUpdate.Caption) else
       begin
         if AboutBox.NewVersion then AboutBox.LUpdate.Caption:= Format(AboutBox.sUpdateAvailable, [AboutBox.LastVersion])
@@ -2454,6 +2471,7 @@ begin
       FSettings.sMnuCopy:= ReadString(LangStr, 'FSettings.sMnuCopy', 'Copier');
       FSettings.sMnuPaste:= ReadString(LangStr, 'FSettings.sMnuPaste', 'Coller');
       FSettings.RBnative.Caption:= ReadString(LangStr, 'FSettings.RBnative.Caption', FSettings.RBnative.Caption);
+      FSettings.LOSVer.Caption:= OsVersion.VerDetail;
 
       // Radios form
       FRadios.Caption:= ReadString(LangStr, 'FRadios.Caption', FRadios.Caption);
@@ -2566,7 +2584,7 @@ begin
 end;
 
 initialization
-{$I webradio.lrs}
+
 
 end.
 

@@ -14,7 +14,7 @@ object FWebRadioMain: TFWebRadioMain
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   Position = poDesktopCenter
-  LCLVersion = '2.2.0.4'
+  LCLVersion = '2.2.2.0'
   object PnlMain: TPanel
     Left = 0
     Height = 251
@@ -48,7 +48,7 @@ object FWebRadioMain: TFWebRadioMain
         AutoSize = False
         Caption = 'Stéréo'
         Color = clBlack
-        ParentColor = True
+        ParentColor = False
         Transparent = False
       end
       object LEqualizer: TLabel
@@ -59,7 +59,7 @@ object FWebRadioMain: TFWebRadioMain
         AutoSize = False
         Caption = 'Egaliseur'
         Color = clBlack
-        ParentColor = True
+        ParentColor = False
         Transparent = False
         Visible = False
       end
@@ -71,7 +71,7 @@ object FWebRadioMain: TFWebRadioMain
         AutoSize = False
         Caption = 'LBitrateFrequ'
         Color = clBlack
-        ParentColor = True
+        ParentColor = False
         Transparent = False
       end
       object LPause: TLabel
@@ -82,7 +82,7 @@ object FWebRadioMain: TFWebRadioMain
         AutoSize = False
         Caption = 'Pause'
         Color = clBlack
-        ParentColor = True
+        ParentColor = False
         Transparent = False
       end
       object LRecording: TLabel
@@ -93,7 +93,7 @@ object FWebRadioMain: TFWebRadioMain
         AutoSize = False
         Caption = 'Recording'
         Color = clBlack
-        ParentColor = True
+        ParentColor = False
         Transparent = False
       end
       object ImgLogo: TImage
@@ -6146,7 +6146,7 @@ object FWebRadioMain: TFWebRadioMain
         AutoSize = False
         Caption = 'Connexion'
         Color = clBlack
-        ParentColor = True
+        ParentColor = False
         ShowAccelChar = False
         Transparent = False
       end
@@ -6161,7 +6161,7 @@ object FWebRadioMain: TFWebRadioMain
         Font.Color = clYellow
         Font.Height = -24
         Font.Name = 'DotMatrix'
-        ParentColor = True
+        ParentColor = False
         ParentFont = False
         ParentShowHint = False
         ShowHint = True
@@ -6177,7 +6177,7 @@ object FWebRadioMain: TFWebRadioMain
         AutoSize = False
         Caption = 'ScrollButton'
         Color = clBlack
-        ParentColor = True
+        ParentColor = False
         ParentShowHint = False
         ShowHint = True
         Transparent = False
@@ -6191,7 +6191,7 @@ object FWebRadioMain: TFWebRadioMain
         AutoSize = False
         Caption = 'ScrollButton'
         Color = clBlack
-        ParentColor = True
+        ParentColor = False
         ParentShowHint = False
         ShowHint = True
         Transparent = False
@@ -7196,6 +7196,7 @@ object FWebRadioMain: TFWebRadioMain
         Top = 120
         Width = 8
         Caption = 'G'
+        ParentColor = False
         ParentShowHint = False
         ShowAccelChar = False
         ShowHint = True
@@ -7207,6 +7208,7 @@ object FWebRadioMain: TFWebRadioMain
         Top = 120
         Width = 8
         Caption = 'D'
+        ParentColor = False
         ParentShowHint = False
         ShowAccelChar = False
         ShowHint = True
@@ -7306,6 +7308,7 @@ object FWebRadioMain: TFWebRadioMain
         Width = 104
         Alignment = taCenter
         AutoSize = False
+        ParentColor = False
       end
       object TBVolume: TbbTrackBar
         Left = 68
@@ -7363,6 +7366,7 @@ object FWebRadioMain: TFWebRadioMain
         Width = 15
         AutoSize = False
         Caption = 'Hz'
+        ParentColor = False
       end
       object LHz1: TLabel
         Left = 35
@@ -7372,6 +7376,7 @@ object FWebRadioMain: TFWebRadioMain
         Alignment = taCenter
         AutoSize = False
         Caption = '62'
+        ParentColor = False
       end
       object LdB: TLabel
         Left = 11
@@ -7380,6 +7385,7 @@ object FWebRadioMain: TFWebRadioMain
         Width = 20
         AutoSize = False
         Caption = 'dB'
+        ParentColor = False
       end
       object LHz2: TLabel
         Left = 65
@@ -7389,6 +7395,7 @@ object FWebRadioMain: TFWebRadioMain
         Alignment = taCenter
         AutoSize = False
         Caption = '125'
+        ParentColor = False
       end
       object LHz3: TLabel
         Left = 95
@@ -7398,6 +7405,7 @@ object FWebRadioMain: TFWebRadioMain
         Alignment = taCenter
         AutoSize = False
         Caption = '250'
+        ParentColor = False
       end
       object LHz4: TLabel
         Left = 125
@@ -7407,6 +7415,7 @@ object FWebRadioMain: TFWebRadioMain
         Alignment = taCenter
         AutoSize = False
         Caption = '500'
+        ParentColor = False
       end
       object LHz5: TLabel
         Left = 155
@@ -7416,6 +7425,7 @@ object FWebRadioMain: TFWebRadioMain
         Alignment = taCenter
         AutoSize = False
         Caption = '1K'
+        ParentColor = False
       end
       object LHz6: TLabel
         Left = 185
@@ -7425,6 +7435,7 @@ object FWebRadioMain: TFWebRadioMain
         Alignment = taCenter
         AutoSize = False
         Caption = '2K'
+        ParentColor = False
       end
       object LHz7: TLabel
         Left = 215
@@ -7434,6 +7445,7 @@ object FWebRadioMain: TFWebRadioMain
         Alignment = taCenter
         AutoSize = False
         Caption = '4K'
+        ParentColor = False
       end
       object LHz8: TLabel
         Left = 245
@@ -7443,6 +7455,7 @@ object FWebRadioMain: TFWebRadioMain
         Alignment = taCenter
         AutoSize = False
         Caption = '8K'
+        ParentColor = False
       end
       object LHz9: TLabel
         Left = 275
@@ -7452,6 +7465,7 @@ object FWebRadioMain: TFWebRadioMain
         Alignment = taCenter
         AutoSize = False
         Caption = '16K'
+        ParentColor = False
       end
       object LZero: TLabel
         Left = 11
@@ -7460,6 +7474,7 @@ object FWebRadioMain: TFWebRadioMain
         Width = 10
         AutoSize = False
         Caption = '0'
+        ParentColor = False
       end
       object LdB1: TLabel
         Left = 35
@@ -7469,6 +7484,7 @@ object FWebRadioMain: TFWebRadioMain
         Alignment = taCenter
         AutoSize = False
         Caption = '0'
+        ParentColor = False
       end
       object LdB2: TLabel
         Left = 65
@@ -7478,6 +7494,7 @@ object FWebRadioMain: TFWebRadioMain
         Alignment = taCenter
         AutoSize = False
         Caption = '0'
+        ParentColor = False
       end
       object LdB3: TLabel
         Left = 95
@@ -7487,6 +7504,7 @@ object FWebRadioMain: TFWebRadioMain
         Alignment = taCenter
         AutoSize = False
         Caption = '0'
+        ParentColor = False
       end
       object LdB4: TLabel
         Left = 125
@@ -7496,6 +7514,7 @@ object FWebRadioMain: TFWebRadioMain
         Alignment = taCenter
         AutoSize = False
         Caption = '0'
+        ParentColor = False
       end
       object LdB5: TLabel
         Left = 155
@@ -7505,6 +7524,7 @@ object FWebRadioMain: TFWebRadioMain
         Alignment = taCenter
         AutoSize = False
         Caption = '0'
+        ParentColor = False
       end
       object LdB6: TLabel
         Left = 185
@@ -7514,6 +7534,7 @@ object FWebRadioMain: TFWebRadioMain
         Alignment = taCenter
         AutoSize = False
         Caption = '0'
+        ParentColor = False
       end
       object LdB7: TLabel
         Left = 215
@@ -7523,6 +7544,7 @@ object FWebRadioMain: TFWebRadioMain
         Alignment = taCenter
         AutoSize = False
         Caption = '0'
+        ParentColor = False
       end
       object LdB8: TLabel
         Left = 245
@@ -7532,6 +7554,7 @@ object FWebRadioMain: TFWebRadioMain
         Alignment = taCenter
         AutoSize = False
         Caption = '0'
+        ParentColor = False
       end
       object LdB9: TLabel
         Left = 275
@@ -7541,6 +7564,7 @@ object FWebRadioMain: TFWebRadioMain
         Alignment = taCenter
         AutoSize = False
         Caption = '0'
+        ParentColor = False
       end
       object SBReset: TSpeedButton
         Left = 269
@@ -7557,6 +7581,7 @@ object FWebRadioMain: TFWebRadioMain
         Width = 79
         AutoSize = False
         Caption = 'Remetre à zéro'
+        ParentColor = False
       end
       object TbbEq1: TbbTrackBar
         Left = 30
@@ -8954,6 +8979,38 @@ object FWebRadioMain: TFWebRadioMain
     Interval = 0
     UseTimerThread = False
     Left = 817
+    Top = 8
+  end
+  object OsVersion: TbbOsVersion
+    ProdStrs.Strings = (
+      ''
+      'Home'
+      'Professional'
+      'Server'
+    )
+    Win10Strs.Strings = (
+      '00000=Unknown version'
+      '10240=v 1507 "July 2015 update"'
+      '10586=v 1511 "November 2015 update"'
+      '14393=v 1607 "July 2016 (Anniversary update)"'
+      '15063=v 1703 "April 2017 (Creators update)"'
+      '16299=v 1709 "October 2017 (Fall Creators update)"'
+      '17134=v 1803 "April 2018 update"'
+      '17763=v 1809 "October 2018 update"'
+      '18362=v 1903 "May 2019 update"'
+      '18363=v 1909 "November 2019 update"'
+      '19041=v 2004 "May 2020 update"'
+      '19042=v 20H2 "October 2020 update"'
+      '19043=v 21H1 "May 2021 update"'
+      '19044=v 21H2 "November 2021 update"'
+      '19045=v 22H2 "October 2022 update"'
+    )
+    Win11Strs.Strings = (
+      '00000=Unknown version'
+      '22000=v 21H2 "October 2021 Initial version"'
+      '22621=v 22H2 "September 2022 update"'
+    )
+    Left = 856
     Top = 8
   end
 end
