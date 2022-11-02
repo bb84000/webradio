@@ -11,20 +11,21 @@
       <UseXPManifest Value="True"/>
       <XPManifest>
         <DpiAware Value="True"/>
-        <TextName Value="bb-sdtp.WebRadio.WebRadio"/>
+        <TextName Value="bb-sdtp.WebRadio"/>
         <TextDesc Value="Tuner radio web - Web radio tuner"/>
       </XPManifest>
       <Icon Value="0"/>
-      <Resources Count="2">
+      <Resources Count="3">
         <Resource_0 FileName="DotMatrix.ttf" Type="RCDATA" ResourceName="DOTMATRIX"/>
         <Resource_1 FileName="images\webradio32.png" Type="RCDATA" ResourceName="WEBRADIO32"/>
+        <Resource_2 FileName="images\webradio256.png" Type="RCDATA" ResourceName="WEBRADIO256"/>
       </Resources>
     </General>
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <MinorVersionNr Value="8"/>
-      <RevisionNr Value="1"/>
-      <StringTable Comments="Web radio player" CompanyName="sdtp - bb95" FileDescription="Tuner radio web - Web radio tuner" InternalName="WebRadio" LegalCopyright="sdtp - bb95" LegalTrademarks="sdtp - bb95" OriginalFilename="WebRadio.exe" ProductName="WebRadio" ProductVersion="0.8.1.0"/>
+      <RevisionNr Value="2"/>
+      <StringTable Comments="Web radio player" CompanyName="sdtp - bb95" FileDescription="Tuner radio web - Web radio tuner" InternalName="WebRadio" LegalCopyright="sdtp - bb95" LegalTrademarks="sdtp - bb95" OriginalFilename="WebRadio.exe" ProductName="WebRadio" ProductVersion="0.8.2.0"/>
     </VersionInfo>
     <BuildModes>
       <Item Name="Default" Default="True"/>

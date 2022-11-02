@@ -1,6 +1,6 @@
 {*******************************************************************************
   Webradio1 : main unit code
-  bb - sdtp - april 2022
+  bb - sdtp - november 2022
   Using Un4seen BASS libraries www.un4seen.com
 *******************************************************************************}
 
@@ -13,7 +13,7 @@ interface
 uses
 {$IFDEF WINDOWS}
 Win32Proc, windows,
-{$ENDIF} LCLIntf, LCLType, Classes, SysUtils, Forms, Controls, Graphics,
+{$ENDIF} LMessages, LCLIntf, LCLType, Classes, SysUtils, Forms, Controls, Graphics,
 Dialogs, ExtCtrls, StdCtrls, Menus, lazd_bass, lazd_bass_wma, lazd_bass_aac,
 lazd_bassenc, lazd_bassenc_mp3, lazd_bassenc_aac, lazd_bassenc_ogg,
 lazd_bass_flac, lazbbcontrols, lazbbscrollcontrols, lazbbtrackbar,
@@ -23,6 +23,8 @@ ComCtrls, Buttons, ColorSpeedButton, UniqueInstance, fptimer, variants,
 BGRABitmap, BGRABitmapTypes, LazFileUtils, Types;
 
 const
+  // Message post at the end of activation procedure, processed once the form is shown
+  WM_FORMSHOWN = WM_USER + 1;
   // BASS constants
   BASS_ERROR_SSL= 10;
   // HLS definitions (copied from BASSHLS.H)
@@ -230,7 +232,7 @@ type
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
-    procedure PEqualizer1Click(Sender: TObject);
+    procedure FormWindowStateChange(Sender: TObject);
     procedure PMnuEqualizerClick(Sender: TObject);
     procedure PMnuRadListClick(Sender: TObject);
     procedure PMnuChooseRadioClick(Sender: TObject);
@@ -322,12 +324,12 @@ type
     FontId: integer;
     FontCount: cardinal;
     sBitrateCaption, sFrequencyCaption: String;
+    StartMini: Boolean;
     procedure OnAppMinimize(Sender: TObject);
     procedure OnQueryendSession(var Cancel: Boolean);
     procedure InitButtons;
     procedure Initialize;
     procedure LoadSettings(Filename: string);
-
     procedure ModLangue;
     procedure CheckUpdate(days: iDays);
     procedure ShowBtnBar;
@@ -353,6 +355,7 @@ type
     procedure RadioProgressChange(Sender: TObject);
     procedure RadioConnectedChange(Sender: TObject);
     procedure FRadiosOnPlay(Sender: Tobject; rad: Tradio);
+    procedure OnFormShown(var Msg: TLMessage);
   public
     BassWMA, BassAAC, BassFLAC, BassEnc, BassEncMP3: HPlugin;
     StreamSave:boolean;
@@ -752,6 +755,17 @@ begin
   cthread := 0;
 end;
 
+// TWebradio      main form
+
+// Procedure to answer post message at the end of activation procedure
+// so once form is shown
+
+procedure TFWebRadioMain.OnFormShown(var Msg: TLMessage);
+begin
+  if StartMini then Application.minimize; //PTMnuIconizeClick(self); //Application.minimize;
+  StartMini:= false;
+end;
+
 // Enable or disable equalizer
 
 procedure TFWebRadioMain.SetEqual(b: boolean);
@@ -823,7 +837,7 @@ begin
    IsRadio:= False;
    // Set generic logo
    ImgLogo.Stretch:= true;
-   ImgLogo.Picture.LoadFromLazarusResource('webradio256');
+   ImgLogo.Picture.LoadFromResourceName(HINSTANCE, 'webradio256');
    SetEqual (CBEqualize.Checked);
 end;
 
@@ -1064,10 +1078,24 @@ begin
 
 end;
 
-procedure TFWebRadioMain.PEqualizer1Click(Sender: TObject);
+procedure TFWebRadioMain.FormWindowStateChange(Sender: TObject);
 begin
-
+  if WindowState <> wsMinimized then
+  begin
+    if Fsettings.Settings.EqualVisible then
+     begin
+       PEqualizer.Left:= PnlVolume.Left+PnlVolume.width+PnlPresets.left;
+       self.Clientwidth:= PnlVolume.Left+PnlVolume.width+PEqualizer.Width+2*PnlPresets.left;
+       PMnuEqualizer.Caption:= sHideEqualizer;
+     end else
+     begin
+       self.clientwidth:= PnlVolume.Left+PnlVolume.Width+PnlPresets.left;
+       PMnuEqualizer.Caption:= sShowEqualizer;
+     end;
+  end;
 end;
+
+
 
 // Intercept minimize system system command to correct
 // wrong window placement on restore from tray
@@ -1123,6 +1151,7 @@ begin
     InitButtons;
     RegularHeight:= height;
     Initialize;
+    if StartMini then PostMessage(Handle, WM_FORMSHOWN, 0, 0) ;
     //Check Update, async call to let stuff loading
     Application.QueueAsyncCall(@CheckUpdate, ChkVerInterval);
   end;
@@ -1319,8 +1348,8 @@ begin
   CBEqualize.Checked:= FSettings.Settings.EquEnabled;
   SetEqual(false);
   if FSettings.Settings.EquEnabled then SetEqual(true);
-  // Display it... or not
-  if Fsettings.Settings.EqualVisible then
+  // Display it... or not reported in Onwindowsstate event
+  {if Fsettings.Settings.EqualVisible then
    begin
      PEqualizer.Left:= PnlVolume.Left+PnlVolume.width+PnlPresets.left;
      self.Clientwidth:= PnlVolume.Left+PnlVolume.width+PEqualizer.Width+2*PnlPresets.left;
@@ -1329,7 +1358,7 @@ begin
    begin
      self.clientwidth:= PnlVolume.Left+PnlVolume.Width+PnlPresets.left;
      PMnuEqualizer.Caption:= sShowEqualizer;
-   end;
+   end;   }
    SBEqualizer.Hint:= PMnuEqualizer.Caption;
    CBEqualize.checked:= FSEttings.Settings.EquEnabled;
    LEqualizer.visible:= FSettings.Settings.EquEnabled;
@@ -1424,7 +1453,7 @@ begin
       self.Top := StrToInt('$' + Copy(Settings.WState, 5, 4));
       self.Left := StrToInt('$' + Copy(Settings.WState, 9, 4));
       //self.Height := StrToInt('$' + Copy(Settings.WState, 13, 4));    // Not used, app cannot be resized
-      //self.Width := StrToInt('$' + Copy(Settings.WState, 17, 4));
+      //self.width := StrToInt('$' + Copy(Settings.WState, 17, 4));
       self.WindowState := WinState;
       PrevLeft:= self.left;
       PrevTop:= self.top;
@@ -1432,6 +1461,7 @@ begin
       begin
         //Application.Minimize;
         PTMnuIconizeClick(self);
+        //StartMini:= true;
       end;
     except
     end;
@@ -1441,6 +1471,7 @@ begin
     begin
       //Application.Minimize;
       PTMnuIconizeClick(self);
+      //StartMini:= true;
     end;
      // Détermination de la langue (si pas dans settings, langue par défaut)
     if Settings.LangStr = '' then Settings.LangStr := LangStr;
@@ -1548,7 +1579,7 @@ begin
   application.ProcessMessages;
   if Fsettings.Settings.EqualVisible then
   begin
-    clientwidth:= PnlVolume.Left+PnlVolume.Width+PnlPresets.left;
+    self.clientwidth:= PnlVolume.Left+PnlVolume.Width+PnlPresets.left;
     PMnuEqualizer.Caption:= sShowEqualizer;
     SBEqualizer.Hint:= sShowEqualizer;
     Fsettings.Settings.EqualVisible:= false;
@@ -2250,7 +2281,7 @@ begin
     MyBmp.Free;
   except
     ImgLogo.Stretch:= true;
-    ImgLogo.Picture.LoadFromLazarusResource('webradio256');
+    ImgLogo.Picture.LoadFromResourceName(HInstance, 'webradio256');
   end;
   //Check if there is a preset
   Application.ProcessMessages;

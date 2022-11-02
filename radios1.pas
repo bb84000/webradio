@@ -404,8 +404,6 @@ end;
 function TRadiosList.FindbyName(value: String; var ndx: int64): Tradio;
 var
   i:integer;
-  p: int64;
-  s: string;
 begin
   result:= Default(TRadio);
   //ndx:= -1;
@@ -1147,7 +1145,7 @@ end;
 
 procedure TFRadios.PopulateList(rdl: TRadiosList) ;
 var
-  i, j: integer;
+  i: integer;
 begin
   LBRadios.Clear;
   if RDl.Count>0 then LBRadios.PopupMenu:= PmnuList;
