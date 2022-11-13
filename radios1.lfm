@@ -2,20 +2,20 @@ object FRadios: TFRadios
   Left = 740
   Height = 257
   Top = 227
-  Width = 577
+  Width = 607
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Liste des radios'
   ClientHeight = 257
-  ClientWidth = 577
+  ClientWidth = 607
   OnClose = FormClose
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '2.2.0.4'
+  LCLVersion = '2.2.4.0'
   object PMain1: TPanel
-    Left = 176
+    Left = 206
     Height = 165
     Top = 42
     Width = 401
@@ -39,6 +39,7 @@ object FRadios: TFRadios
       Top = 37
       Width = 21
       Caption = 'URL'
+      ParentColor = False
     end
     object EComment: TEdit
       Left = 92
@@ -55,6 +56,7 @@ object FRadios: TFRadios
       Top = 63
       Width = 73
       Caption = 'Commentaire'
+      ParentColor = False
     end
     object LFavicon: TLabel
       Left = 14
@@ -62,6 +64,7 @@ object FRadios: TFRadios
       Top = 89
       Width = 27
       Caption = 'Logo'
+      ParentColor = False
     end
     object EFavicon: TEdit
       Left = 92
@@ -89,6 +92,7 @@ object FRadios: TFRadios
       Top = 11
       Width = 27
       Caption = 'Nom'
+      ParentColor = False
     end
     object SBFavicon: TSpeedButton
       Left = 365
@@ -140,6 +144,7 @@ object FRadios: TFRadios
       Width = 73
       AutoSize = False
       Caption = 'Présélections'
+      ParentColor = False
     end
     object SBPreset1: TSpeedButton
       Left = 92
@@ -177,6 +182,7 @@ object FRadios: TFRadios
       AutoSize = False
       Caption = 'Recherche effectuée sur radio-browser.info'
       Font.Color = clBlue
+      ParentColor = False
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
@@ -192,6 +198,7 @@ object FRadios: TFRadios
       Top = 115
       Width = 65
       Caption = 'URL Favicon'
+      ParentColor = False
     end
     object EFaviconURL: TEdit
       Left = 92
@@ -209,16 +216,16 @@ object FRadios: TFRadios
     Left = 0
     Height = 165
     Top = 42
-    Width = 176
+    Width = 206
     Align = alLeft
     ClientHeight = 165
-    ClientWidth = 176
+    ClientWidth = 206
     TabOrder = 1
     object LBRadios: TListBox
       Left = 1
       Height = 163
       Top = 1
-      Width = 174
+      Width = 204
       Align = alClient
       ItemHeight = 0
       OnClick = LBRadiosClick
@@ -231,11 +238,11 @@ object FRadios: TFRadios
     Left = 0
     Height = 42
     Top = 0
-    Width = 577
+    Width = 607
     Align = alTop
     BevelInner = bvLowered
     ClientHeight = 42
-    ClientWidth = 577
+    ClientWidth = 607
     TabOrder = 2
     object SBAddRadio: TSpeedButton
       Left = 10
@@ -475,7 +482,7 @@ object FRadios: TFRadios
       ParentShowHint = False
     end
     object SBSearchBrwRadio: TSpeedButton
-      Left = 540
+      Left = 570
       Height = 24
       Hint = 'Rechercher une radio'
       Top = 10
@@ -554,34 +561,36 @@ object FRadios: TFRadios
       ParentShowHint = False
     end
     object LSearchName: TLabel
-      Left = 225
+      Left = 235
       Height = 15
       Top = 14
       Width = 34
       AutoSize = False
       Caption = 'Nom'
+      ParentColor = False
     end
     object ESearchName: TEdit
-      Left = 260
+      Left = 270
       Height = 23
       Top = 10
-      Width = 115
+      Width = 120
       OnChange = ESearchNameChange
       TabOrder = 0
     end
     object LSearchCountry: TLabel
-      Left = 380
+      Left = 400
       Height = 15
       Top = 14
       Width = 45
       AutoSize = False
       Caption = 'Pays'
+      ParentColor = False
     end
     object ESearchCountry: TEdit
-      Left = 425
+      Left = 445
       Height = 23
       Top = 10
-      Width = 110
+      Width = 120
       TabOrder = 1
     end
     object SBPlayRadio: TSpeedButton
@@ -669,6 +678,7 @@ object FRadios: TFRadios
       Top = 14
       Width = 33
       Caption = 'Limite'
+      ParentColor = False
     end
     object ELimit: TEdit
       Left = 176
@@ -684,16 +694,16 @@ object FRadios: TFRadios
     Left = 0
     Height = 50
     Top = 207
-    Width = 577
+    Width = 607
     Align = alBottom
     BevelInner = bvRaised
     BevelOuter = bvLowered
     ClientHeight = 50
-    ClientWidth = 577
+    ClientWidth = 607
     TabOrder = 3
     OnClick = PButtonsClick
     object BtnOK: TBitBtn
-      Left = 146
+      Left = 160
       Height = 30
       Top = 8
       Width = 85
@@ -783,7 +793,7 @@ object FRadios: TFRadios
       TabOrder = 1
     end
     object BtnCancel: TBitBtn
-      Left = 256
+      Left = 260
       Height = 30
       Top = 8
       Width = 85
