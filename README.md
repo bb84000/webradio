@@ -18,5 +18,5 @@ Windows : [Download the zip file](https://github.com/bb84000/webradio/raw/main/w
 
 Open source program, usage is free<br>
 Application uses Un4seen Development Bass libraries which can be obtained at https://www.un4seen.com/.<br>
-Minimal libraries : bass.dll and bassenc.dll (Windows), libbass.so libbassenc.so (Linux)
+Minimal libraries : bass.dll and bassenc.dll (Windows), libbass.so libbassenc.so (Linux)<br>
 Lazarus bass units for dynamic loading of bass libraries [repository](https://github.com/bb84000/LazbbBassUnits)
