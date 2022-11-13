@@ -14,8 +14,8 @@ Search radios in  Radio-browser community database (http://radio-browser.info)
 
 ### Installation
 
-[Download the zip file](https://github.com/bb84000/webradio/raw/main/webradio.zip) , extract and run installer.
+Windows : [Download the zip file](https://github.com/bb84000/webradio/raw/main/webradio.zip) , extract and run installer.
 
 Open source program, usage is free<br>
 Application uses Un4seen Development Bass libraries which can be obtained at https://www.un4seen.com/.<br>
-Minimal libraries : bass.dll and bassenc.dll
+Minimal libraries : bass.dll and bassenc.dll (Windows), libbass.so libbassenc.so (Linux)
