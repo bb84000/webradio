@@ -23,8 +23,12 @@ ComCtrls, Buttons, ColorSpeedButton, UniqueInstance, fptimer, variants,
 BGRABitmap, BGRABitmapTypes, LazFileUtils, Types;
 
 const
-  // Message post at the end of activation procedure, processed once the form is shown
-  WM_FORMSHOWN = WM_USER + 1;
+  // Messages constants
+  WM_WEBRADIO = WM_USER + 1;
+  WP_Connecting = 0;
+  WP_Minimize = 20;
+
+
   // BASS constants
   BASS_ERROR_SSL= 10;
   // HLS definitions (copied from BASSHLS.H)
@@ -298,8 +302,9 @@ type
     sNoradio: String;
     sNopreset: string;
     sShowEqualizer, SHideEqualizer: String;
+    width_wout_equal, width_with_equal: Integer;
     HttpErrMsgNames: array [0..16] of string;
-    PrevTop, PrevLeft: integer;
+    PrevTop, PrevLeft, PrevWidth, PrevHeight: integer;
     SettingsChanged, RadiosChanged: Boolean;
     FileLength: Int64;
     VuTimercount: int64;
@@ -355,7 +360,7 @@ type
     procedure RadioProgressChange(Sender: TObject);
     procedure RadioConnectedChange(Sender: TObject);
     procedure FRadiosOnPlay(Sender: Tobject; rad: Tradio);
-    procedure OnFormShown(var Msg: TLMessage);
+    procedure MessageProc(var Msg: TLMessage); message WM_WEBRADIO;
   public
     BassWMA, BassAAC, BassFLAC, BassEnc, BassEncMP3: HPlugin;
     StreamSave:boolean;
@@ -383,6 +388,8 @@ var
   IcyTag: TIcyTag;
   ID3Tag: TAG_ID3;
   RadioEvent: TRadioEvents;
+  wr_handle: THandle; // set to main form handle for messages outside main thread
+
 
   {$IFDEF WINDOWS}
   function AddFontMemResourceEx(pbFont: Pointer; cbFont: DWORD; pdv: Pointer; pcFonts: LPDWORD): LongWord; stdcall;
@@ -400,7 +407,7 @@ implementation
 procedure TRadioEvents.setError(i: Integer);
  begin
    if FError= i then  exit;
-   FError:= i;
+   FError:= i ;
    if assigned (FOnErrorChange) then FOnErrorChange(self);
  end;
 
@@ -698,6 +705,7 @@ begin
      if chan <> 0 then BASS_StreamFree(chan) ;
   end else
   begin
+    //SendMessage (wr_handle, WM_WEBRADIO, WP_Connecting, Int64(pChar(url))); // initial message system for reference
     RadioEvent.Connecting:= CurRadio.name;
     // Progress
     repeat
@@ -757,13 +765,37 @@ end;
 
 // TWebradio      main form
 
-// Procedure to answer post message at the end of activation procedure
-// so once form is shown
+// Procedure to intercept messages
+// minimize needed as new lasarus versions don't minimsze properly during aon Activeate procedure
 
-procedure TFWebRadioMain.OnFormShown(var Msg: TLMessage);
+procedure TFWebRadioMain.MessageProc(var Msg: TLMessage);
+var
+  s, s1: string;
 begin
-  if StartMini then Application.minimize; //PTMnuIconizeClick(self); //Application.minimize;
-  StartMini:= false;
+  Case Msg.wParam of
+    WP_Connecting: begin             // Replaced with Radio event
+      sleep (20);
+      Connecting_beg:= 0;
+      LStatus.Caption := sConnectStr;
+      Caption:= DefaultCaption;
+      Lstereo.Caption:= '';
+      LBitrateFrequ.Caption:= '';
+      LPause.Caption:= '';
+      if not error then LTag.caption := '';
+      LRecording.Caption:= '';
+      FileLength:= 0;
+      s1:= StrPas (PChar(msg.LParam));
+      if length(CurRadio.Name) > 0
+      then s:= sLoadStr+' '+CurRadio.Name
+      else s:= sLoadStr+' '+s1;
+      LRadioName.Caption:= (s);
+      LRadioIcyName.Caption:= ' ';
+    end;
+    WP_Minimize: begin
+      if StartMini then Application.minimize;
+      StartMini:= false;
+    end;
+  end;
 end;
 
 // Enable or disable equalizer
@@ -1084,12 +1116,12 @@ begin
   begin
     if Fsettings.Settings.EqualVisible then
      begin
-       PEqualizer.Left:= PnlVolume.Left+PnlVolume.width+PnlPresets.left;
-       self.Clientwidth:= PnlVolume.Left+PnlVolume.width+PEqualizer.Width+2*PnlPresets.left;
+       PEqualizer.Left:= width_wout_equal+1;  //PnlVolume.Left+PnlVolume.width+PnlPresets.left;
+       self.Clientwidth:= width_with_equal;   //PnlVolume.Left+PnlVolume.width+PEqualizer.Width+2*PnlPresets.left;
        PMnuEqualizer.Caption:= sHideEqualizer;
      end else
      begin
-       self.clientwidth:= PnlVolume.Left+PnlVolume.Width+PnlPresets.left;
+       self.clientwidth:= width_wout_equal; //PnlVolume.Left+PnlVolume.Width+PnlPresets.left-1;
        PMnuEqualizer.Caption:= sShowEqualizer;
      end;
   end;
@@ -1148,10 +1180,13 @@ procedure TFWebRadioMain.FormActivate(Sender: TObject);
 begin
   if not Initialized then
   begin
+    wr_handle:= handle;
     InitButtons;
     RegularHeight:= height;
+    width_wout_equal:= PnlVolume.Left+PnlVolume.Width+PnlPresets.left-1;
+    width_with_equal:= PnlVolume.Left+PnlVolume.width+PEqualizer.Width+2*PnlPresets.left;
     Initialize;
-    if StartMini then PostMessage(Handle, WM_FORMSHOWN, 0, 0) ;
+    if StartMini then PostMessage(Handle, WM_WEBRADIO, WP_Minimize, 0) ;
     //Check Update, async call to let stuff loading
     Application.QueueAsyncCall(@CheckUpdate, ChkVerInterval);
   end;
@@ -1452,6 +1487,8 @@ begin
       WinState := TWindowState(StrToInt('$' + Copy(Settings.WState, 1, 4)));
       self.Top := StrToInt('$' + Copy(Settings.WState, 5, 4));
       self.Left := StrToInt('$' + Copy(Settings.WState, 9, 4));
+      PrevWidth:= self.width;
+      PrevHeight:= self.Height;
       //self.Height := StrToInt('$' + Copy(Settings.WState, 13, 4));    // Not used, app cannot be resized
       //self.width := StrToInt('$' + Copy(Settings.WState, 17, 4));
       self.WindowState := WinState;
@@ -1459,19 +1496,17 @@ begin
       PrevTop:= self.top;
       if WinState = wsMinimized then
       begin
-        //Application.Minimize;
-        PTMnuIconizeClick(self);
-        //StartMini:= true;
+        //PTMnuIconizeClick(self);
+        StartMini:= true;
       end;
     except
     end;
-    self.clientwidth:= PnlVolume.Left+PnlVolume.Width+PnlPresets.left;
+    self.clientwidth:= width_wout_equal;  //PnlVolume.Left+PnlVolume.Width+PnlPresets.left-1;
     TrayRadio.visible:= Settings.HideInTaskbar;
     if settings.StartMini then
     begin
-      //Application.Minimize;
-      PTMnuIconizeClick(self);
-      //StartMini:= true;
+      //PTMnuIconizeClick(self);
+      StartMini:= true;
     end;
      // Détermination de la langue (si pas dans settings, langue par défaut)
     if Settings.LangStr = '' then Settings.LangStr := LangStr;
@@ -1579,14 +1614,14 @@ begin
   application.ProcessMessages;
   if Fsettings.Settings.EqualVisible then
   begin
-    self.clientwidth:= PnlVolume.Left+PnlVolume.Width+PnlPresets.left;
+    self.clientwidth:= width_wout_equal;  //PnlVolume.Left+PnlVolume.Width+PnlPresets.left-1;
     PMnuEqualizer.Caption:= sShowEqualizer;
     SBEqualizer.Hint:= sShowEqualizer;
     Fsettings.Settings.EqualVisible:= false;
   end else
   begin
-    PEqualizer.Left:= PnlVolume.Left+PnlVolume.width+PnlPresets.left;
-    self.Clientwidth:= PnlVolume.Left+PnlVolume.width+PEqualizer.Width+2*PnlPresets.left;
+    PEqualizer.Left:= width_wout_equal+1;  //PnlVolume.Left+PnlVolume.width+PnlPresets.left;
+    self.Clientwidth:= width_with_equal;   //PnlVolume.Left+PnlVolume.width+PEqualizer.Width+2*PnlPresets.left;
     PMnuEqualizer.Caption:= sHideEqualizer;
     SBEqualizer.Hint:= sHideEqualizer;
     Fsettings.Settings.EqualVisible:= true;
@@ -2131,6 +2166,7 @@ begin
  //Need to reload position as it can change during hide in taskbar process
   left:= PrevLeft;
   top:= PrevTop;
+  FormWindowStateChange(self);
   // Tag is black when restore from tray, so we need to reload it
   Application.BringToFront;
   LTAg.Invalidate;
