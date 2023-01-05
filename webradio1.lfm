@@ -1,7 +1,7 @@
 object FWebRadioMain: TFWebRadioMain
-  Left = 590
+  Left = 572
   Height = 295
-  Top = 327
+  Top = 199
   Width = 950
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
@@ -6156,48 +6156,71 @@ object FWebRadioMain: TFWebRadioMain
         Height = 30
         Top = 16
         Width = 380
+        Alignment = taLeftJustify
         AutoSize = False
         Caption = 'ScrollButton'
         Color = clBlack
         Font.Color = clYellow
         Font.Height = -24
         Font.Name = 'DotMatrix'
+        Layout = tlTop
         ParentColor = False
         ParentFont = False
         ParentShowHint = False
         ShowHint = True
         Transparent = False
-        ScrollInterval = 35
         ScrollAutoString = '...'
-      end
-      object LRadioIcyName: TbbScrollLabel
-        Left = 85
-        Height = 17
-        Top = 44
-        Width = 380
-        AutoSize = False
-        Caption = 'ScrollButton'
-        Color = clBlack
-        ParentColor = False
-        ParentShowHint = False
-        ShowHint = True
-        Transparent = False
-        ScrollAutoString = '...'
+        ScrollDirection = sdLeftToRight
+        SCrollGraph = True
+        Scrolling = True
+        ScrollStep = 1
       end
       object LTag: TbbScrollLabel
         Left = 85
         Height = 17
         Top = 63
         Width = 380
+        Alignment = taLeftJustify
         AutoSize = False
         Caption = 'ScrollButton'
         Color = clBlack
+        Font.Color = clYellow
+        Layout = tlTop
+        ParentBidiMode = False
         ParentColor = False
+        ParentFont = False
+        ParentShowHint = False
+        ShowAccelChar = False
+        ShowHint = True
+        Transparent = False
+        ScrollAutoString = '...'
+        ScrollDirection = sdLeftToRight
+        SCrollGraph = True
+        Scrolling = True
+        ScrollStep = 1
+      end
+      object LRadioIcyName: TbbScrollLabel
+        Left = 85
+        Height = 17
+        Top = 44
+        Width = 380
+        Alignment = taLeftJustify
+        AutoSize = False
+        Caption = 'ScrollButton'
+        Color = clBlack
+        Font.Color = clYellow
+        Layout = tlTop
+        ParentBidiMode = False
+        ParentColor = False
+        ParentFont = False
         ParentShowHint = False
         ShowHint = True
         Transparent = False
-        ScrollInterval = 35
         ScrollAutoString = '...'
+        ScrollDirection = sdLeftToRight
+        SCrollGraph = True
+        Scrolling = True
+        ScrollStep = 1
       end
     end
     object PnlPresets: TPanel
@@ -7330,6 +7353,7 @@ object FWebRadioMain: TFWebRadioMain
         SliderSize = 13
         SliderStyle = ssButton
         RulerColor = cl3DLight
+        RulerActiveColor = clGradientActiveCaption
         RulerBorderColor = clActiveBorder
         RulerSize = 10
         ScaleMarks = tmBoth
@@ -7602,6 +7626,7 @@ object FWebRadioMain: TFWebRadioMain
         SliderSize = 11
         SliderStyle = ssButton
         RulerColor = cl3DLight
+        RulerActiveColor = clGradientActiveCaption
         RulerBorderColor = clActiveBorder
         RulerSize = 10
         ScaleMarks = tmTopLeft
@@ -7629,6 +7654,7 @@ object FWebRadioMain: TFWebRadioMain
         SliderSize = 11
         SliderStyle = ssButton
         RulerColor = cl3DLight
+        RulerActiveColor = clGradientActiveCaption
         RulerBorderColor = clActiveBorder
         RulerSize = 10
         ScaleMarks = tmTopLeft
@@ -7656,6 +7682,7 @@ object FWebRadioMain: TFWebRadioMain
         SliderSize = 11
         SliderStyle = ssButton
         RulerColor = cl3DLight
+        RulerActiveColor = clGradientActiveCaption
         RulerBorderColor = clActiveBorder
         RulerSize = 10
         ScaleMarks = tmTopLeft
@@ -7683,6 +7710,7 @@ object FWebRadioMain: TFWebRadioMain
         SliderSize = 11
         SliderStyle = ssButton
         RulerColor = cl3DLight
+        RulerActiveColor = clGradientActiveCaption
         RulerBorderColor = clActiveBorder
         RulerSize = 10
         ScaleMarks = tmTopLeft
@@ -7710,6 +7738,7 @@ object FWebRadioMain: TFWebRadioMain
         SliderSize = 11
         SliderStyle = ssButton
         RulerColor = cl3DLight
+        RulerActiveColor = clGradientActiveCaption
         RulerBorderColor = clActiveBorder
         RulerSize = 10
         ScaleMarks = tmTopLeft
@@ -7737,6 +7766,7 @@ object FWebRadioMain: TFWebRadioMain
         SliderSize = 11
         SliderStyle = ssButton
         RulerColor = cl3DLight
+        RulerActiveColor = clGradientActiveCaption
         RulerBorderColor = clActiveBorder
         RulerSize = 10
         ScaleMarks = tmTopLeft
@@ -7764,6 +7794,7 @@ object FWebRadioMain: TFWebRadioMain
         SliderSize = 11
         SliderStyle = ssButton
         RulerColor = cl3DLight
+        RulerActiveColor = clGradientActiveCaption
         RulerBorderColor = clActiveBorder
         RulerSize = 10
         ScaleMarks = tmTopLeft
@@ -7791,6 +7822,7 @@ object FWebRadioMain: TFWebRadioMain
         SliderSize = 11
         SliderStyle = ssButton
         RulerColor = cl3DLight
+        RulerActiveColor = clGradientActiveCaption
         RulerBorderColor = clActiveBorder
         RulerSize = 10
         ScaleMarks = tmTopLeft
@@ -7818,6 +7850,7 @@ object FWebRadioMain: TFWebRadioMain
         SliderSize = 11
         SliderStyle = ssButton
         RulerColor = cl3DLight
+        RulerActiveColor = clGradientActiveCaption
         RulerBorderColor = clActiveBorder
         RulerSize = 10
         ScaleMarks = tmTopLeft

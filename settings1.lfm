@@ -11,7 +11,7 @@ object FSettings: TFSettings
   OnCreate = FormCreate
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '2.2.0.4'
+  LCLVersion = '2.2.4.0'
   object PWinVer: TPanel
     Left = 0
     Height = 30
@@ -30,6 +30,7 @@ object FSettings: TFSettings
       Width = 559
       AutoSize = False
       Caption = 'OS version'
+      ParentColor = False
     end
   end
   object PButtons: TPanel
@@ -159,6 +160,7 @@ object FSettings: TFSettings
         Width = 55
         AutoSize = False
         Caption = 'Langue'
+        ParentColor = False
       end
       object LFont: TLabel
         Left = 260
@@ -167,6 +169,7 @@ object FSettings: TFSettings
         Width = 105
         AutoSize = False
         Caption = 'Police de l''afficheur'
+        ParentColor = False
       end
       object CBFonts: TComboBox
         Left = 369
@@ -201,6 +204,7 @@ object FSettings: TFSettings
         Width = 112
         AutoSize = False
         Caption = 'Débit (kBits/s)'
+        ParentColor = False
       end
       object CBBitrate: TComboBox
         Left = 157
@@ -228,6 +232,7 @@ object FSettings: TFSettings
         Width = 120
         AutoSize = False
         Caption = 'Echantillonnage (Hz)'
+        ParentColor = False
       end
       object CBSampling: TComboBox
         Left = 420
@@ -293,6 +298,7 @@ object FSettings: TFSettings
         Width = 155
         AutoSize = False
         Caption = 'Répertoire d''enregistrement'
+        ParentColor = False
       end
       object EDataFolder: TEdit
         Left = 168
@@ -406,6 +412,7 @@ object FSettings: TFSettings
         Top = 21
         Width = 99
         Caption = 'Texte de l''afficheur'
+        ParentColor = False
       end
       object CPDisplayText: TColorPicker
         Left = 130
@@ -425,6 +432,7 @@ object FSettings: TFSettings
         Top = 21
         Width = 99
         Caption = 'Fond de l''afficheur'
+        ParentColor = False
       end
       object CPDisplayBack: TColorPicker
         Left = 393
@@ -444,6 +452,7 @@ object FSettings: TFSettings
         Top = 46
         Width = 69
         Caption = 'Texte général'
+        ParentColor = False
       end
       object CPGenText: TColorPicker
         Left = 130
@@ -463,6 +472,7 @@ object FSettings: TFSettings
         Top = 46
         Width = 69
         Caption = 'Fond général'
+        ParentColor = False
       end
       object CPGenBack: TColorPicker
         Left = 393

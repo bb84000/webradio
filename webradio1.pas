@@ -1,6 +1,6 @@
 {*******************************************************************************
   Webradio1 : main unit code
-  bb - sdtp - november 2022
+  bb - sdtp - december 2022
   Using Un4seen BASS libraries www.un4seen.com
 *******************************************************************************}
 
@@ -13,14 +13,14 @@ interface
 uses
 {$IFDEF WINDOWS}
 Win32Proc, windows,
-{$ENDIF} LMessages, LCLIntf, LCLType, Classes, SysUtils, Forms, Controls, Graphics,
-Dialogs, ExtCtrls, StdCtrls, Menus, lazd_bass, lazd_bass_wma, lazd_bass_aac,
-lazd_bassenc, lazd_bassenc_mp3, lazd_bassenc_aac, lazd_bassenc_ogg,
-lazd_bass_flac, lazbbcontrols, lazbbscrollcontrols, lazbbtrackbar,
-lazbbOsVersion, settings1, radios1, lazbbutils, lazUTF8,
+{$ENDIF} LMessages, LCLIntf, LCLType, Classes, SysUtils, Forms, Controls,
+Graphics, Dialogs, ExtCtrls, StdCtrls, Menus, lazd_bass, lazd_bass_wma,
+lazd_bass_aac, lazd_bassenc, lazd_bassenc_mp3, lazd_bassenc_aac,
+lazd_bassenc_ogg, lazd_bass_flac, lazbbcontrols, lazbbscrollcontrols,
+lazbbtrackbar, lazbbOsVersion, settings1, radios1, lazbbutils, lazUTF8,
 lazbbinifiles, registry, lazbbaboutdlg, lazbbautostart, lazbbResources,
-ComCtrls, Buttons, ColorSpeedButton, UniqueInstance, fptimer, variants,
-BGRABitmap, BGRABitmapTypes, LazFileUtils, Types;
+lazbbLabelScroll, ComCtrls, Buttons, ColorSpeedButton, UniqueInstance, fptimer,
+variants, BGRABitmap, BGRABitmapTypes, LazFileUtils, Types;
 
 const
   // Messages constants
@@ -157,6 +157,9 @@ type
   { TFWebRadioMain }
 
   TFWebRadioMain = class(TForm)
+    LRadioIcyName: TbbScrollLabel;
+    LTag: TbbScrollLabel;
+    LRadioName: TbbScrollLabel;
     OsVersion: TbbOsVersion;
     PMnuSearchRadios: TMenuItem;
     SBSearchRadios: TSpeedButton;
@@ -171,9 +174,6 @@ type
     TbbEq9: TbbTrackBar;
     TBVolume: TbbTrackBar;
     LFPTimer1: TLFPTimer;
-    LTag: TbbScrollLabel;
-    LRadioIcyName: TbbScrollLabel;
-    LRadioName: TbbScrollLabel;
     PnlMain: TPanel;
     // Equalizer stuff
     PEqualizer: TPanel;
@@ -467,8 +467,10 @@ function GetStreamType(cType: DWORD): Integer;
 begin
   result:= UNK_STRM;
   case cType of
+    {$IFDEF WINDOWS}
     BASS_CTYPE_STREAM_WMA: result:= WMA_STRM;
     BASS_CTYPE_STREAM_WMA_MP3: result:= WMA_MP3_STRM;
+    {$ENDIF}
     BASS_CTYPE_STREAM_MP3: result:= MP3_STRM;
     BASS_CTYPE_STREAM_OGG: result:= OGG_STRM;
     BASS_CTYPE_STREAM_AAC: result:= AAC_STRM;
@@ -599,7 +601,11 @@ begin
      end else
      // try WMA tags
      begin
+       {$IFDEF WINDOWS}
        meta:= BASS_ChannelGetTags(Chan, BASS_TAG_WMA_META);
+       {$ELSE}
+       meta:= nil;
+       {$ENDIF}
         if meta <> nil then
         begin
           p := Pos('TEXT=', meta);
@@ -748,8 +754,9 @@ begin
       BitRate:= IcyTag.bitrate;
     end;
     RadioEvent.Connected:= Strm_Type;
+    {$IFDEF WINDOWS}
     if Strm_Type=WMA_STRM then BASS_ChannelSetSync(chan, BASS_SYNC_WMA_META, 0, SYNCPROC(@MetaSync), nil)
-    else BASS_ChannelSetSync(chan, BASS_SYNC_META, 0, SYNCPROC(@MetaSync), nil); ;
+    else {$ENDIF} BASS_ChannelSetSync(chan, BASS_SYNC_META, 0, SYNCPROC(@MetaSync), nil); ;
     if Bitrate = 0 then Bitrate:= (ByteSec*745) div 1024000 ;
     RadioEvent.Bitrate:= Bitrate;
     RadioEvent.Hint:= HintStr;
@@ -942,7 +949,7 @@ begin
     s:= RadioEvent.Name;
     if length(s)< 2 then s:= ' '; //Caption;
     LRadioIcyName.Caption:= TrimLeft(UTF8ToAnsi(s));
-  end else
+   end else
   begin
     if length(RadioEvent.Name)> 0 then
     begin
@@ -997,6 +1004,7 @@ end;
 procedure TFWebRadioMain.FormCreate(Sender: TObject);
 var
   s: String;
+  x: Integer; // linux var don't remove
 begin
   // install memory font DotMatrix before creating components
   // to be sure the font will be available for them
@@ -1046,7 +1054,7 @@ begin
     CRLF := #10;
     LangStr := GetEnvironmentVariable('LANG');
     // Music folder
-    MusicPath:= UserPath+PathDelim+Music+PathDelim;
+    MusicPath:= UserPath+PathDelim+'Music'+PathDelim;
     if not DirectoryExists(MusicPath) then
     MusicPath:= '';
     x := pos('.', LangStr);
@@ -1253,7 +1261,11 @@ begin
     ShowMessage(Format(sErrBassVersion, [LineEnding]));
     exit;
   end;
-  if (not BASS_Init(-1, 44100, 0, Handle, nil)) then
+ {$IFDEF WINDOWS}
+    if (not BASS_Init(-1, 44100, 0, 0, nil)) then
+ {$ELSE}
+   if (not BASS_Init(-1, 44100, 0, nil, nil)) then
+ {$ENDIF}
   begin
     ShowMessage(BassErrArr[BASS_ERROR_INIT]);
     exit;
@@ -1896,8 +1908,7 @@ begin
     // Get encoding format
     TRB:= FindComponent('RB'+Settings.Encoding) as TRadioButton;
     if TRB <> nil then TRB.Checked:= true;
-    // Disable bitrate and sampling settings in WAV recording, as Windows
-    // display its own dialog box.
+    // Disable bitrate and sampling settings in WAV recording,
     RBEnCodingChange(nil);
     // Get sampling frequency
     for i:= 0 to CBSampling.Items.Count-1 do
@@ -2029,11 +2040,7 @@ begin
     end;
     if rectype='WAV' then
     begin
-      acmformlen:=BASS_Encode_GetACMFormat(0, nil, 0, nil, 0); // get suggested format buffer size
-      acmForm := AllocMem(acmFormLen);
-      //acmForm^.wFormatTag := 1 ; //WAVE_FORMAT_PCM;
-      BASS_Encode_GetACMFormat(Chan, acmForm, acmFormLen, nil, BASS_ACM_DEFAULT);
-      if BASS_Encode_StartACMFile(chan, acmform, BASS_ENCODE_AUTOFREE, PChar(filename)) = 0 then
+      if BASS_Encode_Start(chan, PChar(filename), BASS_ENCODE_PCM, nil, nil)= 0 then
       begin
         ShowMessage(Format(ErrEncoding, [BASS_ErrorGetCode]));
         exit;
@@ -2273,7 +2280,7 @@ end;
 
 procedure TFWebRadioMain.PlayRadio (radio: TRadio);
 var
-  ThreadId: Cardinal;
+  ThreadId: {$IFDEF WINDOWS}Cardinal {$ELSE}QWORD{$ENDIF};
   url: String;
   //LastRadio: TRecord;
   MyBmp : TBGRAbitmap;
@@ -2405,6 +2412,7 @@ begin
   LangStr:=FSettings.Settings.LangStr;
   With LangFile do
     begin
+      {$IFDEF WINDOWS}
       with OsVersion do
       begin
         ProdStrs.Strings[1]:= ReadString(LangStr,'Home','Famille'); ;
@@ -2421,6 +2429,7 @@ begin
           Win11Strs.Strings[i]:= A[0]+'='+ReadString(LangStr,A[0],A[1]);
         end;
       end;
+      {$ENDIF}
       // Form
       DefaultCaption:= ReadString(LangStr, 'DefaultCaption', Caption);
       OKBtn:= ReadString(LangStr, 'OKBtn','OK');

@@ -533,12 +533,12 @@ begin
   Settings.FDisplayText:= clYellow;
   Settings.GenBack:= clDefault;
   Settings.GenText:= clDefault;
-  RBWAV.Visible:= false;
-  RBWAV.Enabled:= false;
-  {$IFDEF WINDOWS}
-    RBWAV.Visible:= true;
-    RBWAV.Enabled:= true;
-  {$ENDIF}
+  //RBWAV.Visible:= false;
+  //RBWAV.Enabled:= false;
+  //{$IFDEF WINDOWS}
+  //  RBWAV.Visible:= true;
+  //  RBWAV.Enabled:= true;
+  //{$ENDIF}
   CBFonts.Items:= Screen.Fonts;
   CBFonts.Items.Add('DotMatrix');
 
@@ -559,18 +559,24 @@ procedure TFSettings.RBEnCodingChange(Sender: TObject);
 begin
   if RBMP3.checked or RBOGG.checked then
   begin
-    CBBitrate.Enabled:= true;
-    CBSampling.Enabled:= true;
+    LBitrate.Visible:= true;
+    CBBitrate.visible:= true;
+    LSampling.Visible:= true;
+    CBSampling.visible:= true;
   end;
   if RBAAC.checked or RBOGG.checked then
   begin
-    CBBitrate.Enabled:= true;
-    CBSampling.Enabled:= false;
+    LBitrate.Visible:= true;
+    CBBitrate.visible:= true;
+    LSampling.Visible:= false;
+    CBSampling.visible:= false;
   end;
   if RBWAV.checked or RBNATIVE.checked then
   begin
-    CBBitrate.Enabled:= false;
-    CBSampling.Enabled:= false;
+    LBitrate.Visible:=  false;
+    CBBitrate.visible:= false;
+    LSampling.Visible:= false;
+    CBSampling.visible:= false;
   end;
 end;
 

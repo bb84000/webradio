@@ -1,7 +1,7 @@
 object FRadios: TFRadios
-  Left = 740
+  Left = 869
   Height = 257
-  Top = 227
+  Top = 388
   Width = 607
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
