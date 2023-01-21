@@ -122,4 +122,8 @@ Version 0.9.1.0 - 22/12/2022
 Version 0.9.2.0 - 05/01/2023
 - Uses new TbbScrollLabel label, old one removed due to compatibility issues
 
+Version 1.0.0.1 - 21/01/2023
+- Changed unique language file to multiple language files in "lang" directory
+- Cosmetic changes
+
 

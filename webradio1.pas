@@ -1,6 +1,6 @@
 {*******************************************************************************
   Webradio1 : main unit code
-  bb - sdtp - december 2022
+  bb - sdtp - January 2023
   Using Un4seen BASS libraries www.un4seen.com
 *******************************************************************************}
 
@@ -17,9 +17,9 @@ Win32Proc, windows,
 Graphics, Dialogs, ExtCtrls, StdCtrls, Menus, lazd_bass, lazd_bass_wma,
 lazd_bass_aac, lazd_bassenc, lazd_bassenc_mp3, lazd_bassenc_aac,
 lazd_bassenc_ogg, lazd_bass_flac, lazbbcontrols, lazbbscrollcontrols,
-lazbbtrackbar, lazbbOsVersion, settings1, radios1, lazbbutils, lazUTF8,
+lazbbtrackbar, lazbbOsVersion, settings1, radios1, lazbbutils, lazUTF8, FileUtil,
 lazbbinifiles, registry, lazbbaboutdlg, lazbbautostart, lazbbResources,
-lazbbLabelScroll, ComCtrls, Buttons, ColorSpeedButton, UniqueInstance, fptimer,
+ComCtrls, Buttons, ColorSpeedButton, UniqueInstance, fptimer,
 variants, BGRABitmap, BGRABitmapTypes, LazFileUtils, Types;
 
 const
@@ -157,8 +157,8 @@ type
   { TFWebRadioMain }
 
   TFWebRadioMain = class(TForm)
-    LRadioIcyName: TbbScrollLabel;
     LTag: TbbScrollLabel;
+    LRadioIcyName: TbbScrollLabel;
     LRadioName: TbbScrollLabel;
     OsVersion: TbbOsVersion;
     PMnuSearchRadios: TMenuItem;
@@ -1084,9 +1084,11 @@ begin
      PluginsDir:= WRExecPath+PathDelim+'Plugins'+PathDelim;
   {$ENDIF}
   // Chargement des chaînes de langue...
-  LangFile := TBbIniFile.Create(WRExecPath + LowerCase(ProgName)+'.lng');
-  version := GetVersionInfo.ProductVersion;
+  //LangFile := TBbIniFile.Create(WRExecPath + LowerCase(ProgName)+'.lng');
+    // Loading default language file..
+  LangFile:= TBbIniFile.Create(ExtractFilePath(Application.ExeName) + 'lang'+PathDelim+'fr.lng');
   LangNums := TStringList.Create;
+  version := GetVersionInfo.ProductVersion;
   WebRadioAppsData := UserAppsDataPath + PathDelim + ProgName + PathDelim;
   if not DirectoryExists(WebradioAppsData) then CreateDir(WebRadioAppsData);
   if not DirectoryExists(WebRadioAppsData + PathDelim + 'images') then
@@ -1134,8 +1136,6 @@ begin
      end;
   end;
 end;
-
-
 
 // Intercept minimize system system command to correct
 // wrong window placement on restore from tray
@@ -1335,7 +1335,7 @@ begin
   AboutBox.LProductName.Caption := GetVersionInfo.FileDescription;
   AboutBox.LCopyright.Caption := GetVersionInfo.CompanyName + ' - ' + DateTimeToStr(CompileDateTime);
   AboutBox.LVersion.Caption := 'Version: ' + Version + ' (' + OS + OSTarget + ')';
-  AboutBox.LUpdate.Hint := AboutBox.sLastUpdateSearch + ': ' + DateToStr(FSettings.Settings.LastUpdChk);
+  //AboutBox.LUpdate.Hint := AboutBox.sLastUpdateSearch + ': ' + DateToStr(FSettings.Settings.LastUpdChk);   //In modlangue
   AboutBox.Version:= Version;
   AboutBox.ProgName:= ProgName;
 
@@ -1477,8 +1477,27 @@ end;
 procedure TFWebRadioMain.ChangeColors;
 begin
   PnlDisplay.Color:= FSettings.Settings.DisplayBack;
+  LStereo.Color:= FSettings.Settings.DisplayBack;
+  LEqualizer.Color:= FSettings.Settings.DisplayBack;
+  LBitrateFrequ.Color:= FSettings.Settings.DisplayBack;
+  LPause.Color:= FSettings.Settings.DisplayBack;
+  LRecording.Color:= FSettings.Settings.DisplayBack;
+  LStatus.Color:= FSettings.Settings.DisplayBack;
+  LRadioName.Color:= FSettings.Settings.DisplayBack;
+  LRadioIcyName.Color:= FSettings.Settings.DisplayBack;
+  LTag.Color:= FSettings.Settings.DisplayBack;
+
   PnlDisplay.Font.Color:= FSettings.Settings.DisplayText;
+  LStereo.Font.Color:= FSettings.Settings.DisplayText;
+  LEqualizer.Font.Color:= FSettings.Settings.DisplayText;
+  LBitrateFrequ.Font.Color:= FSettings.Settings.DisplayText;
+  LPause.Font.Color:= FSettings.Settings.DisplayText;
+  LRecording.Font.Color:= FSettings.Settings.DisplayText;
+  LStatus.Font.Color:= FSettings.Settings.DisplayText;
   LRadioName.Font.Color:= FSettings.Settings.DisplayText;
+  LRadioIcyName.Font.Color:= FSettings.Settings.DisplayText;
+  LTag.Font.Color:= FSettings.Settings.DisplayText;
+
   SignalMeterL.ColorFore:= FSettings.Settings.DisplayText;
   SignalMeterR.ColorFore:= FSettings.Settings.DisplayText;
   Color:= FSettings.Settings.GenBack;
@@ -1522,7 +1541,7 @@ begin
     end;
      // Détermination de la langue (si pas dans settings, langue par défaut)
     if Settings.LangStr = '' then Settings.LangStr := LangStr;
-    LangFile.ReadSections(LangNums);
+    {LangFile.ReadSections(LangNums);
     if LangNums.Count > 1 then
     begin
       CBLangue.Clear;;
@@ -1536,7 +1555,23 @@ begin
           FSettings.CBLangue.ItemIndex:= i;
         end;
       end;
+    end;}
+     try
+    FindAllFiles(LangNums, ExtractFilePath(Application.ExeName) + 'lang', '*.lng', true); //find all language files
+    if LangNums.count > 0 then
+    begin
+      for i:= 0 to LangNums.count-1 do
+      begin
+        LangFile:= TBbInifile.Create(LangNums.Strings[i]);
+        LangNums.Strings[i]:= TrimFileExt(ExtractFileName(LangNums.Strings[i]));
+        FSettings.CBLangue.Items.Add(LangFile.ReadString(LangNums.Strings[i], 'Language', 'Inconnu'));
+        if LangNums.Strings[i] = Settings.LangStr then LangFound := True;
+      end;
     end;
+  except
+    LangFound := false;
+  end;
+
     // Si la langue n'est pas traduite, alors on passe en Anglais
     if not LangFound then
     begin
@@ -1881,7 +1916,9 @@ begin
     RBMP3.Enabled:= bBassencMp3Loaded;
     RBAAC.Enabled:= bBassencAacLoaded;
     RBOGG.Enabled:= bBassencOggLoaded;
-    if LangNums.Count > 1 then
+    CBLangue.ItemIndex := LangNums.IndexOf(Settings.LangStr);
+    oldlng := FSettings.CBLangue.ItemIndex;
+   { if LangNums.Count > 1 then
     begin
       CBLangue.Clear;;
       for i := 0 to LangNums.Count - 1 do
@@ -1895,7 +1932,7 @@ begin
           oldlng:= i;
         end;
       end;
-    end;
+    end; }
     for i:= 0 to CBFonts.Items.Count-1 do
     begin
       if CBFonts.Items[i]=LRadioName.Font.Name then
@@ -2408,10 +2445,17 @@ procedure TFWebRadioMain.ModLangue;
 var
   i: Integer;
   A: TStringArray;
+  prgName: String;
 begin
   LangStr:=FSettings.Settings.LangStr;
+  // Get selected language file
+  LangFile:= TBbIniFile.Create(ExtractFilePath(Application.ExeName) + 'lang'+PathDelim+LangStr+'.lng');
+
   With LangFile do
     begin
+      prgName:= ReadString(LangStr, 'ProgName', 'Erreur');
+      if prgName<>ProgName then
+      ShowMessage('Fichier de langue erroné. Réinstallez le programme');
       {$IFDEF WINDOWS}
       with OsVersion do
       begin
@@ -2515,6 +2559,7 @@ begin
         if AboutBox.NewVersion then AboutBox.LUpdate.Caption:= Format(AboutBox.sUpdateAvailable, [AboutBox.LastVersion])
         else AboutBox.LUpdate.Caption:= AboutBox.sNoUpdateAvailable;
       end;
+      AboutBox.LUpdate.Hint:= AboutBox.sLastUpdateSearch + ': ' + DateToStr(FSettings.Settings.LastUpdChk);
       HelpFile:= WRExecPath+'help'+PathDelim+ReadString(LangStr,'HelpFile', 'webradio.html');
 
       // Alert

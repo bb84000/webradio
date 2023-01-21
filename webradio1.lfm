@@ -49,7 +49,10 @@ object FWebRadioMain: TFWebRadioMain
         AutoSize = False
         Caption = 'Stéréo'
         Color = clBlack
+        Font.Color = clYellow
         ParentColor = False
+        ParentFont = False
+        ParentShowHint = False
         Transparent = False
       end
       object LEqualizer: TLabel
@@ -58,9 +61,12 @@ object FWebRadioMain: TFWebRadioMain
         Top = 85
         Width = 60
         AutoSize = False
-        Caption = 'Egaliseur'
+        Caption = 'Egalizer'
         Color = clBlack
+        Font.Color = clYellow
         ParentColor = False
+        ParentFont = False
+        ParentShowHint = False
         Transparent = False
         Visible = False
       end
@@ -70,9 +76,12 @@ object FWebRadioMain: TFWebRadioMain
         Top = 85
         Width = 60
         AutoSize = False
-        Caption = 'LBitrateFrequ'
+        Caption = 'Bitrate'
         Color = clBlack
+        Font.Color = clYellow
         ParentColor = False
+        ParentFont = False
+        ParentShowHint = False
         Transparent = False
       end
       object LPause: TLabel
@@ -83,7 +92,10 @@ object FWebRadioMain: TFWebRadioMain
         AutoSize = False
         Caption = 'Pause'
         Color = clBlack
+        Font.Color = clYellow
         ParentColor = False
+        ParentFont = False
+        ParentShowHint = False
         Transparent = False
       end
       object LRecording: TLabel
@@ -94,7 +106,10 @@ object FWebRadioMain: TFWebRadioMain
         AutoSize = False
         Caption = 'Recording'
         Color = clBlack
+        Font.Color = clYellow
         ParentColor = False
+        ParentFont = False
+        ParentShowHint = False
         Transparent = False
       end
       object ImgLogo: TImage
@@ -6147,7 +6162,10 @@ object FWebRadioMain: TFWebRadioMain
         AutoSize = False
         Caption = 'Connexion'
         Color = clBlack
+        Font.Color = clYellow
         ParentColor = False
+        ParentFont = False
+        ParentShowHint = False
         ShowAccelChar = False
         Transparent = False
       end
@@ -6156,71 +6174,50 @@ object FWebRadioMain: TFWebRadioMain
         Height = 30
         Top = 16
         Width = 380
-        Alignment = taLeftJustify
         AutoSize = False
         Caption = 'ScrollButton'
         Color = clBlack
         Font.Color = clYellow
-        Font.Height = -24
-        Font.Name = 'DotMatrix'
-        Layout = tlTop
         ParentColor = False
         ParentFont = False
         ParentShowHint = False
         ShowHint = True
         Transparent = False
         ScrollAutoString = '...'
-        ScrollDirection = sdLeftToRight
-        SCrollGraph = True
-        Scrolling = True
-        ScrollStep = 1
-      end
-      object LTag: TbbScrollLabel
-        Left = 85
-        Height = 17
-        Top = 63
-        Width = 380
-        Alignment = taLeftJustify
-        AutoSize = False
-        Caption = 'ScrollButton'
-        Color = clBlack
-        Font.Color = clYellow
-        Layout = tlTop
-        ParentBidiMode = False
-        ParentColor = False
-        ParentFont = False
-        ParentShowHint = False
-        ShowAccelChar = False
-        ShowHint = True
-        Transparent = False
-        ScrollAutoString = '...'
-        ScrollDirection = sdLeftToRight
-        SCrollGraph = True
-        Scrolling = True
-        ScrollStep = 1
       end
       object LRadioIcyName: TbbScrollLabel
         Left = 85
         Height = 17
         Top = 44
         Width = 380
-        Alignment = taLeftJustify
         AutoSize = False
-        Caption = 'ScrollButton'
+        Caption = 'LRadioIcyName'
         Color = clBlack
         Font.Color = clYellow
-        Layout = tlTop
-        ParentBidiMode = False
+        Font.Height = -13
         ParentColor = False
         ParentFont = False
         ParentShowHint = False
         ShowHint = True
         Transparent = False
         ScrollAutoString = '...'
-        ScrollDirection = sdLeftToRight
-        SCrollGraph = True
-        Scrolling = True
-        ScrollStep = 1
+      end
+      object LTag: TbbScrollLabel
+        Left = 85
+        Height = 17
+        Top = 63
+        Width = 380
+        AutoSize = False
+        Caption = 'LTag'
+        Color = clBlack
+        Font.Color = clYellow
+        Font.Height = -13
+        ParentColor = False
+        ParentFont = False
+        ParentShowHint = False
+        ShowHint = True
+        Transparent = False
+        ScrollAutoString = '...'
       end
     end
     object PnlPresets: TPanel

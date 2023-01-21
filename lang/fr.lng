@@ -1,0 +1,244 @@
+;Fichier de langue
+;Il est possibled e créer un fichier de langue en utilisant l'ID de langue comme nom (exemple it.lng)
+;Danois	[da], Néerlandais [nl], Finois [fi], Allemand [de], Grec [el], Hongrois [hu]
+;Islandais [is], Italien [it], Norvégien [no], Polonais [pl], Portugais [pt]
+;Russe [ru], Serbo Croate [sr], Slovaque [sk], Suedois [sv], Turc [tr]
+
+; Le nom de la section doit être le même que celui du fichier : [fr] pour le fichier fr.lng
+; ProgName doit correspondre à la variable du même nom dans le code de l'application
+
+; Sauvegardez votre fichier, il peut être remplacé ou effacé lors d'une msie à jour !
+
+;proposez votre traduction sur GitHub
+
+;Français
+[fr]
+;General
+ProgName=WebRadio
+Language=Français
+DefaultCaption=Tuner radio Web
+OKBtn=OK
+YesBtn=Oui
+NoBtn=Non
+CancelBtn=Annuler
+sStereoCaption=Stéréo
+sMonoCaption=Mono
+sRecordingCaption=Enregistrement
+sPauseCaption=Pause
+sStopCaption=Stoppé
+LLeft.Caption=G
+LRight.Caption=D
+LLeft.Hint=Voie gauche
+LRight.Hint=Voie droite
+LEqualizer.Caption=Egaliseur
+sMuteHint=Cliquer pour couper le son
+sMutedHint=Cliquer pour rétablir le son
+sMuteMenu=Couper le son
+sMutedMenu=Rétablir le son
+sMnuDeletePreset=Supprimer la présélection %s
+sNopreset=Cliquez sur le bouton droit de la souris pour attribuer une radio à ce bouton
+sNoradio=Aucune radio sélectionnée
+sRecordingHint=Cliquer pour enregistrer la radio
+sStopRecordingHint=Cliquer pour arrêter l'enregistrement
+sNoLongerChkUpdates=Ne plus rechercher de mises à jour
+sCannotGetNewVer=Recherche de nouvelle version impossible
+sUpdateAlertBox=Version actuelle : %sUne nouvelle version %s est disponible
+sConnectStr=Connexion...
+sLoadStr=Chargement de
+sBufferStr=Mise en buffer
+sConnectedStr=Connecté
+sNotConnectedStr=Non connecté
+sEnterUrl=Saisir l'URL d'une radio
+sUse64bit=Utilisez la version 64 bits de ce programme
+ODAudio.Title=Ouvrir un fichier audio
+sShowEqualizer=Afficher l''égaliseur
+sHideEqualizer=Masquer l''égaliseur
+
+;Menus
+PMnuOpenRadio.Caption=Ouvrir une radio dans la liste
+PMnuRadList.Caption=Liste des radios
+PMnuOpenURL.Caption=Ouvrir un Url de radio
+PMnuSearchRadios.Caption=Rechercher des radios
+PMnuEqualizer.Caption=Egaliseur
+PMnuReadFile.Caption=Lire un fichier audio
+PMnuSettings.Caption=Préférences
+PMnuHelp.Caption=Aide
+PMnuAbout.Caption=A propos du Tuner radio web
+PMnuQuit.Caption=Quitter
+PMnuChooseRadio.Caption=Choisir une radio dans la liste
+PMnuDeletePreset.Caption=Supprimer la présélection %s
+PTMnuRestore.Caption=Restaurer
+PTMnuIconize.Caption=Réduire
+PMnuChooseRadio.Caption=Choiosr dans la liste des radios
+
+;About
+Aboutbox.Caption=A propos de Radio Web
+AboutBox.LUpdate.Caption=Recherche de mise à jour
+AboutBox.UpdateAvailable=Nouvelle version %s disponible. Cliquer pour la télécharger
+AboutBox.NoUpdateAvailable=Le Tuner radio Web est à jour.
+AboutBox.LastUpdateSearch=Dernière recherche de mise à jour
+AboutBox.LProgPage.Caption=Page d'accueil du programme
+AboutBox.UrlProgSite=https://github.com/bb84000/webradio/wiki/Accueil
+AboutBox.LWebSite.Caption=Page d'accueil du site Web
+AboutBox.LSourceCode.Caption=Page Web du code source
+
+; Radios form
+FRadios.OPDLogo.Title=Sélectionner une image
+FRadios.sConfirmDeleteRadio=Voulez-vous vraiment supprimer la radio %s ?
+FRadios.sRadioBrowserUnavail=Sute Radio browser indisponible
+FRadios.sNoRadioFound=Aucune radio trouvée
+FRadios.SBAddRadio.Hint=Ajouter une radio
+FRadios.MnuAddRadio.Caption=Ajouter la radio
+FRadios.SBEditRadio.Hint=Modifier la radio sélectionnée
+FRadios.MnuEditRadio.Caption=Modifier la radio
+FRadios.SBDeleteRadio.Hint=Supprimer la radio sélectionnée
+FRadios.MnuDeleteRadio.Caption=Supprimer la radio
+FRadios.SBPlayRadio.Hint=Ecouter la radio sélectionnée
+Fradios.MnuPlayRadio.Caption=Ecouter la radio
+FRadios.BtnApply.Caption=Appliquer
+FRadios.BtnApply.Hint=Valider les modifications
+FRadios.BtnCancel.Hint=Annuler les modifications
+FRadios.SBSearchBrwRadio.Hint=Rechercher une radio
+FRadios.LLimit.Caption=Limite
+FRadios.LSearchName.Caption=Nom
+FRadios.LSearchCountry.Caption=Pays
+FRadios.Lname.Caption=Nom
+FRadios.LUrl.Caption=URL
+FRadios.LComment.Caption=Commentaire
+FRadios.LFavicon.Caption=Fichier logo
+FRadios.LPresets.Caption=Présélections
+FRadios.LRadioBrowser.Caption=Recherche effectuée sur radio-browser.info
+FRadios.EFavicon.Hint=Cliquez sur le bouton à droite de ce champ pour sélectionner une image
+
+CBEqualize.Caption=Activer l'égaliseur
+LReset.Caption=Remettre à zéro
+
+;Divers
+
+; Options form
+FSettings.Caption=Préférences du Tuner radio web
+FSettings.TPSystem.Caption=Système
+FSettings.TPEncode.Caption=Paramètres d'enregistrement
+FSettings.CBSavSizePos.Caption=Sauvegarder taille et position de la fenêtre
+FSettings.CBStartup.Caption=Lancer au démarrage du système
+FSettings.CBStartMini.Caption=Démarrer minimisé
+FSettings.CBNoChkNewVer.Caption=Ne pas rechercher de mise à jour
+FSettings.CBShowBtnBar.Caption=Afficher la barre de boutons
+FSettings.CBHideInTaskBar.Caption=Masquer l'icone dans la barre des tâches
+FSettings.LBitrate.Caption=Débit (Kbits/s)
+FSettings.LSampling.Caption=Echantillonnage (Hz)
+FSettings.LLangue.Caption=Langue
+FSettings.LDataFolder.Caption=Répertoire d'enregistrement
+FSettings.LFont.Caption=Police
+FSettings.CBFonts.Hint=Sélection de la police d'affichage du nom de la radio
+FSettings.LDisplayText.Caption=Texte de l'afficheur
+FSettings.LDisplayBack.Caption=Fond de l'afficheur
+FSettings.LGenText.Caption=Texte général
+FSettings.LGenBack.Caption=Fond général
+FSettings.TPColors.Caption=Couleurs
+FSettings.sMnuCopy=Copier
+FSettings.sMnuPaste=Coller
+FSettings.RBnative.Caption=NATIF
+
+// Errors
+sErrBassLoaded=Bibliothèque Bass non chargée.%sExécution du programme impossible
+sErrBassVersion=Mauvaise version de la bibliothèque Bass.%sExécution du programme impossible
+sErrBassencLoaded=Bibliothèque Bassenc non chargée.%sEnregistrement des radios impossible
+sErrBassEncodeVer=Mauvaise version de la bibliothèque BassEnc.%sEnregistrement des radios impossible
+sErrNoBassPLAY=La bibliothèque Bass%s n'est pas installée.%sLecture des flux %s impossible.
+sErrNoBassEnc=La bibliothèque BassEnc%s n'est pas installée.%sEnregistrement en %s de la radio impossible
+
+
+BASS_ERROR_MEM=Mémoire insuffisante
+BASS_ERROR_FILEOPEN=Ouverture du fichier ou du flux impossible
+BASS_ERROR_DRIVER=Erreur de driver
+BASS_ERROR_BUFLOST=Erreur de mémoire tampon
+BASS_ERROR_HANDLE=Handle invalide
+BASS_ERROR_FORMAT=Format d'échantillonnage non supporté
+BASS_ERROR_POSITION=Erreur de position
+BASS_ERROR_INIT=Erreur d'initialisation de la bibiliothèque BASS
+BASS_ERROR_START=La lecture est en pause ou arrêtée
+BASS_ERROR_SSL=Le suppport de SSL/HTTPS n'est pas disponible
+BASS_ERROR_ALREADY=Canal invalide ou non lié au handle
+BASS_ERROR_NOTAUDIO=Le fichier ne contient pas d'audio
+BASS_ERROR_NOCHAN=L'échantillon n'a pas de canal libre
+BASS_ERROR_ILLTYPE=L'élément n'est pas valide
+BASS_ERROR_ILLPARAM=Le paramètre n'est pas valide
+BASS_ERROR_NO3D=Fonctionenment 3D non suppporté
+BASS_ERROR_NOEAX=Fonctionnement EAX non supporté
+BASS_ERROR_DEVICE=Périphérique invalide
+BASS_ERROR_NOPLAY=Le canal n'est pas en cours de lecture
+BASS_ERROR_FREQ=Erreur de fréquence
+BASS_ERROR_NOTFILE=Le fichier ne contient pas de flux
+BASS_ERROR_NOHW=Matériel non trouvé
+BASS_ERROR_EMPTY=Le fichier ne contient pas de données d'échantillonnage
+BASS_ERROR_NONET=Pas de connexion Internet
+BASS_ERROR_CREATE=Le fichier audio n'a pas pu être créé
+BASS_ERROR_NOFX=L'effet demandé est indisponible
+BASS_ERROR_NOTAVAIL=Elément non disponible
+BASS_ERROR_DECODE=Le canal de décodage ne peut pas être lu
+BASS_ERROR_DX=Mauvaise version de DX
+BASS_ERROR_TIMEOUT=Le délai minimum est dépassé depuis la création du canal
+
+BASS_ERROR_UNKNOWN=Erreur inconnue
+
+ErrLoadStr=Erreur de chargement de
+
+ErrInvalidHnd=Handle invalide
+ErrInvalidDev=Périphérique invalide
+ErrTimeout=Délai dépassé
+
+ErrNetConnect=Erreur de connexion Internet
+
+ErrBassInit=Erreur d'initialisation de la bibiliothèque Bass
+ErrUnknown=Erreur inconnue
+ErrReading=Lecture de la radio impossible
+ErrWinVersion=Ce programme ne fonctionne pas avec cette version de Windows
+ErrUnsupportedEnc=Impossible d'enregistrer, encodage %s non supporté
+ErrEncoding=Erreur d'encodage %d
+
+
+;Http error messages
+SErrInvalidProtocol=Protocole "%s" invalide
+SErrReadingSocket=Erreur de lecture des données à partir du socket
+SErrInvalidProtocolVersion=Version de protocole invalide en réponse: %s
+SErrInvalidStatusCode=Code de statut de réponse invalide: %s
+SErrUnexpectedResponse=Code de statut de réponse non prévu: %s
+SErrChunkTooBig=Bloc trop grand
+SErrChunkLineEndMissing=Fin de ligne du bloc manquante
+SErrMaxRedirectsReached=Nombre maximum de redirections atteint: %s
+
+;Socket error messages
+strHostNotFound=Résolution du nom d'hôte pour "%s" impossible.
+strSocketCreationFailed=Echec de la création du socket: %s
+strSocketBindFailed=Echec de liaison du socket: %s
+strSocketListenFailed=Echec de l'écoute sur le port n° %s, erreur %s
+strSocketConnectFailed=Echec de la connexion à %s
+strSocketAcceptFailed=Connexion refusée d'un client sur le socket: %s, erreur %s
+strSocketAcceptWouldBlock=La connexion pourrait bloquer le socket: %s
+strSocketIOTimeOut=Impossible de fixer le timeout E/S à %s
+strErrNoStream=Flux du socket non assigné
+
+;lazbbosver
+Home=Famille
+Professional=Entreprise
+Server=Serveur
+00000=Version inconnue
+10240=v 1507 "Juillet 2015"
+10586=v 1511 "Novembre 2015"
+14393=v 1607 "Juillet 2016 (Màj Anniversaire)"
+15063=v 1703 "Avril 2017 (Màj Createurs)"
+16299=v 1709 "Octobre 2017(Màj Fall Créateurs)"
+17134=v 1803 "Avril 2018"
+17763=v 1809 "Octobre 2018"
+18362=v 1903 "Mai 2019"
+18363=v 1909 "Novembre 2019"
+19041=v 2004 "Mai 2020"
+19042=v 20H2 "Octobre 2020"
+19043=v 21H1 "Mai 2021"
+19044=v 21H2 "Octobre 2021"
+19045=v 22H2 "Octobre 2022"
+22000=v 21H2 "Octobre 2021 Version initiale"
+22621=v 22H2 "Septembre 2022"  
+
+

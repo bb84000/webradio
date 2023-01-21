@@ -1,0 +1,248 @@
+;Languages File
+;It is possible to create a new language file using its ID as name (example it.lng)
+;Danish	[da], Dutch [nl], Finnish [fi], German [de], Greek [el], Hungarian [hu]
+;Icelandic [is], Italian [it], Norwegian [no], Polish [pl], Portuguese [pt]
+;Russian [ru], Serbo Croatian [sr], Slovak [sk], Swedish [sv], Turkish [tr]
+
+; Section name must be the same as the file name : [en] for en.lng file
+; ProgName must be the same as defined in the application code
+
+; Save the file in a secure place as it can be replaced by any update !
+
+;Submit your translation on GitHub
+
+;English
+[en]
+;General
+ProgName=WebRadio
+Language=English
+DefaultCaption=Web radio tuner
+OKBtn=OK
+YesBtn=Yes
+NoBtn=No
+CancelBtn=Cancel
+sStereoCaption=Stereo
+sMonoCaption=Mono
+sRecordingCaption=Recording
+sPauseCaption=Pause
+sStopCaption=Stoped
+LLeft.Caption=L
+LRight.Caption=R
+LLeft.Hint=Left channel
+LRight.Hint=Right channel
+LEqualizer.Caption=Equalizer
+sMuteHint=Click to mute the sound
+sMutedHint=Click to unmute the sound
+sMuteMenu=Mute the sound
+sMutedMenu=Unmute the sound
+sNopreset=Click the rightr mouse button to assign a radio to this button
+sNoradio=No selected radio;
+sMnuDeletePreset=Delete the preset %s
+ODAudio.Title=Open an audio file
+sRecordingHint=Click to record the radio
+sStopRecordingHint=Click to stop recording
+sNoLongerChkUpdates=No longer check updates
+sUpdateAlertBox=Current version: %sA new version %s is available
+sCannotGetNewVer=New version check unavailable
+sConnectStr=Connecting...
+sLoadStr=Loading
+sBufferStr=Buffering
+sConnectedStr=Connected
+sNotConnectedStr=Not connected
+sEnterUrl=Enter a radio's URL
+sUse64bit=Use the 64bit version of the program
+sShowEqualizer=Display equalizer
+sHideEqualizer=Hide Equalizer
+CBEqualize.Caption=Enable the equalizer
+LReset.Caption=Reset levels
+
+;Menus
+PMnuOpenRadio.Caption=Open radio in the list
+PMnuReadFile.Caption=Open audio file
+PMnuOpenURL.Caption=Open radio Url
+PMnuSearchRadios.Caption=Search radios
+PMnuEqualizer.Caption=Equalizer
+PMnuSettings.Caption=Options
+PMnuRadList.Caption=Radios list
+PMnuHelp.Caption=Help
+PMnuAbout.Caption=About Web radio tuner
+PMnuQuit.Caption=Quit
+PMnuChooseRadio.Caption=Select in the radio's list
+PMnuDeletePreset.Caption=Delete preset %s
+PTMnuRestore.Caption=Restore
+PTMnuIconize.Caption=Minimize
+PMnuChooseRadio.Caption=Select in the radio list
+
+;About
+Aboutbox.Caption=About %s
+AboutBox.LUpdate.Caption=Search update
+AboutBox.UpdateAvailable=New version %s available. Click to download it
+AboutBox.NoUpdateAvailable=Web radio Tuner is up to date.
+AboutBox.LastUpdateSearch=Last update check
+AboutBox.LProgPage.Caption=Program home page
+AboutBox.UrlProgSite=https://github.com/bb84000/webradio/wiki
+AboutBox.LWebSite.Caption=Web site home page
+AboutBox.LSourceCode.Caption=Source code Web page
+
+; Radios form
+FRadios.OPDLogo.Title=Select an image
+FRadios.sConfirmDeleteRadio=Do you want really delete the radio %s ?
+FRadios.sRadioBrowserUnavail=Radio browser site unavailable
+FRadios.sNoRadioFound=No radio found
+FRadios.SBAddRadio.Hint=Add a radio
+FRadios.MnuAddRadio.Caption=Add radio
+FRadios.SBEditRadio.Hint=Edit the selected radio
+FRadios.MnuEditRadio.Caption=Edit the radio
+FRadios.SBDeleteRadio.Hint=Delete the selected radio
+FRadios.MnuDeleteRadio.Caption=Delete the radio
+FRadios.SBPlayRadio.Hint=Play selected radio
+Fradios.MnuPlayRadio.Caption=PLay the radio
+FRadios.BtnApply.Caption=Apply
+FRadios.BtnApply.Hint=Apply changes
+FRadios.BtnCancel.Hint=Cancel changes
+FRadios.SBSearchBrwRadio.Hint=Search radio
+FRadios.LLimit.Caption=Limit
+FRadios.LSearchName.Caption=Name
+FRadios.LSearchCountry.Caption=Country
+FRadios.Lname.Caption=Name
+FRadios.LUrl.Caption=URL
+FRadios.LComment.Caption=Comment
+FRadios.LFavicon.Caption=Logo file
+FRadios.LPresets.Caption=Presets
+FRadios.LRadioBrowser.Caption=Search done on radio-browser.info
+FRadios.EFavicon.Hint=Click on the button at the reight of tne field to select an image
+
+; Misc
+
+; Options form
+FSettings.Caption=Web Radio Tuner settings
+FSettings.TPSystem.Caption=System
+FSettings.TPEncode.Caption=Recording settings
+FSettings.CBSavSizePos.Caption=Save window size and position
+FSettings.CBStartup.Caption=Launch at system startup
+FSettings.CBStartMini.Caption=Start minimized
+FSettings.CBNoChkNewVer.Caption=No check for update
+FSettings.CBShowBtnBar.Caption=Display the buttons bar
+FSettings.CBHideInTaskBar.Captio=Hide icon in taskbar
+FSettings.LBitrate.Caption=Bitrate (Kbits/s)
+FSettings.LSampling.Caption=Sampling (Hz)
+FSettings.LLangue.Caption=Language
+FSettings.LDataFolder.Caption=Recording folder
+FSettings.LFont.Caption=Font
+FSettings.CBFonts.Hint=Select the font for radio name display
+FSettings.LDisplayText.Caption=Display text
+FSettings.LDisplayBack.Caption=Display background
+FSettings.LGenText.Caption=General text
+FSettings.LGenBack.Caption=General background
+FSettings.TPColors.Caption=Colors
+FSettings.sMnuCopy=Copy
+FSettings.sMnuPaste=Paste
+FSettings.RBnative.Caption=NATIVE
+
+
+
+;Errors
+sErrBassLoaded=Bass library not loaded.%sProgram execution impossible
+sErrBassVersion=Wrong version of Bass library.%sProgram execution impossible
+sErrBassencLoaded=Bassenc library not loaded.%sRadios recording not available
+sErrBassEncodeVer=The BassEncode library version is wrong.%s Recording is impossible.
+sErrNoBassPLAY=The Bass%s libray is not installed.%sCannot play %s streams.
+sErrNoBassEnc=The BassEnc%s library is not installed.%sCannot record in %s the playing radio
+
+BASS_ERROR_MEM=There is insufficient memory
+BASS_ERROR_FILEOPEN=Cannot open file or stream
+BASS_ERROR_DRIVER=Driver error
+BASS_ERROR_BUFLOST=Buffer error
+BASS_ERROR_HANDLE=Invalid handle
+BASS_ERROR_FORMAT=The sample format is not supported
+BASS_ERROR_POSITION=Position error
+BASS_ERROR_INIT=BASS library initialization error
+BASS_ERROR_START=The output is paused/stopped
+BASS_ERROR_SSL=SSL/HTTPS support is not available
+BASS_ERROR_ALREADY=Invalid or not linked to handle channel
+BASS_ERROR_NOTAUDIO=The file does not contain audio,
+BASS_ERROR_NOCHAN=The sample has no free channels
+BASS_ERROR_ILLTYPE=Invalid element
+BASS_ERROR_ILLPARAM=Invalid parameter
+BASS_ERROR_NO3D=The channel does not have 3D functionality
+BASS_ERROR_NOEAX=EAX functionality not supported
+BASS_ERROR_DEVICE=INvalid device
+BASS_ERROR_NOPLAY=The channel is not playing
+BASS_ERROR_FREQ=Frequency error
+BASS_ERROR_NOTFILE=The file does'nt contain stream
+BASS_ERROR_NOHW=Hardware not found
+BASS_ERROR_EMPTY=The file does'nt contain sample data
+BASS_ERROR_NONET=No Internet connection
+BASS_ERROR_CREATE=The audio file could not be created.
+BASS_ERROR_NOFX=The specified DX8 effect is unavailable
+BASS_ERROR_NOTAVAIL=Elemlent not available
+BASS_ERROR_DECODE=The channel is not playable; it is a "decoding channel".
+BASS_ERROR_DX=Wrong DX8 version
+BASS_ERROR_TIMEOUT=The sample's minimum time gap has not yet passed since the last channel was created.
+BASS_ERROR_FILEFORM=Invalid file format
+BASS_ERROR_SPEAKER=The specified SPEAKER flags are invalid
+BASS_ERROR_VERSION=The plugin requires a different BASS version
+BASS_ERROR_CODEC=Codec not available
+BASS_ERROR_ENDED=The channel has reached the end
+BASS_ERROR_BUSY=The deviece is busy
+BASS_ERROR_UNSTREAMABLE=Cannote create stream
+BASS_ERROR_UNKNOWN=Unknown error
+
+ErrLoadStr=Erreur loading
+ErrInvalidHnd=Invalid handle
+ErrInvalidDev=Invalide device
+ErrTimeout=Timeout
+
+ErrNetConnect=Internet connection error
+
+ErrUnknown=Unknown error
+ErrReading=Unable to play radio
+ErrWinVersion=The program cannot operate with this Windows' version
+
+ErrUnsupportedEnc=Cannot record, %s encoding not supported
+ErrEncoding=Encoding error # %d
+
+
+;Http error messages
+SErrInvalidProtocol=Invalid protocol "%s"
+SErrReadingSocket=Error reading data from socket
+SErrInvalidProtocolVersion=Invalid protocol version in response: %s
+SErrInvalidStatusCode=Invalid response status code: %s
+SErrUnexpectedResponse=Unexpected response status code: %s
+SErrChunkTooBig=Chunk too big
+SErrChunkLineEndMissing=Chunk line end missing
+SErrMaxRedirectsReached=Maximum allowed redirects reached: %s
+
+;Socket error messages
+strHostNotFound=Host name resolution for "%s" failed.
+strSocketCreationFailed=Creation of socket failed: %s
+strSocketBindFailed=Binding of socket failed: %s
+strSocketListenFailed=Listening on port #%s failed, error: %s
+strSocketConnectFailed=Connect to %s failed
+strSocketAcceptFailed=Could not accept a client connection on socket: %s, error %s
+strSocketAcceptWouldBlock=Accept would block on socket: %s
+strSocketIOTimeOut=Failed to set IO Timeout to %s
+strErrNoStream=Socket stream not assigned
+
+;lazbbosver
+Home=Home
+Professional=Professional
+Server=Server
+00000=Unknown version
+10240=v 1507 "July 2015 update"
+10586=v 1511 "November 2015 update"
+14393=v 1607 "July 2016 (Anniversary update)"
+15063=v 1703 "April 2017 (Creators update)"
+16299=v 1709 "October 2017 (Fall Creators update)"
+17134=v 1803 "April 2018 update"
+17763=v 1809 "October 2018 update"
+18362=v 1903 "May 2019 update"
+18363=v 1909 "November 2019 update"
+19041=v 2004 "May 2020 update"
+19042=v 20H2 "October 2020 update"
+19043=v 21H1 "May 2021 updsate"
+19044=v 21H2 "October 2021 update"
+19045=v 22H2 "October 2022 update"
+22000=v 21H2 "October 2021 Initial Version"
+22621=v 22H2 "September 2022 update" 
+

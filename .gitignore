@@ -2,6 +2,7 @@ backup/**
 lib/**
 plugins/**
 *.dll
+lang/backup/**
 webradiowin64.exe
 webradiowin32.exe
 InstallWebradio.exe
