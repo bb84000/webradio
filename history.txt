@@ -126,4 +126,7 @@ Version 1.0.0.1 - 21/01/2023
 - Changed unique language file to multiple language files in "lang" directory
 - Cosmetic changes
 
+Version 1.0.0.2 - 24/01/2023
+- Self translation of different application's forms
+
 

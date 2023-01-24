@@ -789,6 +789,8 @@ object FRadios: TFRadios
       }
       NumGlyphs = 2
       OnClick = BtnApplyClick
+      ParentShowHint = False
+      ShowHint = True
       Spacing = 2
       TabOrder = 1
     end
@@ -869,6 +871,8 @@ object FRadios: TFRadios
       }
       NumGlyphs = 2
       OnClick = BtnCancelClick
+      ParentShowHint = False
+      ShowHint = True
       Spacing = 2
       TabOrder = 2
     end

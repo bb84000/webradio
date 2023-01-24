@@ -12,15 +12,20 @@
 ;Submit your translation on GitHub
 
 ;English
-[en]
-;General
-ProgName=WebRadio
+
+[common]
 Language=English
+ProgName=WebRadio
+ProgErr=Wrong language file. Reinstall program
 DefaultCaption=Web radio tuner
 OKBtn=OK
 YesBtn=Yes
 NoBtn=No
 CancelBtn=Cancel
+ApplyBtn=Apply
+
+[main]
+;General
 sStereoCaption=Stereo
 sMonoCaption=Mono
 sRecordingCaption=Recording
@@ -73,75 +78,23 @@ PTMnuRestore.Caption=Restore
 PTMnuIconize.Caption=Minimize
 PMnuChooseRadio.Caption=Select in the radio list
 
-;About
-Aboutbox.Caption=About %s
-AboutBox.LUpdate.Caption=Search update
-AboutBox.UpdateAvailable=New version %s available. Click to download it
-AboutBox.NoUpdateAvailable=Web radio Tuner is up to date.
-AboutBox.LastUpdateSearch=Last update check
-AboutBox.LProgPage.Caption=Program home page
-AboutBox.UrlProgSite=https://github.com/bb84000/webradio/wiki
-AboutBox.LWebSite.Caption=Web site home page
-AboutBox.LSourceCode.Caption=Source code Web page
-
-; Radios form
-FRadios.OPDLogo.Title=Select an image
-FRadios.sConfirmDeleteRadio=Do you want really delete the radio %s ?
-FRadios.sRadioBrowserUnavail=Radio browser site unavailable
-FRadios.sNoRadioFound=No radio found
-FRadios.SBAddRadio.Hint=Add a radio
-FRadios.MnuAddRadio.Caption=Add radio
-FRadios.SBEditRadio.Hint=Edit the selected radio
-FRadios.MnuEditRadio.Caption=Edit the radio
-FRadios.SBDeleteRadio.Hint=Delete the selected radio
-FRadios.MnuDeleteRadio.Caption=Delete the radio
-FRadios.SBPlayRadio.Hint=Play selected radio
-Fradios.MnuPlayRadio.Caption=PLay the radio
-FRadios.BtnApply.Caption=Apply
-FRadios.BtnApply.Hint=Apply changes
-FRadios.BtnCancel.Hint=Cancel changes
-FRadios.SBSearchBrwRadio.Hint=Search radio
-FRadios.LLimit.Caption=Limit
-FRadios.LSearchName.Caption=Name
-FRadios.LSearchCountry.Caption=Country
-FRadios.Lname.Caption=Name
-FRadios.LUrl.Caption=URL
-FRadios.LComment.Caption=Comment
-FRadios.LFavicon.Caption=Logo file
-FRadios.LPresets.Caption=Presets
-FRadios.LRadioBrowser.Caption=Search done on radio-browser.info
-FRadios.EFavicon.Hint=Click on the button at the reight of tne field to select an image
-
-; Misc
-
-; Options form
-FSettings.Caption=Web Radio Tuner settings
-FSettings.TPSystem.Caption=System
-FSettings.TPEncode.Caption=Recording settings
-FSettings.CBSavSizePos.Caption=Save window size and position
-FSettings.CBStartup.Caption=Launch at system startup
-FSettings.CBStartMini.Caption=Start minimized
-FSettings.CBNoChkNewVer.Caption=No check for update
-FSettings.CBShowBtnBar.Caption=Display the buttons bar
-FSettings.CBHideInTaskBar.Captio=Hide icon in taskbar
-FSettings.LBitrate.Caption=Bitrate (Kbits/s)
-FSettings.LSampling.Caption=Sampling (Hz)
-FSettings.LLangue.Caption=Language
-FSettings.LDataFolder.Caption=Recording folder
-FSettings.LFont.Caption=Font
-FSettings.CBFonts.Hint=Select the font for radio name display
-FSettings.LDisplayText.Caption=Display text
-FSettings.LDisplayBack.Caption=Display background
-FSettings.LGenText.Caption=General text
-FSettings.LGenBack.Caption=General background
-FSettings.TPColors.Caption=Colors
-FSettings.sMnuCopy=Copy
-FSettings.sMnuPaste=Paste
-FSettings.RBnative.Caption=NATIVE
-
-
-
 ;Errors
+ErrLoadStr=Erreur loading
+ErrInvalidHnd=Invalid handle
+ErrInvalidDev=Invalide device
+ErrTimeout=Timeout
+
+ErrNetConnect=Internet connection error
+
+ErrUnknown=Unknown error
+ErrReading=Unable to play radio
+ErrWinVersion=The program cannot operate with this Windows' version
+
+ErrUnsupportedEnc=Cannot record, %s encoding not supported
+ErrEncoding=Encoding error # %d
+
+[BassErr]
+; Bass errors
 sErrBassLoaded=Bass library not loaded.%sProgram execution impossible
 sErrBassVersion=Wrong version of Bass library.%sProgram execution impossible
 sErrBassencLoaded=Bassenc library not loaded.%sRadios recording not available
@@ -188,21 +141,7 @@ BASS_ERROR_BUSY=The deviece is busy
 BASS_ERROR_UNSTREAMABLE=Cannote create stream
 BASS_ERROR_UNKNOWN=Unknown error
 
-ErrLoadStr=Erreur loading
-ErrInvalidHnd=Invalid handle
-ErrInvalidDev=Invalide device
-ErrTimeout=Timeout
-
-ErrNetConnect=Internet connection error
-
-ErrUnknown=Unknown error
-ErrReading=Unable to play radio
-ErrWinVersion=The program cannot operate with this Windows' version
-
-ErrUnsupportedEnc=Cannot record, %s encoding not supported
-ErrEncoding=Encoding error # %d
-
-
+[HttpErr]
 ;Http error messages
 SErrInvalidProtocol=Invalid protocol "%s"
 SErrReadingSocket=Error reading data from socket
@@ -212,7 +151,6 @@ SErrUnexpectedResponse=Unexpected response status code: %s
 SErrChunkTooBig=Chunk too big
 SErrChunkLineEndMissing=Chunk line end missing
 SErrMaxRedirectsReached=Maximum allowed redirects reached: %s
-
 ;Socket error messages
 strHostNotFound=Host name resolution for "%s" failed.
 strSocketCreationFailed=Creation of socket failed: %s
@@ -225,6 +163,7 @@ strSocketIOTimeOut=Failed to set IO Timeout to %s
 strErrNoStream=Socket stream not assigned
 
 ;lazbbosver
+[OSVersion]
 Home=Home
 Professional=Professional
 Server=Server
@@ -244,5 +183,68 @@ Server=Server
 19044=v 21H2 "October 2021 update"
 19045=v 22H2 "October 2022 update"
 22000=v 21H2 "October 2021 Initial Version"
-22621=v 22H2 "September 2022 update" 
+22621=v 22H2 "September 2022 update"
+
+[AboutBox]
+Caption=About %s
+sLastUpdateSearch=Last update check
+sUpdateAvailable=New version %s available. Click to download it
+sNoUpdateAvailable=%s is up to date.
+LUpdate.Caption=Search update
+LProgPage.Caption=Program home page
+UrlProgSite=/wiki
+LWebSite.Caption=Web site home page
+LSourceCode.Caption=Source code Web page
+
+[FSettings]
+Caption=%s settings
+TPSystem.Caption=System
+TPEncode.Caption=Recording settings
+CBSavSizePos.Caption=Save window size and position
+CBStartup.Caption=Launch at system startup
+CBStartMini.Caption=Start minimized
+CBNoChkNewVer.Caption=No check for update
+CBShowBtnBar.Caption=Display the buttons bar
+CBHideInTaskBar.Caption=Hide icon in taskbar
+LBitrate.Caption=Bitrate (Kbits/s)
+LSampling.Caption=Sampling (Hz)
+LLangue.Caption=Language
+LDataFolder.Caption=Recording folder
+LFont.Caption=Font
+CBFonts.Hint=Select the font for radio name display
+TPColors.Caption=Colors
+LDisplayText.Caption=Display text
+LDisplayBack.Caption=Display background
+LGenText.Caption=General text
+LGenBack.Caption=General background
+sMnuCopy=Copy
+sMnuPaste=Paste
+RBnative.Caption=NATIVE
+
+[FRadios]
+OPDLogo.Title=Select an image
+sConfirmDeleteRadio=Do you want really delete the radio %s ?
+sRadioBrowserUnavail=Radio browser site unavailable
+sNoRadioFound=No radio found
+SBAddRadio.Hint=Add a radio
+MnuAddRadio.Caption=Add radio
+SBEditRadio.Hint=Edit the selected radio
+MnuEditRadio.Caption=Edit the radio
+SBDeleteRadio.Hint=Delete the selected radio
+MnuDeleteRadio.Caption=Delete the radio
+SBPlayRadio.Hint=Play selected radio
+MnuPlayRadio.Caption=PLay the radio
+BtnApply.Hint=Apply changes
+BtnCancel.Hint=Cancel changes
+LLimit.Caption=Limit
+SBSearchBrwRadio.Hint=Search radio
+LSearchName.Caption=Name
+LSearchCountry.Caption=Country
+Lname.Caption=Name
+LUrl.Caption=URL
+LComment.Caption=Comment
+LFavicon.Caption=Logo file
+LPresets.Caption=Presets
+LRadioBrowser.Caption=Search done on radio-browser.info
+EFavicon.Hint=Click on the button at the right of tne field to select an image
 

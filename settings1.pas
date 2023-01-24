@@ -1,6 +1,6 @@
 {****************************************************************************** }
 { settings1 - Modify FSettings form and record                                  }
-{ bb - sdtp - january 2022                                                      }
+{ bb - sdtp - january 2023                                                      }
 {*******************************************************************************}
 
 unit settings1;
@@ -11,7 +11,8 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls,
-  Buttons, laz2_DOM, laz2_XMLRead, laz2_XMLWrite, lazbbutils, lazbbcontrols;
+  Buttons, laz2_DOM, laz2_XMLRead, laz2_XMLWrite, lazbbutils, lazbbcontrols,
+  lazbbinifiles;
 
 type
 
@@ -178,6 +179,7 @@ end;
     Settings: TConfig;
     sMnuCopy: string;
     sMnuPaste: string;
+    procedure Translate(LangFile: TBbIniFile);
   end;
 
 var
@@ -609,6 +611,44 @@ end;
 procedure TFSettings.CBStartupChange(Sender: TObject);
 begin
   //CBMinimized.Enabled:= CBStartup.Checked;
+end;
+
+// Self localization procedure. LangFile parameter is language related ini file
+
+procedure TFSettings.Translate(LangFile: TBbIniFile);
+var
+  DefaultCaption: String;
+begin
+  if assigned (Langfile) then
+  with LangFile do
+  begin
+    BtnOK.Caption:= ReadString('Common', 'OKBtn', BtnOK.Caption);
+    BtnCancel.Caption:= ReadString('Common', 'CancelBtn', BtnCancel.Caption);
+    DefaultCaption:= ReadString('Common', 'DefaultCaption', '...');
+    Caption:=Format(ReadString('FSettings','Caption','Préférences de %s'), [DefaultCaption]);
+    TPSystem.Caption:= ReadString('FSettings', 'TPSystem.Caption', TPSystem.Caption);
+    TPEncode.Caption:= ReadString('FSettings', 'TPEncode.Caption', TPEncode.Caption);
+    CBSavSizePos.Caption:= ReadString('FSettings', 'CBSavSizePos.Caption', CBSavSizePos.Caption);
+    CBStartup.Caption:= ReadString('FSettings', 'CBStartup.Caption', CBStartup.Caption);
+    CBStartMini.Caption:= ReadString('FSettings', 'CBStartMini.Caption', CBStartMini.Caption);
+    CBNoChkNewVer.Caption:= ReadString('FSettings', 'CBNoChkNewVer.Caption', CBNoChkNewVer.Caption);
+    CBShowBtnBar.Caption:= ReadString('FSettings', 'CBShowBtnBar.Caption', CBShowBtnBar.Caption);;
+    CBHideInTaskBar.Caption:= ReadString('FSettings', 'CBHideInTaskBar.Caption', CBHideInTaskBar.Caption);
+    LBitrate.Caption:= ReadString('FSettings', 'LBitrate.Caption', LBitrate.Caption);
+    LSampling.Caption:= ReadString('FSettings', 'LSampling.Caption', LSampling.Caption);
+    LLangue.Caption:= ReadString('FSettings', 'LLangue.Caption', LLangue.Caption);
+    LDataFolder.Caption:= ReadString('FSettings', 'LDataFolder.Caption', LDataFolder.Caption);
+    LFont.Caption:= ReadString('FSettings', 'LFont.Caption', LFont.Caption);
+    CBFonts.Hint:= ReadString('FSettings', 'CBFonts.Hint', CBFonts.Hint);
+    TPColors.Caption:= ReadString('FSettings', 'TPColors.Caption', TPColors.Caption);
+    LDisplayText.Caption:= ReadString('FSettings', 'LDisplayText.Caption', LDisplayText.Caption);
+    LDisplayBack.Caption:= ReadString('FSettings', 'LDisplayBack.Caption', LDisplayBack.Caption);
+    LGenText.Caption:= ReadString('FSettings', 'LGenText.Caption', LGenText.Caption);
+    LGenBack.Caption:= ReadString('FSettings', 'LGenBack.Caption', LGenBack.Caption);
+    sMnuCopy:= ReadString('FSettings', 'sMnuCopy', 'Copier');
+    sMnuPaste:= ReadString('FSettings', 'sMnuPaste', 'Coller');
+    RBnative.Caption:= ReadString('FSettings', 'RBnative.Caption', RBnative.Caption);
+  end;
 end;
 
 end.

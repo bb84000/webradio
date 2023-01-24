@@ -12,15 +12,20 @@
 ;proposez votre traduction sur GitHub
 
 ;Français
-[fr]
-;General
-ProgName=WebRadio
+
+[common]
 Language=Français
+ProgName=WebRadio
+ProgErr=Fichier de langue erroné. Réinstallez le programme
 DefaultCaption=Tuner radio Web
 OKBtn=OK
 YesBtn=Oui
 NoBtn=Non
 CancelBtn=Annuler
+ApplyBtn=Appliquer
+
+[main]
+;General
 sStereoCaption=Stéréo
 sMonoCaption=Mono
 sRecordingCaption=Enregistrement
@@ -53,6 +58,8 @@ sUse64bit=Utilisez la version 64 bits de ce programme
 ODAudio.Title=Ouvrir un fichier audio
 sShowEqualizer=Afficher l''égaliseur
 sHideEqualizer=Masquer l''égaliseur
+CBEqualize.Caption=Activer l'égaliseur
+LReset.Caption=Remettre à zéro
 
 ;Menus
 PMnuOpenRadio.Caption=Ouvrir une radio dans la liste
@@ -71,83 +78,30 @@ PTMnuRestore.Caption=Restaurer
 PTMnuIconize.Caption=Réduire
 PMnuChooseRadio.Caption=Choiosr dans la liste des radios
 
-;About
-Aboutbox.Caption=A propos de Radio Web
-AboutBox.LUpdate.Caption=Recherche de mise à jour
-AboutBox.UpdateAvailable=Nouvelle version %s disponible. Cliquer pour la télécharger
-AboutBox.NoUpdateAvailable=Le Tuner radio Web est à jour.
-AboutBox.LastUpdateSearch=Dernière recherche de mise à jour
-AboutBox.LProgPage.Caption=Page d'accueil du programme
-AboutBox.UrlProgSite=https://github.com/bb84000/webradio/wiki/Accueil
-AboutBox.LWebSite.Caption=Page d'accueil du site Web
-AboutBox.LSourceCode.Caption=Page Web du code source
-
-; Radios form
-FRadios.OPDLogo.Title=Sélectionner une image
-FRadios.sConfirmDeleteRadio=Voulez-vous vraiment supprimer la radio %s ?
-FRadios.sRadioBrowserUnavail=Sute Radio browser indisponible
-FRadios.sNoRadioFound=Aucune radio trouvée
-FRadios.SBAddRadio.Hint=Ajouter une radio
-FRadios.MnuAddRadio.Caption=Ajouter la radio
-FRadios.SBEditRadio.Hint=Modifier la radio sélectionnée
-FRadios.MnuEditRadio.Caption=Modifier la radio
-FRadios.SBDeleteRadio.Hint=Supprimer la radio sélectionnée
-FRadios.MnuDeleteRadio.Caption=Supprimer la radio
-FRadios.SBPlayRadio.Hint=Ecouter la radio sélectionnée
-Fradios.MnuPlayRadio.Caption=Ecouter la radio
-FRadios.BtnApply.Caption=Appliquer
-FRadios.BtnApply.Hint=Valider les modifications
-FRadios.BtnCancel.Hint=Annuler les modifications
-FRadios.SBSearchBrwRadio.Hint=Rechercher une radio
-FRadios.LLimit.Caption=Limite
-FRadios.LSearchName.Caption=Nom
-FRadios.LSearchCountry.Caption=Pays
-FRadios.Lname.Caption=Nom
-FRadios.LUrl.Caption=URL
-FRadios.LComment.Caption=Commentaire
-FRadios.LFavicon.Caption=Fichier logo
-FRadios.LPresets.Caption=Présélections
-FRadios.LRadioBrowser.Caption=Recherche effectuée sur radio-browser.info
-FRadios.EFavicon.Hint=Cliquez sur le bouton à droite de ce champ pour sélectionner une image
-
-CBEqualize.Caption=Activer l'égaliseur
-LReset.Caption=Remettre à zéro
-
-;Divers
-
-; Options form
-FSettings.Caption=Préférences du Tuner radio web
-FSettings.TPSystem.Caption=Système
-FSettings.TPEncode.Caption=Paramètres d'enregistrement
-FSettings.CBSavSizePos.Caption=Sauvegarder taille et position de la fenêtre
-FSettings.CBStartup.Caption=Lancer au démarrage du système
-FSettings.CBStartMini.Caption=Démarrer minimisé
-FSettings.CBNoChkNewVer.Caption=Ne pas rechercher de mise à jour
-FSettings.CBShowBtnBar.Caption=Afficher la barre de boutons
-FSettings.CBHideInTaskBar.Caption=Masquer l'icone dans la barre des tâches
-FSettings.LBitrate.Caption=Débit (Kbits/s)
-FSettings.LSampling.Caption=Echantillonnage (Hz)
-FSettings.LLangue.Caption=Langue
-FSettings.LDataFolder.Caption=Répertoire d'enregistrement
-FSettings.LFont.Caption=Police
-FSettings.CBFonts.Hint=Sélection de la police d'affichage du nom de la radio
-FSettings.LDisplayText.Caption=Texte de l'afficheur
-FSettings.LDisplayBack.Caption=Fond de l'afficheur
-FSettings.LGenText.Caption=Texte général
-FSettings.LGenBack.Caption=Fond général
-FSettings.TPColors.Caption=Couleurs
-FSettings.sMnuCopy=Copier
-FSettings.sMnuPaste=Coller
-FSettings.RBnative.Caption=NATIF
-
 // Errors
+ErrLoadStr=Erreur de chargement de
+
+ErrInvalidHnd=Handle invalide
+ErrInvalidDev=Périphérique invalide
+ErrTimeout=Délai dépassé
+
+ErrNetConnect=Erreur de connexion Internet
+
+ErrBassInit=Erreur d'initialisation de la bibiliothèque Bass
+ErrUnknown=Erreur inconnue
+ErrReading=Lecture de la radio impossible
+ErrWinVersion=Ce programme ne fonctionne pas avec cette version de Windows
+ErrUnsupportedEnc=Impossible d'enregistrer, encodage %s non supporté
+ErrEncoding=Erreur d'encodage %d
+
+[BassErr]
+; Bass errors
 sErrBassLoaded=Bibliothèque Bass non chargée.%sExécution du programme impossible
 sErrBassVersion=Mauvaise version de la bibliothèque Bass.%sExécution du programme impossible
 sErrBassencLoaded=Bibliothèque Bassenc non chargée.%sEnregistrement des radios impossible
 sErrBassEncodeVer=Mauvaise version de la bibliothèque BassEnc.%sEnregistrement des radios impossible
 sErrNoBassPLAY=La bibliothèque Bass%s n'est pas installée.%sLecture des flux %s impossible.
 sErrNoBassEnc=La bibliothèque BassEnc%s n'est pas installée.%sEnregistrement en %s de la radio impossible
-
 
 BASS_ERROR_MEM=Mémoire insuffisante
 BASS_ERROR_FILEOPEN=Ouverture du fichier ou du flux impossible
@@ -179,25 +133,10 @@ BASS_ERROR_NOTAVAIL=Elément non disponible
 BASS_ERROR_DECODE=Le canal de décodage ne peut pas être lu
 BASS_ERROR_DX=Mauvaise version de DX
 BASS_ERROR_TIMEOUT=Le délai minimum est dépassé depuis la création du canal
-
 BASS_ERROR_UNKNOWN=Erreur inconnue
 
-ErrLoadStr=Erreur de chargement de
 
-ErrInvalidHnd=Handle invalide
-ErrInvalidDev=Périphérique invalide
-ErrTimeout=Délai dépassé
-
-ErrNetConnect=Erreur de connexion Internet
-
-ErrBassInit=Erreur d'initialisation de la bibiliothèque Bass
-ErrUnknown=Erreur inconnue
-ErrReading=Lecture de la radio impossible
-ErrWinVersion=Ce programme ne fonctionne pas avec cette version de Windows
-ErrUnsupportedEnc=Impossible d'enregistrer, encodage %s non supporté
-ErrEncoding=Erreur d'encodage %d
-
-
+[HttpErr]
 ;Http error messages
 SErrInvalidProtocol=Protocole "%s" invalide
 SErrReadingSocket=Erreur de lecture des données à partir du socket
@@ -207,7 +146,6 @@ SErrUnexpectedResponse=Code de statut de réponse non prévu: %s
 SErrChunkTooBig=Bloc trop grand
 SErrChunkLineEndMissing=Fin de ligne du bloc manquante
 SErrMaxRedirectsReached=Nombre maximum de redirections atteint: %s
-
 ;Socket error messages
 strHostNotFound=Résolution du nom d'hôte pour "%s" impossible.
 strSocketCreationFailed=Echec de la création du socket: %s
@@ -220,6 +158,7 @@ strSocketIOTimeOut=Impossible de fixer le timeout E/S à %s
 strErrNoStream=Flux du socket non assigné
 
 ;lazbbosver
+[OSVersion]
 Home=Famille
 Professional=Entreprise
 Server=Serveur
@@ -241,4 +180,66 @@ Server=Serveur
 22000=v 21H2 "Octobre 2021 Version initiale"
 22621=v 22H2 "Septembre 2022"  
 
+[AboutBox]
+Caption=A propos de %s
+sLastUpdateSearch=Dernière recherche de mise à jour
+sUpdateAvailable=Nouvelle version %s disponible. Cliquer pour la télécharger
+sNoUpdateAvailable=Le Tuner radio Web est à jour.
+LUpdate.Caption=Recherche de mise à jour
+LProgPage.Caption=Page d'accueil du programme
+LWebSite.Caption=Page d'accueil du site Web
+LSourceCode.Caption=Page Web du code source
+UrlProgSite=/wiki/Accueil
+
+[FSettings]
+Caption=Préférences de %s
+TPSystem.Caption=Système
+TPEncode.Caption=Paramètres d'enregistrement
+CBSavSizePos.Caption=Sauvegarder taille et position de la fenêtre
+CBStartup.Caption=Lancer au démarrage du système
+CBStartMini.Caption=Démarrer minimisé
+CBNoChkNewVer.Caption=Ne pas rechercher de mise à jour
+CBShowBtnBar.Caption=Afficher la barre de boutons
+CBHideInTaskBar.Caption=Masquer l'icone dans la barre des tâches
+LBitrate.Caption=Débit (Kbits/s)
+LSampling.Caption=Echantillonnage (Hz)
+LLangue.Caption=Langue
+LDataFolder.Caption=Répertoire d'enregistrement
+LFont.Caption=Police
+CBFonts.Hint=Sélection de la police d'affichage du nom de la radio
+TPColors.Caption=Couleurs
+LDisplayText.Caption=Texte de l'afficheur
+LDisplayBack.Caption=Fond de l'afficheur
+LGenText.Caption=Texte général
+LGenBack.Caption=Fond général
+sMnuCopy=Copier
+sMnuPaste=Coller
+RBnative.Caption=NATIF
+
+[FRadios]
+OPDLogo.Title=Sélectionner une image
+sConfirmDeleteRadio=Voulez-vous vraiment supprimer la radio %s ?
+sRadioBrowserUnavail=Site Radio browser indisponible
+sNoRadioFound=Aucune radio trouvée
+SBAddRadio.Hint=Ajouter une radio
+MnuAddRadio.Caption=Ajouter la radio
+SBEditRadio.Hint=Modifier la radio sélectionnée
+MnuEditRadio.Caption=Modifier la radio
+SBDeleteRadio.Hint=Supprimer la radio sélectionnée
+MnuDeleteRadio.Caption=Supprimer la radio
+SBPlayRadio.Hint=Ecouter la radio sélectionnée
+MnuPlayRadio.Caption=Ecouter la radio
+BtnApply.Hint=Valider les modifications
+BtnCancel.Hint=Annuler les modifications
+LLimit.Caption=Limite
+SBSearchBrwRadio.Hint=Rechercher une radio
+LSearchName.Caption=Nom
+LSearchCountry.Caption=Pays
+Lname.Caption=Nom
+LUrl.Caption=URL
+LComment.Caption=Commentaire
+LFavicon.Caption=Fichier logo
+LPresets.Caption=Présélections
+LRadioBrowser.Caption=Recherche effectuée sur radio-browser.info
+EFavicon.Hint=Cliquez sur le bouton à droite de ce champ pour sélectionner une image
 

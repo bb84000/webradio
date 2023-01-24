@@ -1,7 +1,7 @@
 {*******************************************************************************
   radios1 - Radios list and FRadios form
-  bb - sdtp - april 2022
-  Uses Indy DNS Resolver and API drom Radio-Browser.info
+  bb - sdtp - january 2023
+  Uses Indy DNS Resolver and API from Radio-Browser.info
 ********************************************************************************}
 unit Radios1;
 
@@ -13,7 +13,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls,
   Buttons, ExtDlgs, laz2_DOM, laz2_XMLRead, laz2_XMLWrite, lazbbutils, fileutil,
   IdDNSResolver, fphttpclient, fpopenssl, openssl, opensslsockets, lclintf,
-  Menus ;
+  Menus, lazbbinifiles ;
 
 type
 
@@ -180,6 +180,7 @@ type
     function SaveRadios(filename:String): Boolean;
     procedure PopulateList(rdl: TRadiosList);
     property OnPlay: TOnPlayEvent read FOnPlay write FOnPlay;
+    procedure Translate(LangFile: TBbIniFile);
   end;
 
 var
@@ -1155,6 +1156,49 @@ begin
   end;
 end;
 
+// Self localization procedure. LangFile parameter is language related ini file
+
+procedure TFRadios.Translate(LangFile: TBbIniFile);
+var
+  DefaultCaption: String;
+begin
+  if assigned (Langfile) then
+  with LangFile do
+  begin
+    //Caption:= ReadString(FRadios', 'Caption', Caption);   // Not set. Use related main menu item caption
+    BtnOK.Caption:= ReadString('Common', 'OKBtn', BtnOK.Caption);
+    BtnCancel.Caption:= ReadString('Common', 'CancelBtn', BtnCancel.Caption);
+    BtnApply.Caption:= ReadString('Common', 'ApplyBtn', BtnApply.Caption);;
+    OPDLogo.Title:= ReadString('FRadios', 'OPDLogo.Title', 'Ouvrir une image');
+    sConfirmDeleteRadio:= ReadString('FRadios', 'sConfirmDeleteRadio', 'Voulez-vous vraiment supprimer la radio %s ?');
+    sRadioBrowserUnavail:= ReadString('FRadios', 'sRadioBrowserUnavail', 'Site Radio browser non disponible');
+    sNoRadioFound:= ReadString('FRadios', 'sNoRadioFound', 'Aucune radio trouvée');
+    SBAddRadio.Hint:= ReadString('FRadios', 'SBAddRadio.Hint', SBAddRadio.Hint);
+    MnuAddRadio.Caption:= ReadString('FRadios', 'MnuAddRadio.Caption', MnuAddRadio.Caption);
+    SBEditRadio.Hint:= ReadString('FRadios', 'SBEditRadio.Hint', SBEditRadio.Hint);
+    MnuEditRadio.Caption:= ReadString('FRadios', 'MnuEditRadio.Caption', MnuEditRadio.Caption);
+    SBDeleteRadio.Hint:= ReadString('FRadios', 'SBDeleteRadio.Hint', SBDeleteRadio.Hint);
+    MnuDeleteRadio.Caption:= ReadString('FRadios', 'MnuDeleteRadio.Caption', MnuDeleteRadio.Caption);
+    SBPlayRadio.Hint:= ReadString('FRadios', 'SBPlayRadio.Hint', SBPlayRadio.Hint);
+    MnuPlayRadio.Caption:= ReadString('Fradios', 'MnuPlayRadio.Caption', MnuPlayRadio.Caption);
+    BtnApply.Hint:= ReadString('FRadios', 'BtnApply.Hint', BtnApply.Hint);
+    BtnCancel.Hint:= ReadString('FRadios', 'BtnCancel.Hint', BtnCancel.Hint);
+    LLimit.Caption:= ReadString('FRadios','LLimit.Caption', LLimit.Caption);
+    SBSearchBrwRadio.Hint:= ReadString('FRadios', 'SBSearchBrwRadio.Hint', SBSearchBrwRadio.Hint);
+    LSearchName.Caption:= ReadString('FRadios', 'LSearchName.Caption', LSearchName.Caption);
+    LSearchCountry.Caption:= ReadString('FRadios', 'LSearchCountry.Caption', LSearchCountry.Caption);
+    Lname.Caption:= ReadString('FRadios', 'Lname.Caption', Lname.Caption);
+    LUrl.Caption:= ReadString('FRadios', 'LUrl.Caption', LUrl.Caption);
+    LComment.Caption:= ReadString('FRadios', 'LComment.Caption', LComment.Caption);
+    LFavicon.Caption:= ReadString('FRadios', 'LFavicon.Caption', LFavicon.Caption);
+    LPresets.Caption:= ReadString('FRadios', 'LPresets.Caption', LPresets.Caption);
+    LRadioBrowser.Caption:= ReadString('FRadios', 'LRadioBrowser.Caption', LRadioBrowser.Caption);
+    EFavicon.Hint:= ReadString('FRadios', 'EFavicon.Hint', EFavicon.Hint);
+
+
+  end;
+
+end;
 
 end.
 

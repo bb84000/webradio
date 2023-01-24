@@ -1338,7 +1338,7 @@ begin
   //AboutBox.LUpdate.Hint := AboutBox.sLastUpdateSearch + ': ' + DateToStr(FSettings.Settings.LastUpdChk);   //In modlangue
   AboutBox.Version:= Version;
   AboutBox.ProgName:= ProgName;
-
+  AboutBox.LastUpdate:= FSettings.Settings.LastUpdChk;
   if Assigned(IniFile) then IniFile.free;
   // Default display colors
   PnlDisplay.Color:= clBlack;
@@ -1564,7 +1564,8 @@ begin
       begin
         LangFile:= TBbInifile.Create(LangNums.Strings[i]);
         LangNums.Strings[i]:= TrimFileExt(ExtractFileName(LangNums.Strings[i]));
-        FSettings.CBLangue.Items.Add(LangFile.ReadString(LangNums.Strings[i], 'Language', 'Inconnu'));
+        //FSettings.CBLangue.Items.Add(LangFile.ReadString(LangNums.Strings[i], 'Language', 'Inconnu'));
+        FSettings.CBLangue.Items.Add(LangFile.ReadString('common', 'Language', 'Inconnu'));
         if LangNums.Strings[i] = Settings.LangStr then LangFound := True;
       end;
     end;
@@ -2047,7 +2048,7 @@ var
   recBitrate: string;
   recSampling: string;
   TRB: TRadioButton;
-  acmformlen: DWORD = 0;
+  //acmformlen: DWORD = 0;
   NativeExt: string;
   p: integer;
 begin
@@ -2437,6 +2438,7 @@ begin
        AboutBox.LUpdate.Caption:= AboutBox.sNoUpdateAvailable;
    end;
    AboutBox.LUpdate.Hint:= AboutBox.sLastUpdateSearch + ': ' + DateToStr(FSettings.Settings.LastUpdChk);
+   AboutBox.Translate(LangFile);
 end;
 
 // Procedure to translate IDE texts
@@ -2450,258 +2452,189 @@ begin
   LangStr:=FSettings.Settings.LangStr;
   // Get selected language file
   LangFile:= TBbIniFile.Create(ExtractFilePath(Application.ExeName) + 'lang'+PathDelim+LangStr+'.lng');
-
   With LangFile do
+  begin
+    prgName:= ReadString('common', 'ProgName', 'Erreur');
+    if prgName<>ProgName then
+      ShowMessage(ReadString('common', 'ProgErr', 'Fichier de langue erroné. Réinstallez le programme'));
+    {$IFDEF WINDOWS}
+    with OsVersion do
     begin
-      prgName:= ReadString(LangStr, 'ProgName', 'Erreur');
-      if prgName<>ProgName then
-      ShowMessage('Fichier de langue erroné. Réinstallez le programme');
-      {$IFDEF WINDOWS}
-      with OsVersion do
+      ProdStrs.Strings[1]:= ReadString('OSVersion','Home','Famille'); ;
+      ProdStrs.Strings[2]:= ReadString('OSVersion','Professional','Entreprise');
+      ProdStrs.Strings[3]:= ReadString('OSVersion','Server','Serveur');
+      for i:= 0 to Win10Strs.count-1 do
       begin
-        ProdStrs.Strings[1]:= ReadString(LangStr,'Home','Famille'); ;
-        ProdStrs.Strings[2]:= ReadString(LangStr,'Professional','Entreprise');
-        ProdStrs.Strings[3]:= ReadString(LangStr,'Server','Serveur');
-        for i:= 0 to Win10Strs.count-1 do
-        begin
-          A:= Win10Strs.Strings[i].split('=');
-          Win10Strs.Strings[i]:= A[0]+'='+ReadString(LangStr,A[0],A[1]);
-        end;
-        for i:= 0 to Win11Strs.count-1 do
-        begin
-          A:= Win11Strs.Strings[i].split('=');
-          Win11Strs.Strings[i]:= A[0]+'='+ReadString(LangStr,A[0],A[1]);
-        end;
+        A:= Win10Strs.Strings[i].split('=');
+        Win10Strs.Strings[i]:= A[0]+'='+ReadString('OSVersion',A[0],A[1]);
       end;
-      {$ENDIF}
-      // Form
-      DefaultCaption:= ReadString(LangStr, 'DefaultCaption', Caption);
-      OKBtn:= ReadString(LangStr, 'OKBtn','OK');
-      YesBtn:=ReadString(LangStr,'YesBtn','Oui');
-      NoBtn:=ReadString(LangStr,'NoBtn','Non');
-      CancelBtn:=ReadString(LangStr,'CancelBtn','Annuler');
-      sStereoCaption:= ReadString(LangStr,'sStereoCaption','Stéréo');
-      sMonoCaption:= ReadString(LangStr,'sMonoCaption','Mono');
-      LStereo.Caption:= sStereoCaption;
-      LEqualizer.Caption:= ReadString(LangStr,'LEqualizer.Caption', LEqualizer.Caption);
-      sRecordingCaption:= ReadString(LangStr,'sRecordingCaption','Enregistrement');
-      sStopCaption:= ReadString(LangStr, 'sStopCaption', 'Stoppé');
-      sPauseCaption:= ReadString(LangStr, 'sPauseCaption','Pause');
-      LLeft.Caption:= ReadString(LangStr, 'LLeft.Caption', LLeft.Caption);
-      LRight.Caption:= ReadString(LangStr, 'LRight.Caption', LRight.Caption);
-      LLeft.Hint:= ReadString(LangStr, 'LLeft.Hint', LLeft.Hint);
-      LRight.Hint:= ReadString(LangStr, 'LRight.Hint', LRight.Hint);
-      sMuteHint:= ReadString(LangStr, 'sMuteHint', 'Cliquer pour couper le son');
-      sMutedHint:= ReadString(LangStr, 'sMutedHint', 'Cliquer pour rétablir le son');
-      SBMute.Hint:= sMuteHint;
-      ODAudio.Title:= ReadString(LangStr, 'ODAudio.Title', ODAudio.Title);
-      sMnuDeletePreset:= ReadString(LangStr, 'sMnuDeletePreset', 'Supprimer la présélection %s');
-      sMuteMenu:= ReadString(LangStr, 'sMuteMenu', 'Couper le son');
-      sMutedMenu:= ReadString(LangStr, 'sMutedMenu', 'Rétablir le son');
-      sRecordingHint:= ReadString(LangStr, 'sRecordingHint', 'Cliquer pour enregistrer la radio');
-      sStopRecordingHint:= ReadString(LangStr, 'sStopRecordingHint', 'Cliquer pour arrêter l''enregistrement');
-      SBRecord.Hint:= sRecordingHint;
-      sConnectStr:= ReadString(LangStr, 'sConnectStr', 'Connexion...');
-      sConnectedStr:= ReadString(LangStr, 'sConnectedStr', 'Connecté');
-      sNotConnectedStr:= ReadString(LangStr, 'sNotConnectedStr', 'Non connecté');
-      sLoadStr:=  ReadString(LangStr, 'sLoadStr', 'Chargement de');
-      sBufferStr:= ReadString(LangStr, 'sBufferStr', 'Mise en buffer');
-      sEnterUrl:= ReadString(LangStr, 'sEnterUrl', sEnterUrl);
-      sUse64bit:=ReadString(LangStr,'Use64bit','Utilisez la version 64 bits de ce programme');
-      sNoradio:= ReadString(LangStr,'sNoradio', 'Aucune radio sélectionnée');
-      sNopreset:= ReadString(LangStr,'sNopreset', 'Aucune radio présélectionnée');
-      sShowEqualizer:= ReadString(LangStr,'sShowEqualizer', 'Afficher l''égaliseur');
-      sHideEqualizer:= ReadString(LangStr,'sHideEqualizer', 'Masquer l''égaliseur');
-      sCannotGetNewVer:=ReadString(LangStr,'CannotGetNewVer','Recherche de nouvelle version impossible');
-      if Fsettings.Settings.EqualVisible then PMnuEqualizer.Caption:= sHideEqualizer
-      else PMnuEqualizer.Caption:= sShowEqualizer ;
-      SBEqualizer.Hint:= PMnuEqualizer.Caption;
-            //Menus and buttons
-      PMnuOpenRadio.Caption:= ReadString(LangStr, 'PMnuOpenRadio.Caption', PMnuOpenRadio.Caption);;
-      PMnuReadFile.Caption:= ReadString(LangStr, 'PMnuReadFile.Caption', PMnuReadFile.Caption);
-      PMnuOpenURL.Caption:= ReadString(LangStr, 'PMnuOpenURL.Caption', PMnuOpenURL.Caption);
-      PMnuSearchRadios.Caption:= ReadString(LangStr, 'PMnuSearchRadios.Caption', PMnuSearchRadios.Caption);
-      PMnuSettings.Caption:= ReadString(LangStr, 'PMnuSettings.Caption', PMnuSettings.Caption);
-      PMnuRadList.Caption:= ReadString(LangStr, 'PMnuRadList.Caption', PMnuRadList.Caption);
-      PMnuHelp.Caption:= ReadString(LangStr, 'PMnuHelp.Caption', PMnuHelp.Caption);
-      PMnuAbout.Caption:= ReadString(LangStr, 'PMnuAbout.Caption', PMnuAbout.Caption);
-      PMnuQuit.Caption:= ReadString(LangStr, 'PMnuQuit.Caption', PMnuQuit.Caption);
-      PMnuChooseRadio.Caption:= ReadString(LangStr, 'PMnuChooseRadio.Caption', PMnuChooseRadio.Caption);
-      PTMnuRestore.Caption:= ReadString(LangStr, 'PTMnuRestore.Caption', PTMnuRestore.Caption);
-      PTMnuIconize.Caption:= ReadString(LangStr, 'PTMnuIconize.Caption', PTMnuIconize.Caption);
-      PTMnuAbout.Caption:= PMnuAbout.Caption;
-      PTMnuQuit.Caption:= PMnuQuit.Caption;
-      if Muted then PTMnuMute.Caption:= sMutedMenu else PTMnuMute.Caption:= sMuteMenu;
-
-      SBOpenRadio.hint:= PMnuOpenRadio.Caption;
-      SBReadFile.Hint:= PMnuReadFile.Caption;
-      SBOpenUrl.Hint:= PMnuOpenURL.Caption;
-      SBSEtings.Hint:= PMnuSettings.Caption;
-      SBRadList.Hint:= PMnuRadList.Caption;
-      SBSearchRadios.Hint:= PMnuSearchRadios.Caption;
-      SBHelp.Hint:= PMnuHelp.Caption;
-      SBAbout.Hint:= PMnuAbout.Caption;
-      SBQuit.Hint:= PMnuQuit.Caption;
-
-      // About
-      Aboutbox.Caption:= Format(ReadString(LangStr,'Aboutbox.Caption','A propos du %s'), [DefaultCaption]);
-      AboutBox.sLastUpdateSearch:=ReadString(LangStr,'AboutBox.LastUpdateSearch','Dernière recherche de mise à jour');
-      AboutBox.sUpdateAvailable:=ReadString(LangStr,'AboutBox.UpdateAvailable','Nouvelle version %s disponible');
-      AboutBox.sNoUpdateAvailable:=ReadString(LangStr,'AboutBox.NoUpdateAvailable','Le Tuner radio Web est à jour');
-      AboutBox.LProductName.Caption:= DefaultCaption;
-      AboutBox.LProgPage.Caption:= ReadString(LangStr,'AboutBox.LProgPage.Caption', AboutBox.LProgPage.Caption);
-      AboutBox.UrlProgSite:= ReadString(LangStr,'AboutBox.UrlProgSite','https://github.com/bb84000/webradio/wiki/Accueil');
-      AboutBox.LWebSite.Caption:= ReadString(LangStr,'AboutBox.LWebSite.Caption', AboutBox.LWebSite.Caption);
-      AboutBox.LSourceCode.Caption:= ReadString(LangStr,'AboutBox.LSourceCode.Caption', AboutBox.LSourceCode.Caption);
-      AboutBox.LVersion.Hint:= OSVersion.VerDetail;
-      if not AboutBox.checked then AboutBox.LUpdate.Caption:=ReadString(LangStr,'AboutBox.LUpdate.Caption',AboutBox.LUpdate.Caption) else
+      for i:= 0 to Win11Strs.count-1 do
       begin
-        if AboutBox.NewVersion then AboutBox.LUpdate.Caption:= Format(AboutBox.sUpdateAvailable, [AboutBox.LastVersion])
-        else AboutBox.LUpdate.Caption:= AboutBox.sNoUpdateAvailable;
+        A:= Win11Strs.Strings[i].split('=');
+        Win11Strs.Strings[i]:= A[0]+'='+ReadString('OSVersion',A[0],A[1]);
       end;
-      AboutBox.LUpdate.Hint:= AboutBox.sLastUpdateSearch + ': ' + DateToStr(FSettings.Settings.LastUpdChk);
-      HelpFile:= WRExecPath+'help'+PathDelim+ReadString(LangStr,'HelpFile', 'webradio.html');
+    end;
+    {$ENDIF}
+    // Form
+    DefaultCaption:= ReadString('common', 'DefaultCaption', Caption);
+    OKBtn:= ReadString('common', 'OKBtn','OK');
+    YesBtn:=ReadString('common','YesBtn','Oui');
+    NoBtn:=ReadString('common','NoBtn','Non');
+    CancelBtn:=ReadString('common','CancelBtn','Annuler');
+    sStereoCaption:= ReadString('main','sStereoCaption','Stéréo');
+    sMonoCaption:= ReadString('main','sMonoCaption','Mono');
+    LStereo.Caption:= sStereoCaption;
+    LEqualizer.Caption:= ReadString('main','LEqualizer.Caption', LEqualizer.Caption);
+    sRecordingCaption:= ReadString('main','sRecordingCaption','Enregistrement');
+    sStopCaption:= ReadString('main', 'sStopCaption', 'Stoppé');
+    sPauseCaption:= ReadString('main', 'sPauseCaption','Pause');
+    LLeft.Caption:= ReadString('main', 'LLeft.Caption', LLeft.Caption);
+    LRight.Caption:= ReadString('main', 'LRight.Caption', LRight.Caption);
+    LLeft.Hint:= ReadString('main', 'LLeft.Hint', LLeft.Hint);
+    LRight.Hint:= ReadString('main', 'LRight.Hint', LRight.Hint);
+    sMuteHint:= ReadString('main', 'sMuteHint', 'Cliquer pour couper le son');
+    sMutedHint:= ReadString('main', 'sMutedHint', 'Cliquer pour rétablir le son');
+    SBMute.Hint:= sMuteHint;
+    ODAudio.Title:= ReadString('main', 'ODAudio.Title', ODAudio.Title);
+    sMnuDeletePreset:= ReadString('main', 'sMnuDeletePreset', 'Supprimer la présélection %s');
+    sMuteMenu:= ReadString('main', 'sMuteMenu', 'Couper le son');
+    sMutedMenu:= ReadString('main', 'sMutedMenu', 'Rétablir le son');
+    sRecordingHint:= ReadString('main', 'sRecordingHint', 'Cliquer pour enregistrer la radio');
+    sStopRecordingHint:= ReadString('main', 'sStopRecordingHint', 'Cliquer pour arrêter l''enregistrement');
+    SBRecord.Hint:= sRecordingHint;
+    sConnectStr:= ReadString('main', 'sConnectStr', 'Connexion...');
+    sConnectedStr:= ReadString('main', 'sConnectedStr', 'Connecté');
+    sNotConnectedStr:= ReadString('main', 'sNotConnectedStr', 'Non connecté');
+    sLoadStr:=  ReadString('main', 'sLoadStr', 'Chargement de');
+    sBufferStr:= ReadString('main', 'sBufferStr', 'Mise en buffer');
+    sEnterUrl:= ReadString('main', 'sEnterUrl', sEnterUrl);
+    sUse64bit:=ReadString('main','Use64bit','Utilisez la version 64 bits de ce programme');
+    sNoradio:= ReadString('main','sNoradio', 'Aucune radio sélectionnée');
+    sNopreset:= ReadString('main','sNopreset', 'Aucune radio présélectionnée');
+    sShowEqualizer:= ReadString('main','sShowEqualizer', 'Afficher l''égaliseur');
+    sHideEqualizer:= ReadString('main','sHideEqualizer', 'Masquer l''égaliseur');
+    sCannotGetNewVer:=ReadString('main','CannotGetNewVer','Recherche de nouvelle version impossible');
+    if Fsettings.Settings.EqualVisible then PMnuEqualizer.Caption:= sHideEqualizer
+    else PMnuEqualizer.Caption:= sShowEqualizer ;
+    SBEqualizer.Hint:= PMnuEqualizer.Caption;
+    CBEqualize.Caption:= ReadString('main','CBEqualize.Caption', CBEqualize.Caption);
+    LReset.Caption:= ReadString('main','LReset.Caption', LReset.Caption);
 
-      // Alert
-      sUpdateAlertBox:=ReadString(LangStr,'sUpdateAlertBox','Version actuelle: %sUne nouvelle version %s est disponible. Cliquer pour la télécharger');
-      sNoLongerChkUpdates:=ReadString(LangStr,'sNoLongerChkUpdates','Ne plus rechercher les mises à jour');
+    //Menus and buttons
+    PMnuOpenRadio.Caption:= ReadString('main', 'PMnuOpenRadio.Caption', PMnuOpenRadio.Caption);;
+    PMnuReadFile.Caption:= ReadString('main', 'PMnuReadFile.Caption', PMnuReadFile.Caption);
+    PMnuOpenURL.Caption:= ReadString('main', 'PMnuOpenURL.Caption', PMnuOpenURL.Caption);
+    PMnuSearchRadios.Caption:= ReadString('main', 'PMnuSearchRadios.Caption', PMnuSearchRadios.Caption);
+    PMnuSettings.Caption:= ReadString('main', 'PMnuSettings.Caption', PMnuSettings.Caption);
+    PMnuRadList.Caption:= ReadString('main', 'PMnuRadList.Caption', PMnuRadList.Caption);
+    PMnuHelp.Caption:= ReadString('main', 'PMnuHelp.Caption', PMnuHelp.Caption);
+    PMnuAbout.Caption:= ReadString('main', 'PMnuAbout.Caption', PMnuAbout.Caption);
+    PMnuQuit.Caption:= ReadString('main', 'PMnuQuit.Caption', PMnuQuit.Caption);
+    PMnuChooseRadio.Caption:= ReadString('main', 'PMnuChooseRadio.Caption', PMnuChooseRadio.Caption);
+    PTMnuRestore.Caption:= ReadString('main', 'PTMnuRestore.Caption', PTMnuRestore.Caption);
+    PTMnuIconize.Caption:= ReadString('main', 'PTMnuIconize.Caption', PTMnuIconize.Caption);
+    PTMnuAbout.Caption:= PMnuAbout.Caption;
+    PTMnuQuit.Caption:= PMnuQuit.Caption;
+    if Muted then PTMnuMute.Caption:= sMutedMenu else PTMnuMute.Caption:= sMuteMenu;
 
-      // Settings form
-      FSettings.Caption:= ReadString(LangStr, 'FSettings.Caption', FSettings.Caption);
-      FSettings.BtnCancel.Caption:= CancelBtn;
-      FSettings.BtnOK.Caption:= OKBtn;
-      FSettings.TPSystem.Caption:= ReadString(LangStr, 'FSettings.TPSystem.Caption', FSettings.TPSystem.Caption);
-      FSettings.TPEncode.Caption:= ReadString(LangStr, 'FSettings.TPEncode.Caption', FSettings.TPEncode.Caption);
-      FSettings.CBSavSizePos.Caption:= ReadString(LangStr, 'FSettings.CBSavSizePos.Caption', FSettings.CBSavSizePos.Caption);
-      FSettings.CBStartup.Caption:= ReadString(LangStr, 'FSettings.CBStartup.Caption', FSettings.CBStartup.Caption);
-      FSettings.CBStartMini.Caption:= ReadString(LangStr, 'FSettings.CBStartMini.Caption', FSettings.CBStartMini.Caption);
-      FSettings.CBNoChkNewVer.Caption:= ReadString(LangStr, 'FSettings.CBNoChkNewVer.Caption', FSettings.CBNoChkNewVer.Caption);
-      FSettings.CBHideInTaskBar.Caption:= ReadString(LangStr, 'FSettings.CBHideInTaskBar.Caption', FSettings.CBHideInTaskBar.Caption);
-      FSettings.CBShowBtnBar.Caption:= ReadString(LangStr, 'FSettings.CBShowBtnBar.Caption', FSettings.CBShowBtnBar.Caption);;
-      FSettings.LBitrate.Caption:= ReadString(LangStr, 'FSettings.LBitrate.Caption', FSettings.LBitrate.Caption);
-      FSettings.LSampling.Caption:= ReadString(LangStr, 'FSettings.LSampling.Caption', FSettings.LSampling.Caption);
-      FSettings.LLangue.Caption:= ReadString(LangStr, 'FSettings.LLangue.Caption', FSettings.LLangue.Caption);
-      FSettings.LDataFolder.Caption:= ReadString(LangStr, 'FSettings.LDataFolder.Caption', FSettings.LDataFolder.Caption);
-      FSettings.LFont.Caption:= ReadString(LangStr, 'FSettings.LFont.Caption', FSettings.LFont.Caption);
-      FSettings.CBFonts.Hint:= ReadString(LangStr, 'FSettings.CBFonts.Hint',FSettings.CBFonts.Hint);
-      FSettings.TPColors.Caption:= ReadString(LangStr, 'FSettings.TPColors.Caption', FSettings.TPColors.Caption);
-      FSettings.LDisplayText.Caption:= ReadString(LangStr, 'FSettings.LDisplayText.Caption', FSettings.LDisplayText.Caption);
-      FSettings.LDisplayBack.Caption:= ReadString(LangStr, 'FSettings.LDisplayBack.Caption', FSettings.LDisplayBack.Caption);
-      FSettings.LGenText.Caption:= ReadString(LangStr, 'FSettings.LGenText.Caption', FSettings.LGenText.Caption);
-      FSettings.LGenBack.Caption:= ReadString(LangStr, 'FSettings.LGenBack.Caption', FSettings.LGenBack.Caption);
-      FSettings.sMnuCopy:= ReadString(LangStr, 'FSettings.sMnuCopy', 'Copier');
-      FSettings.sMnuPaste:= ReadString(LangStr, 'FSettings.sMnuPaste', 'Coller');
-      FSettings.RBnative.Caption:= ReadString(LangStr, 'FSettings.RBnative.Caption', FSettings.RBnative.Caption);
-      FSettings.LOSVer.Caption:= OsVersion.VerDetail;
+    SBOpenRadio.hint:= PMnuOpenRadio.Caption;
+    SBReadFile.Hint:= PMnuReadFile.Caption;
+    SBOpenUrl.Hint:= PMnuOpenURL.Caption;
+    SBSEtings.Hint:= PMnuSettings.Caption;
+    SBRadList.Hint:= PMnuRadList.Caption;
+    SBSearchRadios.Hint:= PMnuSearchRadios.Caption;
+    SBHelp.Hint:= PMnuHelp.Caption;
+    SBAbout.Hint:= PMnuAbout.Caption;
+    SBQuit.Hint:= PMnuQuit.Caption;
 
-      // Radios form
-      FRadios.Caption:= ReadString(LangStr, 'FRadios.Caption', FRadios.Caption);
-      FRadios.OKBtn:= OKBtn;
-      FRadios.YesBtn:= YesBtn;
-      FRadios.NoBtn:= NoBtn;
-      FRadios.CancelBtn:= CancelBtn;
-      FRadios.OPDLogo.Title:= ReadString(LangStr, 'FRadios.OPDLogo.Title', 'Ouvrir une image');
-      FRadios.sConfirmDeleteRadio:= ReadString(LangStr,'FRadios.sConfirmDeleteRadio', 'Voulez-vous vraiment supprimer la radio %s ?');
-      FRadios.sRadioBrowserUnavail:= ReadString(LangStr,'FRadios.sRadioBrowserUnavail', 'Site Radio browser non disponible');
-      FRadios.sNoRadioFound:= ReadString(LangStr,'FRadios.sNoRadioFound', 'Aucune radio trouvée');
-      FRadios.SBAddRadio.Hint:= ReadString(LangStr,'FRadios.SBAddRadio.Hint', FRadios.SBAddRadio.Hint);
-      FRadios.MnuAddRadio.Caption:= ReadString(LangStr,'FRadios.MnuAddRadio.Caption', FRadios.MnuAddRadio.Caption);
-      FRadios.SBEditRadio.Hint:= ReadString(LangStr,'FRadios.SBEditRadio.Hint', FRadios.SBEditRadio.Hint);
-      FRadios.MnuEditRadio.Caption:= ReadString(LangStr,'FRadios.MnuEditRadio.Caption', FRadios.MnuEditRadio.Caption);
-      FRadios.SBDeleteRadio.Hint:= ReadString(LangStr,'FRadios.SBDeleteRadio.Hint', FRadios.SBDeleteRadio.Hint);
-      FRadios.MnuDeleteRadio.Caption:= ReadString(LangStr,'FRadios.MnuDeleteRadio.Caption', FRadios.MnuDeleteRadio.Caption);
-      FRadios.SBPlayRadio.Hint:= ReadString(LangStr,'FRadios.SBPlayRadio.Hint', FRadios.SBPlayRadio.Hint);
-      Fradios.MnuPlayRadio.Caption:= ReadString(LangStr,'Fradios.MnuPlayRadio.Caption', Fradios.MnuPlayRadio.Caption);
-      FRadios.BtnCancel.Caption:= CancelBtn;
-      FRadios.BtnApply.Caption:= ReadString(LangStr,'FRadios.BtnApply.Caption', FRadios.BtnApply.Caption);
-      FRadios.BtnApply.Hint:= ReadString(LangStr,'FRadios.BtnApply.Hint', FRadios.BtnApply.Hint);
-      FRadios.BtnCancel.Hint:= ReadString(LangStr,'FRadios.BtnCancel.Hint', FRadios.BtnCancel.Hint);
-      FRadios.LLimit.Caption:= ReadString(LangStr,'FRadios.LLimit.Caption', FRadios.LLimit.Caption);
-      FRadios.SBSearchBrwRadio.Hint:= ReadString(LangStr,'FRadios.SBSearchBrwRadio.Hint', FRadios.SBSearchBrwRadio.Hint);
-      FRadios.LSearchName.Caption:= ReadString(LangStr,'FRadios.LSearchName.Caption', FRadios.LSearchName.Caption);
-      FRadios.LSearchCountry.Caption:= ReadString(LangStr,'FRadios.LSearchCountry.Caption', FRadios.LSearchCountry.Caption);
-      FRadios.Lname.Caption:= ReadString(LangStr,'FRadios.Lname.Caption', FRadios.Lname.Caption);
-      FRadios.LUrl.Caption:= ReadString(LangStr,'FRadios.LUrl.Caption', FRadios.LUrl.Caption);
-      FRadios.LComment.Caption:= ReadString(LangStr,'FRadios.LComment.Caption', FRadios.LComment.Caption);
-      FRadios.LFavicon.Caption:= ReadString(LangStr,'FRadios.LFavicon.Caption', FRadios.LFavicon.Caption);
-      FRadios.LPresets.Caption:= ReadString(LangStr,'FRadios.LPresets.Caption', FRadios.LPresets.Caption);
-      FRadios.LRadioBrowser.Caption:= ReadString(LangStr,'FRadios.LRadioBrowser.Caption', FRadios.LRadioBrowser.Caption);
-      FRadios.EFavicon.Hint:= ReadString(LangStr,'FRadios.EFavicon.Hint', FRadios.EFavicon.Hint);
-      CBEqualize.Caption:= ReadString(LangStr,'CBEqualize.Caption', CBEqualize.Caption);
+    // About box
+    AboutBox.LVersion.Hint:= OSVersion.VerDetail;
+    AboutBox.Translate(LangFile);
 
-      LReset.Caption:= ReadString(LangStr,'LReset.Caption', LReset.Caption);
+    HelpFile:= WRExecPath+'help'+PathDelim+ReadString('main','HelpFile', 'webradio.html');
 
-      // BASS Errors
-      sErrBassLoaded:= ReadString(LangStr, 'sErrBassLoaded', 'BASS.DLL non chargé.%sExécution du programme impossible');
-      sErrBassVersion:= ReadString(LangStr, 'sErrBassVersion','Mauvaise version de BASS.DLL.%sExécution du programme impossible');
-      sErrBassencLoaded:= ReadString(LangStr, 'sErrBassencLoaded', 'BASSENC.DLL non chargé.%sEnregistrement impossible');
-      sErrBassencVer:= ReadString(LangStr, 'sErrNoBassencVer','Mauvaise version de Bassenc.%sEnregistrement impossible.');
-      sErrNoBassPLAY:=  ReadString(LangStr, 'sErrNoBassPLAY','La bibliothèque Bass%s n''est pas installée.%sLecture des flux %s impossible.');
+    // Alert
+    sUpdateAlertBox:=ReadString('main','sUpdateAlertBox','Version actuelle: %sUne nouvelle version %s est disponible. Cliquer pour la télécharger');
+    sNoLongerChkUpdates:=ReadString('main','sNoLongerChkUpdates','Ne plus rechercher les mises à jour');
 
-      BassErrArr[BASS_OK]:= 'OK';         //0
-      BassErrArr[BASS_ERROR_MEM]:= ReadString(LangStr, 'BASS_ERROR_MEM', 'Erreur mémoire');
-      BassErrArr[BASS_ERROR_FILEOPEN]:= ReadString(LangStr, 'BASS_ERROR_FILEOPEN', 'Erreur d''ouverture du fichier ou du flux');
-      BassErrArr[BASS_ERROR_DRIVER]:= ReadString(LangStr, 'BASS_ERROR_DRIVER', 'Erreur de driver');
-      BassErrArr[BASS_ERROR_BUFLOST]:= ReadString(LangStr, 'BASS_ERROR_BUFLOST', 'Erreur de mémoire tampon');
-      BassErrArr[BASS_ERROR_HANDLE]:= ReadString(LangStr, 'BASS_ERROR_HANDLE', 'Erreur de handle');
-      BassErrArr[BASS_ERROR_FORMAT]:= ReadString(LangStr, 'BASS_ERROR_FORMAT', 'Erreur de format d''échantillon');
-      BassErrArr[BASS_ERROR_POSITION ]:= ReadString(LangStr, 'BASS_ERROR_POSITION ', 'Erreur de position');
-      BassErrArr[BASS_ERROR_INIT]:= ReadString(LangStr, 'BASS_ERROR_INIT', 'Erreur d''initialisation de la bibiliothèque Bass');
-      BassErrArr[BASS_ERROR_START]:= ReadString(LangStr, 'BASS_ERROR_START', 'Erreur de démarrage');
-      BassErrArr[BASS_ERROR_SSL]:= ReadString(LangStr, 'BASS_ERROR_SSL', 'SSL non installé');
-      BassErrArr[BASS_ERROR_ALREADY]:= ReadString(LangStr, 'BASS_ERROR_ALREADY', 'Fonction déjà en cours d''utilisation');
-      BassErrArr[BASS_ERROR_NOTAUDIO]:= ReadString(LangStr, 'BASS_ERROR_NOTAUDIO', 'Le fichier ne contient pas d''audio'); //The file does not contain audio,
-      BassErrArr[BASS_ERROR_NOCHAN]:= ReadString(LangStr, 'BASS_ERROR_NOCHAN', 'L''échantillon n''a pas de canal libre');  //The sample has no free channels
-      BassErrArr[BASS_ERROR_ILLTYPE]:= ReadString(LangStr, 'BASS_ERROR_ILLTYPE', 'L''élément n''est pas valide');
-      BassErrArr[BASS_ERROR_ILLPARAM]:= ReadString(LangStr, 'BASS_ERROR_ILLPARAM', 'Le paramètre n''est pas valide');
-      BassErrArr[BASS_ERROR_NO3D]:= ReadString(LangStr, 'BASS_ERROR_NO3D', 'Fonctionenment 3D non suppporté'); //The channel does not have 3D functionality
-      BassErrArr[BASS_ERROR_NOEAX]:= ReadString(LangStr, 'BASS_ERROR_NOEAX', 'Fonctionnement EAX non supporté');
-      BassErrArr[BASS_ERROR_DEVICE]:= ReadString(LangStr, 'BASS_ERROR_DEVICE', 'Périphérique invalide');
-      BassErrArr[BASS_ERROR_NOPLAY]:= ReadString(LangStr, 'BASS_ERROR_NOPLAY', 'Le canal n''est pas en cours de lecture'); //The channel is not playing
-      BassErrArr[BASS_ERROR_FREQ]:= ReadString(LangStr, 'BASS_ERROR_FREQ', 'Erreur de fréquence');
-      BassErrArr[BASS_ERROR_NOTFILE]:= ReadString(LangStr, 'BASS_ERROR_NOTFILE', 'Le fichier ne contient pas de flux');
-      BassErrArr[BASS_ERROR_NOHW]:= ReadString(LangStr, 'BASS_ERROR_NOHW', 'Matériel non trouvé');
-      BassErrArr[BASS_ERROR_EMPTY]:= ReadString(LangStr, 'BASS_ERROR_EMPTY', 'Le fichier ne contient pas de données d''échantillonnage');
-      BassErrArr[BASS_ERROR_NONET]:= ReadString(LangStr, 'BASS_ERROR_NONET', 'Pas de connexion Internet');
-      BassErrArr[BASS_ERROR_CREATE]:= ReadString(LangStr, 'BASS_ERROR_CREATE', 'Le fichier audio n''a pas pu être créé'); //The PCM file could not be created.
-      BassErrArr[BASS_ERROR_NOFX]:= ReadString(LangStr, 'BASS_ERROR_NOFX', 'L''effet demandé est indisponible'); //The specified DX8 effect is unavailable
-      BassErrArr[BASS_ERROR_NOTAVAIL]:= ReadString(LangStr, 'BASS_ERROR_NOTAVAIL', 'Elélent non disponible');
-      BassErrArr[BASS_ERROR_DECODE]:= ReadString(LangStr, 'BASS_ERROR_DECODE', 'Le canal de décodage ne peut pas être lu'); //The channel is not playable; it is a "decoding channel".
-      BassErrArr[BASS_ERROR_DX]:= ReadString(LangStr, 'BASS_ERROR_DX', 'Mauvaise version de DX)');
-      BassErrArr[BASS_ERROR_TIMEOUT]:= ReadString(LangStr, 'BASS_ERROR_TIMEOUT', 'Délai maximum dépassé');
-      BassErrArr[BASS_ERROR_FILEFORM]:= ReadString(LangStr, 'BASS_ERROR_FILEFORM', 'Format de fichier invalide');
-      BassErrArr[BASS_ERROR_SPEAKER]:= ReadString(LangStr, 'BASS_ERROR_SPEAKER', 'Les paramètres de haut parleur sont invalides');  //  The specified SPEAKER flags are invalid
-      BassErrArr[BASS_ERROR_VERSION]:= ReadString(LangStr, 'BASS_ERROR_VERSION', 'Le plugin nécessite une version différente de BASS'); //The plugin requires a different BASS version
-      BassErrArr[BASS_ERROR_CODEC]:= ReadString(LangStr, 'BASS_ERROR_CODEC', 'Codec non disponible');
-      BassErrArr[BASS_ERROR_ENDED]:= ReadString(LangStr, 'BASS_ERROR_ENDED', 'Le canal a atteint la fin');//   The channel has reached the end
-      BassErrArr[BASS_ERROR_BUSY]:= ReadString(LangStr, 'BASS_ERROR_BUSY', 'L''élément est utilisé'); // The deviece is busy
-      BassErrArr[BASS_ERROR_UNSTREAMABLE]:= ReadString(LangStr, 'BASS_ERROR_UNSTREAMABLE', 'Impossible de créer un flux');
-      BassErrArr[length(BassErrArr)-1]:= ReadString(LangStr, 'BASS_ERROR_UNKNOWN', 'Erreur inconnue');
+    // Settings form
+    FSettings.LOSVer.Caption:= OsVersion.VerDetail;
+    FSettings.Translate(LangFile);
 
-      sErrNoBassEnc:=  ReadString(LangStr, 'sErrNoBassEnc','La bibliothèque BassEnc%s n''est pas installée.%sEnregistrement impossible au format %s.');
-      ErrUnsupportedEnc:= ReadString(LangStr, 'ErrUnsupportedEnc', 'Impossible d''enregistrer, encodage %s non supporté');
-      ErrEncoding:= ReadString(LangStr, 'ErrEncoding', 'Erreur d''encodage %d');
+    // Radios form
+    FRadios.Translate(LangFile);
+
+    // BASS Errors
+    sErrBassLoaded:= ReadString('BassErr', 'sErrBassLoaded', 'BASS.DLL non chargé.%sExécution du programme impossible');
+    sErrBassVersion:= ReadString('BassErr', 'sErrBassVersion','Mauvaise version de BASS.DLL.%sExécution du programme impossible');
+    sErrBassencLoaded:= ReadString('BassErr', 'sErrBassencLoaded', 'BASSENC.DLL non chargé.%sEnregistrement impossible');
+    sErrBassencVer:= ReadString('BassErr', 'sErrNoBassencVer','Mauvaise version de Bassenc.%sEnregistrement impossible.');
+    sErrNoBassPLAY:=  ReadString('BassErr', 'sErrNoBassPLAY','La bibliothèque Bass%s n''est pas installée.%sLecture des flux %s impossible.');
+    sErrNoBassEnc:=  ReadString('BassErr', 'sErrNoBassEnc','La bibliothèque BassEnc%s n''est pas installée.%sEnregistrement impossible au format %s.');
+
+    BassErrArr[BASS_OK]:= 'OK';         //0
+    BassErrArr[BASS_ERROR_MEM]:= ReadString('BassErr', 'BASS_ERROR_MEM', 'Erreur mémoire');
+    BassErrArr[BASS_ERROR_FILEOPEN]:= ReadString('BassErr', 'BASS_ERROR_FILEOPEN', 'Erreur d''ouverture du fichier ou du flux');
+    BassErrArr[BASS_ERROR_DRIVER]:= ReadString('BassErr', 'BASS_ERROR_DRIVER', 'Erreur de driver');
+    BassErrArr[BASS_ERROR_BUFLOST]:= ReadString('BassErr', 'BASS_ERROR_BUFLOST', 'Erreur de mémoire tampon');
+    BassErrArr[BASS_ERROR_HANDLE]:= ReadString('BassErr', 'BASS_ERROR_HANDLE', 'Erreur de handle');
+    BassErrArr[BASS_ERROR_FORMAT]:= ReadString('BassErr', 'BASS_ERROR_FORMAT', 'Erreur de format d''échantillon');
+    BassErrArr[BASS_ERROR_POSITION ]:= ReadString('BassErr', 'BASS_ERROR_POSITION ', 'Erreur de position');
+    BassErrArr[BASS_ERROR_INIT]:= ReadString('BassErr', 'BASS_ERROR_INIT', 'Erreur d''initialisation de la bibiliothèque Bass');
+    BassErrArr[BASS_ERROR_START]:= ReadString('BassErr', 'BASS_ERROR_START', 'Erreur de démarrage');
+    BassErrArr[BASS_ERROR_SSL]:= ReadString('BassErr', 'BASS_ERROR_SSL', 'SSL non installé');
+    BassErrArr[BASS_ERROR_ALREADY]:= ReadString('BassErr', 'BASS_ERROR_ALREADY', 'Fonction déjà en cours d''utilisation');
+    BassErrArr[BASS_ERROR_NOTAUDIO]:= ReadString('BassErr', 'BASS_ERROR_NOTAUDIO', 'Le fichier ne contient pas d''audio'); //The file does not contain audio,
+    BassErrArr[BASS_ERROR_NOCHAN]:= ReadString('BassErr', 'BASS_ERROR_NOCHAN', 'L''échantillon n''a pas de canal libre');  //The sample has no free channels
+    BassErrArr[BASS_ERROR_ILLTYPE]:= ReadString('BassErr', 'BASS_ERROR_ILLTYPE', 'L''élément n''est pas valide');
+    BassErrArr[BASS_ERROR_ILLPARAM]:= ReadString('BassErr', 'BASS_ERROR_ILLPARAM', 'Le paramètre n''est pas valide');
+    BassErrArr[BASS_ERROR_NO3D]:= ReadString('BassErr', 'BASS_ERROR_NO3D', 'Fonctionenment 3D non suppporté'); //The channel does not have 3D functionality
+    BassErrArr[BASS_ERROR_NOEAX]:= ReadString('BassErr', 'BASS_ERROR_NOEAX', 'Fonctionnement EAX non supporté');
+    BassErrArr[BASS_ERROR_DEVICE]:= ReadString('BassErr', 'BASS_ERROR_DEVICE', 'Périphérique invalide');
+    BassErrArr[BASS_ERROR_NOPLAY]:= ReadString('BassErr', 'BASS_ERROR_NOPLAY', 'Le canal n''est pas en cours de lecture'); //The channel is not playing
+    BassErrArr[BASS_ERROR_FREQ]:= ReadString('BassErr', 'BASS_ERROR_FREQ', 'Erreur de fréquence');
+    BassErrArr[BASS_ERROR_NOTFILE]:= ReadString('BassErr', 'BASS_ERROR_NOTFILE', 'Le fichier ne contient pas de flux');
+    BassErrArr[BASS_ERROR_NOHW]:= ReadString('BassErr', 'BASS_ERROR_NOHW', 'Matériel non trouvé');
+    BassErrArr[BASS_ERROR_EMPTY]:= ReadString('BassErr', 'BASS_ERROR_EMPTY', 'Le fichier ne contient pas de données d''échantillonnage');
+    BassErrArr[BASS_ERROR_NONET]:= ReadString('BassErr', 'BASS_ERROR_NONET', 'Pas de connexion Internet');
+    BassErrArr[BASS_ERROR_CREATE]:= ReadString('BassErr', 'BASS_ERROR_CREATE', 'Le fichier audio n''a pas pu être créé'); //The PCM file could not be created.
+    BassErrArr[BASS_ERROR_NOFX]:= ReadString('BassErr', 'BASS_ERROR_NOFX', 'L''effet demandé est indisponible'); //The specified DX8 effect is unavailable
+    BassErrArr[BASS_ERROR_NOTAVAIL]:= ReadString('BassErr', 'BASS_ERROR_NOTAVAIL', 'Elélent non disponible');
+    BassErrArr[BASS_ERROR_DECODE]:= ReadString('BassErr', 'BASS_ERROR_DECODE', 'Le canal de décodage ne peut pas être lu'); //The channel is not playable; it is a "decoding channel".
+    BassErrArr[BASS_ERROR_DX]:= ReadString('BassErr', 'BASS_ERROR_DX', 'Mauvaise version de DX)');
+    BassErrArr[BASS_ERROR_TIMEOUT]:= ReadString('BassErr', 'BASS_ERROR_TIMEOUT', 'Délai maximum dépassé');
+    BassErrArr[BASS_ERROR_FILEFORM]:= ReadString('BassErr', 'BASS_ERROR_FILEFORM', 'Format de fichier invalide');
+    BassErrArr[BASS_ERROR_SPEAKER]:= ReadString('BassErr', 'BASS_ERROR_SPEAKER', 'Les paramètres de haut parleur sont invalides');  //  The specified SPEAKER flags are invalid
+    BassErrArr[BASS_ERROR_VERSION]:= ReadString('BassErr', 'BASS_ERROR_VERSION', 'Le plugin nécessite une version différente de BASS'); //The plugin requires a different BASS version
+    BassErrArr[BASS_ERROR_CODEC]:= ReadString('BassErr', 'BASS_ERROR_CODEC', 'Codec non disponible');
+    BassErrArr[BASS_ERROR_ENDED]:= ReadString('BassErr', 'BASS_ERROR_ENDED', 'Le canal a atteint la fin');//   The channel has reached the end
+    BassErrArr[BASS_ERROR_BUSY]:= ReadString('BassErr', 'BASS_ERROR_BUSY', 'L''élément est utilisé'); // The deviece is busy
+    BassErrArr[BASS_ERROR_UNSTREAMABLE]:= ReadString('BassErr', 'BASS_ERROR_UNSTREAMABLE', 'Impossible de créer un flux');
+    BassErrArr[length(BassErrArr)-1]:= ReadString('BassErr', 'BASS_ERROR_UNKNOWN', 'Erreur inconnue');
+
+    ErrUnsupportedEnc:= ReadString(LangStr, 'ErrUnsupportedEnc', 'Impossible d''enregistrer, encodage %s non supporté');
+    ErrEncoding:= ReadString(LangStr, 'ErrEncoding', 'Erreur d''encodage %d');
 
     // HTTP Error messages
-    HttpErrMsgNames[0] := ReadString(LangStr,'SErrInvalidProtocol','Protocole "%s" invalide');
-    HttpErrMsgNames[1] := ReadString(LangStr,'SErrReadingSocket','Erreur de lecture des données à partir du socket');
-    HttpErrMsgNames[2] := ReadString(LangStr,'SErrInvalidProtocolVersion','Version de protocole invalide en réponse: %s');
-    HttpErrMsgNames[3] := ReadString(LangStr,'SErrInvalidStatusCode','Code de statut de réponse invalide: %s');
-    HttpErrMsgNames[4] := ReadString(LangStr,'SErrUnexpectedResponse','Code de statut de réponse non prévu: %s');
-    HttpErrMsgNames[5] := ReadString(LangStr,'SErrChunkTooBig','Bloc trop grand');
-    HttpErrMsgNames[6] := ReadString(LangStr,'SErrChunkLineEndMissing','Fin de ligne du bloc manquante');
-    HttpErrMsgNames[7] := ReadString(LangStr,'SErrMaxRedirectsReached','Nombre maximum de redirections atteint: %s');
+    HttpErrMsgNames[0] := ReadString('HttpErr','SErrInvalidProtocol','Protocole "%s" invalide');
+    HttpErrMsgNames[1] := ReadString('HttpErr','SErrReadingSocket','Erreur de lecture des données à partir du socket');
+    HttpErrMsgNames[2] := ReadString('HttpErr','SErrInvalidProtocolVersion','Version de protocole invalide en réponse: %s');
+    HttpErrMsgNames[3] := ReadString('HttpErr','SErrInvalidStatusCode','Code de statut de réponse invalide: %s');
+    HttpErrMsgNames[4] := ReadString('HttpErr','SErrUnexpectedResponse','Code de statut de réponse non prévu: %s');
+    HttpErrMsgNames[5] := ReadString('HttpErr','SErrChunkTooBig','Bloc trop grand');
+    HttpErrMsgNames[6] := ReadString('HttpErr','SErrChunkLineEndMissing','Fin de ligne du bloc manquante');
+    HttpErrMsgNames[7] := ReadString('HttpErr','SErrMaxRedirectsReached','Nombre maximum de redirections atteint: %s');
     // Socket error messages
-    HttpErrMsgNames[8] := ReadString(LangStr,'strHostNotFound','Résolution du nom d''hôte pour "%s" impossible.');
-    HttpErrMsgNames[9] := ReadString(LangStr,'strSocketCreationFailed','Echec de la création du socket: %s');
-    HttpErrMsgNames[10] := ReadString(LangStr,'strSocketBindFailed','Echec de liaison du socket: %s');
-    HttpErrMsgNames[11] := ReadString(LangStr,'strSocketListenFailed','Echec de l''écoute sur le port n° %s, erreur %s');
-    HttpErrMsgNames[12]:=ReadString(LangStr,'strSocketConnectFailed','Echec de la connexion à %s');
-    HttpErrMsgNames[13]:=ReadString(LangStr,'strSocketAcceptFailed','Connexion refusée d''un client sur le socket: %s, erreur %s');
-    HttpErrMsgNames[14]:=ReadString(LangStr,'strSocketAcceptWouldBlock','La connexion pourrait bloquer le socket: %s');
-    HttpErrMsgNames[15]:=ReadString(LangStr,'strSocketIOTimeOut','Impossible de fixer le timeout E/S à %s');
-    HttpErrMsgNames[16]:=ReadString(LangStr,'strErrNoStream','Flux du socket non assigné');
-    end;
+    HttpErrMsgNames[8] := ReadString('HttpErr','strHostNotFound','Résolution du nom d''hôte pour "%s" impossible.');
+    HttpErrMsgNames[9] := ReadString('HttpErr','strSocketCreationFailed','Echec de la création du socket: %s');
+    HttpErrMsgNames[10] := ReadString('HttpErr','strSocketBindFailed','Echec de liaison du socket: %s');
+    HttpErrMsgNames[11] := ReadString('HttpErr','strSocketListenFailed','Echec de l''écoute sur le port n° %s, erreur %s');
+    HttpErrMsgNames[12]:=ReadString('HttpErr','strSocketConnectFailed','Echec de la connexion à %s');
+    HttpErrMsgNames[13]:=ReadString('HttpErr','strSocketAcceptFailed','Connexion refusée d''un client sur le socket: %s, erreur %s');
+    HttpErrMsgNames[14]:=ReadString('HttpErr','strSocketAcceptWouldBlock','La connexion pourrait bloquer le socket: %s');
+    HttpErrMsgNames[15]:=ReadString('HttpErr','strSocketIOTimeOut','Impossible de fixer le timeout E/S à %s');
+    HttpErrMsgNames[16]:=ReadString('HttpErr','strErrNoStream','Flux du socket non assigné');
+  end;
 end;
 
 initialization
