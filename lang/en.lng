@@ -184,6 +184,7 @@ Server=Server
 19045=v 22H2 "October 2022 update"
 22000=v 21H2 "October 2021 Initial Version"
 22621=v 22H2 "September 2022 update"
+22631=v 23H2 "October 2023 update"
 
 [AboutBox]
 Caption=About %s

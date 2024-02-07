@@ -1,6 +1,6 @@
 {*******************************************************************************
   Webradio1 : main unit code
-  bb - sdtp - January 2023
+  bb - sdtp - November 2023
   Using Un4seen BASS libraries www.un4seen.com
 *******************************************************************************}
 
@@ -273,7 +273,7 @@ type
     CompileDateTime: TDateTime;
     UserPath, UserAppsDataPath, MusicPath, WRExecPath:  String;
     WebRadioAppsData, PluginsDir: String;
-    LangStr: string;
+    CurLangStr: string;
     ProgName: String;
     LangFile: TBbIniFile;
     LangNums: TStringList;
@@ -335,7 +335,7 @@ type
     procedure InitButtons;
     procedure Initialize;
     procedure LoadSettings(Filename: string);
-    procedure ModLangue;
+    procedure Translate(LngFile: TBbInifile);
     procedure CheckUpdate(days: iDays);
     procedure ShowBtnBar;
     function SaveConfig(Typ: TSaveMode): boolean;
@@ -1052,13 +1052,13 @@ begin
   {$IFDEF Linux}
     OS := 'Linux';
     CRLF := #10;
-    LangStr := GetEnvironmentVariable('LANG');
+    CurLangStr := GetEnvironmentVariable('LANG');
     // Music folder
     MusicPath:= UserPath+PathDelim+'Music'+PathDelim;
     if not DirectoryExists(MusicPath) then
     MusicPath:= '';
-    x := pos('.', LangStr);
-    LangStr := Copy(LangStr, 0, 2);
+    x := pos('.', CurLangStr);
+    CurLangStr := Copy(CurLangStr, 0, 2);
     wxbitsrun := 0;
     OSTarget:= '';
   {$ENDIF}
@@ -1071,7 +1071,7 @@ begin
       UserAppsDataPath := s                     // NT to XP
     else
     UserAppsDataPath := ExtractFilePath(ExcludeTrailingPathDelimiter(s)) + 'Roaming'; // Vista to W10
-    LazGetShortLanguageID(LangStr);
+    LazGetShortLanguageID(CurLangStr);
     Application.MainFormOnTaskBar:= true;
   {$ENDIF}
   ProgName := 'WebRadio';
@@ -1317,7 +1317,7 @@ begin
   FRadios.OnPlay:= @FRadiosOnPlay;
   ConfigFileName:= WebRadioAppsData+'settings.xml';
   RadiosFileName:= WebRadioAppsData+'wradios.xml';
-  FSettings.Settings.LangStr:= LangStr;
+  FSettings.Settings.LangStr:= CurLangStr;
   // Check inifile with URLs, if not present, then use default
   IniFile:= TBbInifile.Create('webradio.ini');
   AboutBox.ChkVerURL := IniFile.ReadString('urls', 'ChkVerURL','https://github.com/bb84000/webradio/releases/latest');
@@ -1345,7 +1345,9 @@ begin
   PnlDisplay.Font.Color:= clYellow;
   LRadioName.Font.Color:= clYellow;
   LoadSettings(ConfigFileName);
-  ModLangue;
+  LangFile:= TBbIniFile.Create(ExtractFilePath(Application.ExeName) + 'lang'+PathDelim+FSettings.Settings.LangStr+'.lng');
+  Translate(LangFile);
+  //ModLangue;
   LRadioName.Caption:= sNoradio;
   LRadioIcyName.Caption:= ' ';
   if (Pos('64', OSVersion.Architecture)>0) and (OsTarget='32 bits') then
@@ -1540,7 +1542,7 @@ begin
       StartMini:= true;
     end;
      // Détermination de la langue (si pas dans settings, langue par défaut)
-    if Settings.LangStr = '' then Settings.LangStr := LangStr;
+    if Settings.LangStr = '' then Settings.LangStr := CurLangStr;
     {LangFile.ReadSections(LangNums);
     if LangNums.Count > 1 then
     begin
@@ -1586,7 +1588,9 @@ begin
   if Fsettings.Settings.RadioFont <> '' then
   LRadioName.Font.Name:= Fsettings.Settings.RadioFont;
   ChangeColors;
-  Modlangue;
+  //Modlangue;
+  LangFile:= TBbIniFile.Create(ExtractFilePath(Application.ExeName) + 'lang'+PathDelim+FSettings.Settings.LangStr+'.lng');
+  Translate(LangFile);
   SettingsChanged := false;
 end;
 
@@ -1750,6 +1754,7 @@ begin
   AboutBox.LastUpdate:= FSettings.Settings.LastUpdChk;
   chked:= AboutBox.Checked;
   AboutBox.ErrorMessage:='';
+
   AboutBox.ShowModal;
   // If we have checked update and got an error
   if length(AboutBox.ErrorMessage)>0 then
@@ -1918,7 +1923,7 @@ begin
     RBAAC.Enabled:= bBassencAacLoaded;
     RBOGG.Enabled:= bBassencOggLoaded;
     CBLangue.ItemIndex := LangNums.IndexOf(Settings.LangStr);
-    oldlng := FSettings.CBLangue.ItemIndex;
+    oldlng := CBLangue.ItemIndex;
    { if LangNums.Count > 1 then
     begin
       CBLangue.Clear;;
@@ -1997,7 +2002,11 @@ begin
       Settings.DataFolder:= EDataFolder.text;
       if not DirectoryExists(Settings.DataFolder) then CreateDir(Settings.DataFolder);
       Settings.LangStr := LangNums.Strings[CBLangue.ItemIndex];
-      if (CBLangue.ItemIndex<> oldlng) then ModLangue;
+      if (CBLangue.ItemIndex<> oldlng) then
+      begin
+        LangFile:= TBbIniFile.Create(ExtractFilePath(Application.ExeName) + 'lang'+PathDelim+Settings.LangStr+'.lng');
+        self.Translate(LangFile);               // self is important !!! translate main form
+      end;
       try
         if CBFonts.ItemIndex <> oldfont then
         LRadioName.Font.Name:= CBFonts.SelText;
@@ -2393,88 +2402,75 @@ begin
   alertmsg:= '';
   if not visible then alertpos:= poDesktopCenter
   else alertpos:= poMainFormCenter;
+  AboutBox.LastUpdate:= Trunc(FSettings.Settings.LastUpdChk);
   if (Trunc(Now)>Trunc(FSettings.Settings.LastUpdChk)+days) and (not FSettings.Settings.NoChkNewVer) then
   begin
-     FSettings.Settings.LastUpdChk := Trunc(Now);
-     AboutBox.Checked:= true;
-     AboutBox.ErrorMessage:='';
-     sNewVer:= AboutBox.ChkNewVersion;
-     errmsg:= AboutBox.ErrorMessage;
-     // Retry if nothing found the first time
-     if (length(sNewVer)=0) and (length(errmsg)=0)then
-     begin
-       Application.ProcessMessages;
-       sNewVer:= AboutBox.ChkNewVersion;
-       errmsg:= AboutBox.ErrorMessage;
-     end;
-     if length(sNewVer)=0 then
-     begin
-       if length(errmsg)=0 then alertmsg:= sCannotGetNewVer
-       else alertmsg:= TranslateHttpErrorMsg(errmsg, HttpErrMsgNames);
-       if AlertDlg(Caption,  alertmsg, [OKBtn, CancelBtn, sNoLongerChkUpdates],
-                    true, mtError, alertpos)= mrYesToAll then FSettings.Settings.NoChkNewVer:= true;
-       exit;
-     end;
-     NewVer := VersionToInt(sNewVer);
-     // Cannot get new version
-     if NewVer < 0 then exit;
-     //CurVer := VersionToInt('0.1.0.0');     //Test version check
-     CurVer := VersionToInt(version);
-     if NewVer > CurVer then
-     begin
-       FSettings.Settings.LastVersion:= sNewVer;
-       AboutBox.LUpdate.Caption := Format(AboutBox.sUpdateAvailable, [sNewVer]);
-       AboutBox.NewVersion:= true;
-       AboutBox.ShowModal;
-     end else
-     begin
-       AboutBox.LUpdate.Caption:= AboutBox.sNoUpdateAvailable;
-     end;
-     FSettings.Settings.LastUpdChk:= now;
-   end else
-   begin
+    FSettings.Settings.LastUpdChk := Trunc(Now);
+    AboutBox.Checked:= true;
+    AboutBox.ErrorMessage:='';
+    sNewVer:= AboutBox.ChkNewVersion;
+    errmsg:= AboutBox.ErrorMessage;
+    // Retry if nothing found the first time
+    if (length(sNewVer)=0) and (length(errmsg)=0)then
+    begin
+      Application.ProcessMessages;
+      sNewVer:= AboutBox.ChkNewVersion;
+      errmsg:= AboutBox.ErrorMessage;
+    end;
+    if length(sNewVer)=0 then
+    begin
+      if length(errmsg)=0 then alertmsg:= sCannotGetNewVer
+      else alertmsg:= TranslateHttpErrorMsg(errmsg, HttpErrMsgNames);
+      if AlertDlg(Caption,  alertmsg, [OKBtn, CancelBtn, sNoLongerChkUpdates],
+                   true, mtError, alertpos)= mrYesToAll then FSettings.Settings.NoChkNewVer:= true;
+      exit;
+    end;
+    NewVer := VersionToInt(sNewVer);
+    // Cannot get new version
+    if NewVer < 0 then exit;
+    //CurVer := VersionToInt('0.1.0.0');     //Test version check
+    CurVer := VersionToInt(version);
+    if NewVer > CurVer then
+    begin
+      FSettings.Settings.LastVersion:= sNewVer;
+      AboutBox.LUpdate.Caption := Format(AboutBox.sUpdateAvailable, [sNewVer]);
+      AboutBox.NewVersion:= true;
+      AboutBox.ShowModal;
+    end else
+    begin
+      AboutBox.LUpdate.Caption:= AboutBox.sNoUpdateAvailable;
+    end;
+    FSettings.Settings.LastUpdChk:= now;
+  end else
+  begin
     if VersionToInt(FSettings.Settings.LastVersion)>VersionToInt(version) then
-       AboutBox.LUpdate.Caption := Format(AboutBox.sUpdateAvailable, [FSettings.Settings.LastVersion]) else
-       AboutBox.LUpdate.Caption:= AboutBox.sNoUpdateAvailable;
-   end;
-   AboutBox.LUpdate.Hint:= AboutBox.sLastUpdateSearch + ': ' + DateToStr(FSettings.Settings.LastUpdChk);
-   AboutBox.Translate(LangFile);
+      AboutBox.LUpdate.Caption := Format(AboutBox.sUpdateAvailable, [FSettings.Settings.LastVersion]) else
+    begin
+      AboutBox.LUpdate.Caption:= AboutBox.sNoUpdateAvailable;
+      // Already checked the same day
+      if Trunc(FSettings.Settings.LastUpdChk) = Trunc(now) then AboutBox.checked:= true;
+    end;
+  end;
+  // AboutBox.LUpdate.Hint:= AboutBox.sLastUpdateSearch + ': ' + DateToStr(FSettings.Settings.LastUpdChk);
+  AboutBox.Translate(LangFile);
 end;
 
 // Procedure to translate IDE texts
 
-procedure TFWebRadioMain.ModLangue;
+procedure TFWebRadioMain.Translate(lngFile: TBbInifile);
 var
-  i: Integer;
-  A: TStringArray;
   prgName: String;
 begin
-  LangStr:=FSettings.Settings.LangStr;
+  //LangStr:=FSettings.Settings.LangStr;
   // Get selected language file
-  LangFile:= TBbIniFile.Create(ExtractFilePath(Application.ExeName) + 'lang'+PathDelim+LangStr+'.lng');
-  With LangFile do
+  //LngFile:= TBbIniFile.Create(ExtractFilePath(Application.ExeName) + 'lang'+PathDelim+FSettings.Settings.LangStr+'.lng');
+  If Assigned(lngFile) then
+  With LngFile do
   begin
     prgName:= ReadString('common', 'ProgName', 'Erreur');
-    if prgName<>ProgName then
-      ShowMessage(ReadString('common', 'ProgErr', 'Fichier de langue erroné. Réinstallez le programme'));
-    {$IFDEF WINDOWS}
-    with OsVersion do
-    begin
-      ProdStrs.Strings[1]:= ReadString('OSVersion','Home','Famille'); ;
-      ProdStrs.Strings[2]:= ReadString('OSVersion','Professional','Entreprise');
-      ProdStrs.Strings[3]:= ReadString('OSVersion','Server','Serveur');
-      for i:= 0 to Win10Strs.count-1 do
-      begin
-        A:= Win10Strs.Strings[i].split('=');
-        Win10Strs.Strings[i]:= A[0]+'='+ReadString('OSVersion',A[0],A[1]);
-      end;
-      for i:= 0 to Win11Strs.count-1 do
-      begin
-        A:= Win11Strs.Strings[i].split('=');
-        Win11Strs.Strings[i]:= A[0]+'='+ReadString('OSVersion',A[0],A[1]);
-      end;
-    end;
-    {$ENDIF}
+    if prgName<>ProgName then ShowMessage(ReadString('common', 'ProgErr',
+                         'Fichier de langue erroné. Réinstallez le programme'));
+    OsVersion.Translate(LangFile);
     // Form
     DefaultCaption:= ReadString('common', 'DefaultCaption', Caption);
     OKBtn:= ReadString('common', 'OKBtn','OK');
@@ -2612,8 +2608,8 @@ begin
     BassErrArr[BASS_ERROR_UNSTREAMABLE]:= ReadString('BassErr', 'BASS_ERROR_UNSTREAMABLE', 'Impossible de créer un flux');
     BassErrArr[length(BassErrArr)-1]:= ReadString('BassErr', 'BASS_ERROR_UNKNOWN', 'Erreur inconnue');
 
-    ErrUnsupportedEnc:= ReadString(LangStr, 'ErrUnsupportedEnc', 'Impossible d''enregistrer, encodage %s non supporté');
-    ErrEncoding:= ReadString(LangStr, 'ErrEncoding', 'Erreur d''encodage %d');
+    ErrUnsupportedEnc:= ReadString('main', 'ErrUnsupportedEnc', 'Impossible d''enregistrer, encodage %s non supporté');
+    ErrEncoding:= ReadString('main', 'ErrEncoding', 'Erreur d''encodage %d');
 
     // HTTP Error messages
     HttpErrMsgNames[0] := ReadString('HttpErr','SErrInvalidProtocol','Protocole "%s" invalide');

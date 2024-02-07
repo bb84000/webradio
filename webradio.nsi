@@ -194,7 +194,7 @@ Section "" ;No components page, name is not important
   File "/oname=bass64.dll" "${lazarus_dir}\Bass\x64\bass.dll"
   File "/oname=bassenc64.dll" "${lazarus_dir}\Bass\x64\bassenc.dll"
   File "/oname=bass32.dll" "${lazarus_dir}\Bass\bass.dll"
-  File "/oname=bassenc32.dll" "${lazarus_dir}\Bass\bass.dll"
+  File "/oname=bassenc32.dll" "${lazarus_dir}\Bass\bassenc.dll"
   File "/oname=libeay3264.dll" "${lazarus_dir}\openssl\win64\libeay32.dll"
   File "/oname=ssleay3264.dll" "${lazarus_dir}\openssl\win64\ssleay32.dll"
   File "/oname=libeay3232.dll" "${lazarus_dir}\openssl\win32\libeay32.dll"

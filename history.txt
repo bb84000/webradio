@@ -129,4 +129,8 @@ Version 1.0.0.1 - 21/01/2023
 Version 1.0.0.2 - 24/01/2023
 - Self translation of different application's forms
 
+Version 1.0.0.3 - 07/02/2024
+- Self translation of TOsVersion component
+- Corection of 32 bit install
+
 

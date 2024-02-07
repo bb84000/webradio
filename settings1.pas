@@ -179,7 +179,7 @@ end;
     Settings: TConfig;
     sMnuCopy: string;
     sMnuPaste: string;
-    procedure Translate(LangFile: TBbIniFile);
+    procedure Translate(LngFile: TBbIniFile);
   end;
 
 var
@@ -615,12 +615,12 @@ end;
 
 // Self localization procedure. LangFile parameter is language related ini file
 
-procedure TFSettings.Translate(LangFile: TBbIniFile);
+procedure TFSettings.Translate(LngFile: TBbIniFile);
 var
   DefaultCaption: String;
 begin
-  if assigned (Langfile) then
-  with LangFile do
+  if assigned (Lngfile) then
+  with LngFile do
   begin
     BtnOK.Caption:= ReadString('Common', 'OKBtn', BtnOK.Caption);
     BtnCancel.Caption:= ReadString('Common', 'CancelBtn', BtnCancel.Caption);

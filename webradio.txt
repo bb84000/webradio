@@ -5,6 +5,8 @@ French description at the end of Ebglish one
 Web radio Tuner is a program to play and record the radio streams on the Web from their address (url).
 
 INSTALLATION
+Download archive. After the download, unlock the zip file (rigth click on the file in File Explorer, 
+in the menu, left click on "Properties", check the "Unlock" case and click th "OK" button.
 Run InstallWebradio.exe, then follow instructions of the setup program.
 
 USAGE
@@ -38,6 +40,8 @@ English description on top of this document
 Tuner radio Web permet de lire et d'enregistrer les flux radio sur le Web à partir de leur adresse (url).
 
 INSTALLATION
+Téléchargez l'archive. Après le téléchargement, débloquer le fichier zip (Clic droit sur le fichier dans l'Explorateur de fichiers, 
+dans le menu, clic gauche sur "Propriétés", cocher la case "Débloquer" puis cliquez sur le bouton "OK".
 Exécuter InstallWebradio.exe, puis suivre les instructions du programme d'installation.
 
 UTILISATION

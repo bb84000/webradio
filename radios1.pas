@@ -180,7 +180,7 @@ type
     function SaveRadios(filename:String): Boolean;
     procedure PopulateList(rdl: TRadiosList);
     property OnPlay: TOnPlayEvent read FOnPlay write FOnPlay;
-    procedure Translate(LangFile: TBbIniFile);
+    procedure Translate(LngFile: TBbIniFile);
   end;
 
 var
@@ -1158,12 +1158,12 @@ end;
 
 // Self localization procedure. LangFile parameter is language related ini file
 
-procedure TFRadios.Translate(LangFile: TBbIniFile);
+procedure TFRadios.Translate(LngFile: TBbIniFile);
 var
   DefaultCaption: String;
 begin
-  if assigned (Langfile) then
-  with LangFile do
+  if assigned (Lngfile) then
+  with LngFile do
   begin
     //Caption:= ReadString(FRadios', 'Caption', Caption);   // Not set. Use related main menu item caption
     BtnOK.Caption:= ReadString('Common', 'OKBtn', BtnOK.Caption);
