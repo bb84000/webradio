@@ -93,14 +93,6 @@ type
    text: String;                           //Complete icy and ice text
  end;
 
-  { int64 or longint type for Application.QueueAsyncCall }
-  {$IFDEF CPU32}
-    iDays= LongInt;
-  {$ENDIF}
-  {$IFDEF CPU64}
-    iDays= Int64;
-  {$ENDIF}
-
   // Define settings saving mode
   TSaveMode = (None, Setting, All);
 
@@ -336,7 +328,7 @@ type
     procedure Initialize;
     procedure LoadSettings(Filename: string);
     procedure Translate(LngFile: TBbInifile);
-    procedure CheckUpdate(days: iDays);
+    procedure CheckUpdate(days: PtrInt);
     procedure ShowBtnBar;
     function SaveConfig(Typ: TSaveMode): boolean;
     procedure SettingsOnChange(Sender: TObject);
@@ -2389,7 +2381,7 @@ end;
 
 //Dernière recherche il y a "days" jours ou plus ?
 
-procedure TFWebRadioMain.CheckUpdate(days: iDays);
+procedure TFWebRadioMain.CheckUpdate(days: PtrInt);
 var
   errmsg: string;
   sNewVer: string;

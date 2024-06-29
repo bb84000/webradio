@@ -133,4 +133,9 @@ Version 1.0.0.3 - 07/02/2024
 - Self translation of TOsVersion component
 - Corection of 32 bit install
 
+Version 1.0.0.4
+- Relpaced iDay type with PtrInt
+
+Version 1.0.0.5
+- Changed OSVersion
 
