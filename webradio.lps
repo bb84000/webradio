@@ -18,8 +18,8 @@
         <ComponentName Value="FWebRadioMain"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <TopLine Value="2368"/>
-        <CursorPos X="50" Y="2384"/>
+        <TopLine Value="376"/>
+        <CursorPos Y="393"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -50,9 +50,10 @@
       <Unit>
         <Filename Value="history.txt"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="107"/>
-        <CursorPos Y="141"/>
+        <TopLine Value="110"/>
+        <CursorPos Y="144"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Text"/>
@@ -60,9 +61,8 @@
       <Unit>
         <Filename Value="webradio.txt"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="27"/>
+        <TopLine Value="32"/>
         <CursorPos X="62" Y="61"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
@@ -996,6 +996,12 @@
         <UnitName Value="NewPackage"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="3" Y="11"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Divers\labelres.pas"/>
+        <UnitName Value="LabelRes"/>
+        <EditorIndex Value="-1"/>
         <UsageCount Value="10"/>
       </Unit>
     </Units>
