@@ -13,7 +13,7 @@ object FRadios: TFRadios
   OnDestroy = FormDestroy
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '2.2.4.0'
+  LCLVersion = '3.8.0.0'
   object PMain1: TPanel
     Left = 206
     Height = 165
@@ -205,11 +205,11 @@ object FRadios: TFRadios
       Height = 23
       Top = 110
       Width = 296
-      OnClick = EFaviconURLClick
       ParentShowHint = False
       ReadOnly = True
       ShowHint = True
       TabOrder = 4
+      OnClick = EFaviconURLClick
     end
   end
   object PMain: TPanel
@@ -228,10 +228,10 @@ object FRadios: TFRadios
       Width = 204
       Align = alClient
       ItemHeight = 0
+      TabOrder = 0
       OnClick = LBRadiosClick
       OnMouseMove = LBRadiosMouseMove
       OnSelectionChange = LBRadiosSelectionChange
-      TabOrder = 0
     end
   end
   object PTools: TPanel
@@ -574,8 +574,8 @@ object FRadios: TFRadios
       Height = 23
       Top = 10
       Width = 120
-      OnChange = ESearchNameChange
       TabOrder = 0
+      OnChange = ESearchNameChange
     end
     object LSearchCountry: TLabel
       Left = 400

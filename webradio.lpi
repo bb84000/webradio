@@ -24,8 +24,8 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="6"/>
-      <StringTable Comments="Web radio player" CompanyName="sdtp - bb" FileDescription="Tuner radio web - Web radio tuner" InternalName="WebRadio" LegalCopyright="sdtp - bb95" LegalTrademarks="sdtp - bb95" OriginalFilename="WebRadio.exe" ProductName="WebRadio" ProductVersion="1.0.0.6"/>
+      <RevisionNr Value="1"/>
+      <StringTable Comments="Web radio player" CompanyName="sdtp - bb" FileDescription="Tuner radio web - Web radio tuner" InternalName="WebRadio" LegalCopyright="sdtp - bb95" LegalTrademarks="sdtp - bb95" OriginalFilename="WebRadio.exe" ProductName="WebRadio" ProductVersion="1.0.1.0"/>
     </VersionInfo>
     <BuildModes>
       <Item Name="Default" Default="True"/>
@@ -38,6 +38,12 @@
       <FormatVersion Value="2"/>
     </RunParams>
     <RequiredPackages>
+      <Item>
+        <PackageName Value="ExCtrlsPkg_dsgn"/>
+      </Item>
+      <Item>
+        <PackageName Value="ExCtrlsPkg"/>
+      </Item>
       <Item>
         <PackageName Value="indylaz"/>
       </Item>
@@ -100,6 +106,13 @@
         <Filename Value="..\Packets\Lazbbcomponents\History;txt.txt"/>
         <IsPartOfProject Value="True"/>
       </Unit>
+      <Unit>
+        <Filename Value="..\lazbbunits\lazbbaboutupdate.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="AboutBox"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -114,8 +127,8 @@
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <CodeGeneration>
-      <TargetCPU Value="i386"/>
-      <TargetOS Value="win32"/>
+      <TargetCPU Value="x86_64"/>
+      <TargetOS Value="win64"/>
       <Optimizations>
         <OptimizationLevel Value="2"/>
       </Optimizations>
@@ -123,7 +136,6 @@
     <Linking>
       <Debugging>
         <GenerateDebugInfo Value="False"/>
-        <RunWithoutDebug Value="True"/>
         <DebugInfoType Value="dsDwarf2Set"/>
       </Debugging>
       <Options>

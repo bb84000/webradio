@@ -15,7 +15,7 @@ object FWebRadioMain: TFWebRadioMain
   OnDestroy = FormDestroy
   OnWindowStateChange = FormWindowStateChange
   Position = poDesktopCenter
-  LCLVersion = '3.2.0.0'
+  LCLVersion = '3.8.0.0'
   object PnlMain: TPanel
     Left = 0
     Height = 251
@@ -16870,7 +16870,6 @@ object FWebRadioMain: TFWebRadioMain
       'Professional'
       'Server'
     )
-    
     Left = 856
     Top = 8
   end

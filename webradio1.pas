@@ -1,6 +1,6 @@
 {*******************************************************************************
   Webradio1 : main unit code
-  bb - sdtp - November 2023
+  bb - sdtp - march 2025
   Using Un4seen BASS libraries www.un4seen.com
 *******************************************************************************}
 
@@ -18,7 +18,7 @@ Graphics, Dialogs, ExtCtrls, StdCtrls, Menus, lazd_bass, lazd_bass_wma,
 lazd_bass_aac, lazd_bassenc, lazd_bassenc_mp3, lazd_bassenc_aac,
 lazd_bassenc_ogg, lazd_bass_flac, lazbbcontrols, lazbbscrollcontrols,
 lazbbtrackbar, lazbbOsVersion, settings1, radios1, lazbbutils, lazUTF8, FileUtil,
-lazbbinifiles, registry, lazbbaboutdlg, lazbbautostart, lazbbResources,
+lazbbinifiles, registry, lazbbaboutdlg, lazbbautostart, lazbbResources, lazbbupdatedlg,
 ComCtrls, Buttons, ColorSpeedButton, UniqueInstance, fptimer,
 variants, BGRABitmap, BGRABitmapTypes, LazFileUtils, Types;
 
@@ -152,6 +152,7 @@ type
     LTag: TbbScrollLabel;
     LRadioIcyName: TbbScrollLabel;
     LRadioName: TbbScrollLabel;
+
     OsVersion: TbbOsVersion;
     PMnuSearchRadios: TMenuItem;
     SBSearchRadios: TSpeedButton;
@@ -229,6 +230,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormWindowStateChange(Sender: TObject);
+    procedure PMnuAddURLClick(Sender: TObject);
     procedure PMnuEqualizerClick(Sender: TObject);
     procedure PMnuRadListClick(Sender: TObject);
     procedure PMnuChooseRadioClick(Sender: TObject);
@@ -1129,6 +1131,13 @@ begin
   end;
 end;
 
+procedure TFWebRadioMain.PMnuAddURLClick(Sender: TObject);
+begin
+
+end;
+
+
+
 // Intercept minimize system system command to correct
 // wrong window placement on restore from tray
 
@@ -1315,12 +1324,14 @@ begin
   AboutBox.ChkVerURL := IniFile.ReadString('urls', 'ChkVerURL','https://github.com/bb84000/webradio/releases/latest');
   AboutBox.UrlWebsite:= IniFile.ReadString('urls', 'UrlWebSite','https://www.sdtp.com');
   AboutBox.UrlSourceCode:=IniFile.ReadString('urls', 'UrlSourceCode','https://github.com/bb84000/webradio');
+  UpdateDlg.UrlInstall:= IniFile.ReadString('urls', 'UrlInstall', 'https://github.com/bb84000/webradio/raw/refs/heads/main/webradio.zip');
+  UpdateDlg.ExeInstall:= IniFile.ReadString('urls', 'ExeInstall', 'InstallWebradio.exe');
   ChkVerInterval:= IniFile.ReadInt64('urls', 'ChkVerInterval', 3);
   FRadios.sDNSHost:= IniFile.ReadString('urls', 'sDNSHost', '8.8.8.8');
   FRadios.sARecAPI:= IniFile.ReadString('urls', 'sARecAPI', 'all.api.radio-browser.info');
   FRadios.sSrvRecAPI:= IniFile.ReadString('urls', 'sSrvRecAPI', '_api._tcp.radio-browser.info');
   FRadios.sRadioBrowserURL:= IniFile.ReadString('urls', 'sRadioBrowserURL', 'https://www.radio-browser.info');
-
+  if Assigned(IniFile) then IniFile.free;
   // Language dependent variables are updated in ModLangue procedure
   //AboutBox.Width:= 400; // to have more place for the long product name
   bbLoadfromResource(AboutBox.Image1, 'WEBRADIO32');
@@ -1331,7 +1342,9 @@ begin
   AboutBox.Version:= Version;
   AboutBox.ProgName:= ProgName;
   AboutBox.LastUpdate:= FSettings.Settings.LastUpdChk;
-  if Assigned(IniFile) then IniFile.free;
+  UpdateDlg.ProgName:= ProgName;
+  UpdateDlg.NewVersion:= false;
+
   // Default display colors
   PnlDisplay.Color:= clBlack;
   PnlDisplay.Font.Color:= clYellow;
@@ -1693,7 +1706,7 @@ begin
     Item.Caption := FRadios.Radios.GetItem(i).name;
     Item.Tag:= i;
     if TMenuItem(SEnder).name='PMnuChooseRadio' then Item.OnClick := @PMnuRadioListItemClick;
-    if TSpeedButton(Sender).Name='SBChooseRadio' then Item.OnClick := @PMnuRadioListItemClick;;
+    //if TSpeedButton(Sender).Name='SBChooseRadio' then Item.OnClick := @PMnuRadioListItemClick;;
     if TMenuItem(SEnder).name='PMnuOpenRadio' then Item.OnClick := @PMnuOpenRadioItemClick;
     if TMenuItem(SEnder).name='SBOpenRadio' then Item.OnClick := @PMnuOpenRadioItemClick;
     PMnuRadiosList.Items.Add(Item);
@@ -2427,7 +2440,13 @@ begin
       FSettings.Settings.LastVersion:= sNewVer;
       AboutBox.LUpdate.Caption := Format(AboutBox.sUpdateAvailable, [sNewVer]);
       AboutBox.NewVersion:= true;
-      AboutBox.ShowModal;
+      UpdateDlg.sNewVer:= sNewVer;
+      UpdateDlg.NewVersion:= true;
+      {$IFDEF WINDOWS}
+        if UpdateDlg.ShowModal = mryes then Close;    // New version install experimental
+      {$ELSE}
+        AboutBox.ShowModal;
+      {$ENDIF}
     end else
     begin
       AboutBox.LUpdate.Caption:= AboutBox.sNoUpdateAvailable;
@@ -2538,6 +2557,9 @@ begin
     // About box
     AboutBox.LVersion.Hint:= OSVersion.VerDetail;
     AboutBox.Translate(LangFile);
+
+    // UpdateDlg
+    UpdateDlg.Translate (LangFile);
 
     HelpFile:= WRExecPath+'help'+PathDelim+ReadString('main','HelpFile', 'webradio.html');
 

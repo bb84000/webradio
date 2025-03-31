@@ -141,3 +141,6 @@ Version 1.0.0.5
 
 Version 1.0.0.6 - 27/12/2024
 - Updated for Windows 11 24H2
+
+Version 1.0.1.0 - 31/03/2025
+- Auto update module (Windows only, experimental)

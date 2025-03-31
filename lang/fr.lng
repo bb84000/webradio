@@ -244,3 +244,13 @@ LPresets.Caption=Présélections
 LRadioBrowser.Caption=Recherche effectuée sur radio-browser.info
 EFavicon.Hint=Cliquez sur le bouton à droite de ce champ pour sélectionner une image
 
+[UpdateDlg]
+Caption=Mise à jour de %s
+BtnDownload.Caption=Télécharger
+BtnUpdate.Caption=Mettre à jour
+BtnAbort.Caption-Abandonner
+sUpdtAvailable=Nouvelle version %s disponible. Cliquez sur le bouton "Télécharger"
+sNoUpdtAvailable=%s est à jour
+sUpdtInstall=Cliquer sur le bouton "Mettre à jour" pour installer la mise à jour
+DlError=Erreur de téléchargement
+ZipError=Erreur archive

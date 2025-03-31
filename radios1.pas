@@ -13,7 +13,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls,
   Buttons, ExtDlgs, laz2_DOM, laz2_XMLRead, laz2_XMLWrite, lazbbutils, fileutil,
   IdDNSResolver, fphttpclient, fpopenssl, openssl, opensslsockets, lclintf,
-  Menus, lazbbinifiles ;
+  Menus, lazbbinifiles, ExProgressbar ;
 
 type
 
