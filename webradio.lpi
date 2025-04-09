@@ -25,7 +25,8 @@
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="1"/>
       <RevisionNr Value="1"/>
-      <StringTable Comments="Web radio player" CompanyName="sdtp - bb" FileDescription="Tuner radio web - Web radio tuner" InternalName="WebRadio" LegalCopyright="sdtp - bb95" LegalTrademarks="sdtp - bb95" OriginalFilename="WebRadio.exe" ProductName="WebRadio" ProductVersion="1.0.1.0"/>
+      <BuildNr Value="1"/>
+      <StringTable Comments="Web radio player" CompanyName="sdtp - bb" FileDescription="Tuner radio web - Web radio tuner" InternalName="WebRadio" LegalCopyright="sdtp - bb95" LegalTrademarks="sdtp - bb95" OriginalFilename="WebRadio.exe" ProductName="WebRadio" ProductVersion="1.0.1.1"/>
     </VersionInfo>
     <BuildModes>
       <Item Name="Default" Default="True"/>

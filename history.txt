@@ -144,3 +144,6 @@ Version 1.0.0.6 - 27/12/2024
 
 Version 1.0.1.0 - 31/03/2025
 - Auto update module (Windows only, experimental)
+
+Version 1.0.1.1 - 09/04/2025
+- Auto update enabled in About Box

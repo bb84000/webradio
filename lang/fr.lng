@@ -190,7 +190,7 @@ LUpdate.Caption=Recherche de mise à jour
 LProgPage.Caption=Page d'accueil du programme
 LWebSite.Caption=Page d'accueil du site Web
 LSourceCode.Caption=Page Web du code source
-UrlProgSite=/wiki/Accueil
+UrlProgSite=/Accueil
 
 [FSettings]
 Caption=Préférences de %s

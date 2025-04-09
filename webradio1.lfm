@@ -8339,7 +8339,7 @@ object FWebRadioMain: TFWebRadioMain
       ParentShowHint = False
     end
     object SBAbout: TSpeedButton
-      Left = 375
+      Left = 376
       Height = 26
       Top = 10
       Width = 36

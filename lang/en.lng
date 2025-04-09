@@ -194,7 +194,7 @@ sUpdateAvailable=New version %s available. Click to download it
 sNoUpdateAvailable=%s is up to date.
 LUpdate.Caption=Search update
 LProgPage.Caption=Program home page
-UrlProgSite=/wiki
+UrlProgSite=
 LWebSite.Caption=Web site home page
 LSourceCode.Caption=Source code Web page
 

@@ -355,6 +355,7 @@ type
     procedure RadioConnectedChange(Sender: TObject);
     procedure FRadiosOnPlay(Sender: Tobject; rad: Tradio);
     procedure MessageProc(var Msg: TLMessage); message WM_WEBRADIO;
+    procedure InitAboutBox;
   public
     BassWMA, BassAAC, BassFLAC, BassEnc, BassEncMP3: HPlugin;
     StreamSave:boolean;
@@ -1313,44 +1314,19 @@ begin
   if initialized then exit;
   // Now, main settings
   FSettings.Settings.AppName:= LowerCase(ProgName);
-
   FRadios.Radios.AppName := LowerCase(ProgName);
   FRadios.OnPlay:= @FRadiosOnPlay;
   ConfigFileName:= WebRadioAppsData+'settings.xml';
   RadiosFileName:= WebRadioAppsData+'wradios.xml';
-  FSettings.Settings.LangStr:= CurLangStr;
-  // Check inifile with URLs, if not present, then use default
-  IniFile:= TBbInifile.Create('webradio.ini');
-  AboutBox.ChkVerURL := IniFile.ReadString('urls', 'ChkVerURL','https://github.com/bb84000/webradio/releases/latest');
-  AboutBox.UrlWebsite:= IniFile.ReadString('urls', 'UrlWebSite','https://www.sdtp.com');
-  AboutBox.UrlSourceCode:=IniFile.ReadString('urls', 'UrlSourceCode','https://github.com/bb84000/webradio');
-  UpdateDlg.UrlInstall:= IniFile.ReadString('urls', 'UrlInstall', 'https://github.com/bb84000/webradio/raw/refs/heads/main/webradio.zip');
-  UpdateDlg.ExeInstall:= IniFile.ReadString('urls', 'ExeInstall', 'InstallWebradio.exe');
-  ChkVerInterval:= IniFile.ReadInt64('urls', 'ChkVerInterval', 3);
-  FRadios.sDNSHost:= IniFile.ReadString('urls', 'sDNSHost', '8.8.8.8');
-  FRadios.sARecAPI:= IniFile.ReadString('urls', 'sARecAPI', 'all.api.radio-browser.info');
-  FRadios.sSrvRecAPI:= IniFile.ReadString('urls', 'sSrvRecAPI', '_api._tcp.radio-browser.info');
-  FRadios.sRadioBrowserURL:= IniFile.ReadString('urls', 'sRadioBrowserURL', 'https://www.radio-browser.info');
-  if Assigned(IniFile) then IniFile.free;
-  // Language dependent variables are updated in ModLangue procedure
-  //AboutBox.Width:= 400; // to have more place for the long product name
-  bbLoadfromResource(AboutBox.Image1, 'WEBRADIO32');
-  AboutBox.LProductName.Caption := GetVersionInfo.FileDescription;
-  AboutBox.LCopyright.Caption := GetVersionInfo.CompanyName + ' - ' + DateTimeToStr(CompileDateTime);
-  AboutBox.LVersion.Caption := 'Version: ' + Version + ' (' + OS + OSTarget + ')';
-  //AboutBox.LUpdate.Hint := AboutBox.sLastUpdateSearch + ': ' + DateToStr(FSettings.Settings.LastUpdChk);   //In modlangue
-  AboutBox.Version:= Version;
-  AboutBox.ProgName:= ProgName;
-  AboutBox.LastUpdate:= FSettings.Settings.LastUpdChk;
-  UpdateDlg.ProgName:= ProgName;
-  UpdateDlg.NewVersion:= false;
-
+  //FSettings.Settings.LangStr:= CurLangStr;
   // Default display colors
   PnlDisplay.Color:= clBlack;
   PnlDisplay.Font.Color:= clYellow;
   LRadioName.Font.Color:= clYellow;
   LoadSettings(ConfigFileName);
+  if length(FSettings.Settings.LastVersion)=0 then FSettings.Settings.LastVersion:= version;
   LangFile:= TBbIniFile.Create(ExtractFilePath(Application.ExeName) + 'lang'+PathDelim+FSettings.Settings.LangStr+'.lng');
+  InitAboutBox ;
   Translate(LangFile);
   //ModLangue;
   LRadioName.Caption:= sNoradio;
@@ -1444,6 +1420,44 @@ begin
   end else PlayRadio(CurRadio);
   Initialized:= true;
 
+end;
+
+procedure TFWebRadioMain.InitAboutBox;
+var
+  IniFile: TBbIniFile;
+begin
+  // Check inifile with URLs, if not present, then use default
+  IniFile:= TBbInifile.Create('webradio.ini');
+  AboutBox.UrlWebsite:= IniFile.ReadString('urls', 'UrlWebSite','https://www.sdtp.com');
+  AboutBox.UrlSourceCode:=IniFile.ReadString('urls', 'UrlSourceCode','https://github.com/bb84000/webradio');
+  AboutBox.UrlProgSite:=  IniFile.ReadString('urls', 'UrlProgSite','https://github.com/bb84000/webradio/wiki');
+  AboutBox.autoUpdate:= true;          // enable auto update on Aboutbox new version click
+  AboutBox.ChkVerURL := IniFile.ReadString('urls', 'ChkVerURL','https://api.github.com/repos/bb84000/webradio/releases/latest');
+  UpdateDlg.UrlInstall:= IniFile.ReadString('urls', 'UrlInstall', 'https://github.com/bb84000/webradio/raw/refs/heads/main/webradio.zip');
+  UpdateDlg.ExeInstall:= IniFile.ReadString('urls', 'ExeInstall', 'InstallWebradio.exe'); // Installer executable
+  ChkVerInterval:= IniFile.ReadInt64('urls', 'ChkVerInterval', 3);
+  FRadios.sDNSHost:= IniFile.ReadString('urls', 'sDNSHost', '8.8.8.8');
+  FRadios.sARecAPI:= IniFile.ReadString('urls', 'sARecAPI', 'all.api.radio-browser.info');
+  FRadios.sSrvRecAPI:= IniFile.ReadString('urls', 'sSrvRecAPI', '_api._tcp.radio-browser.info');
+  FRadios.sRadioBrowserURL:= IniFile.ReadString('urls', 'sRadioBrowserURL', 'https://www.radio-browser.info');
+  if assigned(inifile) then FreeAndNil(inifile);
+  AboutBox.Version:= Version;
+  AboutBox.LProductName.Caption:= GetVersionInfo.ProductName+' ('+OsTarget+')';
+  AboutBox.LCopyright.Caption:= GetVersionInfo.CompanyName+' - '+DateTimeToStr(CompileDateTime);
+  //AboutBox.Width:= 340; // to have more place for the long product name
+  AboutBox.LVersion.Caption:= 'Version: '+Version+ ' (' + OS + OSTarget + ')';
+  //AboutBox.Image1.Picture.Icon.Handle:= Application.Icon.Handle;
+  bbLoadfromResource(AboutBox.Image1, 'WEBRADIO32');
+  AboutBox.ProgName:= ProgName;
+  AboutBox.LastUpdate:= FSettings.Settings.LastUpdChk;
+  AboutBox.LastVersion:= FSettings.Settings.LastVersion;
+  AboutBox.LUpdate.Hint := AboutBox.sLastUpdateSearch + ': ' + DateToStr(FSettings.Settings.LastUpdChk);
+  // Populate UpdateDlg with proper variables
+  UpdateDlg.ChkVerURL := AboutBox.ChkVerUrl;
+  UpdateDlg.ProgName:= ProgName;
+  UpdateDlg.NewVersion:= false;
+  AboutBox.Translate(LangFile);
+  UpdateDlg.Translate(LangFile);
 end;
 
 // Load preset radios
@@ -1756,11 +1770,24 @@ var
   chked: Boolean;
   alertmsg: String;
 begin
+  // If main windows is hidden, place the about box at the center of desktop,
+  // else at the center of main windows
+  if (Sender.ClassName= 'TMenuItem') and not visible then AboutBox.Position:= poDesktopCenter
+  else AboutBox.Position:= poMainFormCenter;
   AboutBox.LastUpdate:= FSettings.Settings.LastUpdChk;
   chked:= AboutBox.Checked;
   AboutBox.ErrorMessage:='';
-
-  AboutBox.ShowModal;
+  if AboutBox.ShowModal= mrLast then
+  begin
+      UpdateDlg.sNewVer:= AboutBox.LastVersion;
+      UpdateDlg.NewVersion:= true;
+      {$IFDEF WINDOWS}
+        if UpdateDlg.ShowModal = mryes then close;    // New version install experimental
+      {$ELSE}
+        OpenURL(AboutBox.UrlProgSite);
+      {$ENDIF}
+  end;
+  FSettings.Settings.LastVersion:= AboutBox.LastVersion ;
   // If we have checked update and got an error
   if length(AboutBox.ErrorMessage)>0 then
   begin
@@ -2407,7 +2434,7 @@ begin
   alertmsg:= '';
   if not visible then alertpos:= poDesktopCenter
   else alertpos:= poMainFormCenter;
-  AboutBox.LastUpdate:= Trunc(FSettings.Settings.LastUpdChk);
+  //AboutBox.LastUpdate:= Trunc(FSettings.Settings.LastUpdChk);
   if (Trunc(Now)>Trunc(FSettings.Settings.LastUpdChk)+days) and (not FSettings.Settings.NoChkNewVer) then
   begin
     FSettings.Settings.LastUpdChk := Trunc(Now);
@@ -2416,12 +2443,12 @@ begin
     sNewVer:= AboutBox.ChkNewVersion;
     errmsg:= AboutBox.ErrorMessage;
     // Retry if nothing found the first time
-    if (length(sNewVer)=0) and (length(errmsg)=0)then
-    begin
-      Application.ProcessMessages;
-      sNewVer:= AboutBox.ChkNewVersion;
-      errmsg:= AboutBox.ErrorMessage;
-    end;
+    //if (length(sNewVer)=0) and (length(errmsg)=0)then
+    //begin
+    //  Application.ProcessMessages;
+    //  sNewVer:= AboutBox.ChkNewVersion;
+    //  errmsg:= AboutBox.ErrorMessage;
+    //end;
     if length(sNewVer)=0 then
     begin
       if length(errmsg)=0 then alertmsg:= sCannotGetNewVer
@@ -2455,14 +2482,17 @@ begin
   end else
   begin
     if VersionToInt(FSettings.Settings.LastVersion)>VersionToInt(version) then
-      AboutBox.LUpdate.Caption := Format(AboutBox.sUpdateAvailable, [FSettings.Settings.LastVersion]) else
+    begin
+      AboutBox.LUpdate.Caption := Format(AboutBox.sUpdateAvailable, [FSettings.Settings.LastVersion]);
+      AboutBox.NewVersion:= true ;
+    end else
     begin
       AboutBox.LUpdate.Caption:= AboutBox.sNoUpdateAvailable;
       // Already checked the same day
       if Trunc(FSettings.Settings.LastUpdChk) = Trunc(now) then AboutBox.checked:= true;
     end;
   end;
-  // AboutBox.LUpdate.Hint:= AboutBox.sLastUpdateSearch + ': ' + DateToStr(FSettings.Settings.LastUpdChk);
+  AboutBox.LUpdate.Hint:= AboutBox.sLastUpdateSearch + ': ' + DateToStr(FSettings.Settings.LastUpdChk);
   AboutBox.Translate(LangFile);
 end;
 
