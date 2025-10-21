@@ -1,6 +1,6 @@
 ;------------------------------------------------------------------------------------------
 ; NSIS Installation script for 32/64 bit WebRadio
-; bb - sdtp - October 2022
+; bb - sdtp - October 2025
 ;
 ; 22/10/2022 Replaced onInit with a custom page to check running app and previous versions
 ;------------------------------------------------------------------------------------------
@@ -195,10 +195,7 @@ Section "" ;No components page, name is not important
   File "/oname=bassenc64.dll" "${lazarus_dir}\Bass\x64\bassenc.dll"
   File "/oname=bass32.dll" "${lazarus_dir}\Bass\bass.dll"
   File "/oname=bassenc32.dll" "${lazarus_dir}\Bass\bassenc.dll"
-  File "/oname=libeay3264.dll" "${lazarus_dir}\openssl\win64\libeay32.dll"
-  File "/oname=ssleay3264.dll" "${lazarus_dir}\openssl\win64\ssleay32.dll"
-  File "/oname=libeay3232.dll" "${lazarus_dir}\openssl\win32\libeay32.dll"
-  File "/oname=ssleay3232.dll" "${lazarus_dir}\openssl\win32\ssleay32.dll"
+
   File "${lazarus_dir}\openssl\OpenSSL License.txt"
   ; Install plugins
   CreateDirectory "$INSTDIR\plugins"
@@ -216,21 +213,24 @@ Section "" ;No components page, name is not important
   File "/oname=bassenc_aac32.dll" "${lazarus_dir}\Bass\bassenc_aac.dll"
   File "/oname=bassenc_ogg32.dll" "${lazarus_dir}\Bass\bassenc_ogg.dll"
 
+  SetOutPath "$INSTDIR"
   ; Set variables according 64 ou 32 bit windows version
-  ${If} ${RunningX64} 
+  ${If} ${RunningX64}
      StrCpy $exe_to_inst "64.exe"
      StrCpy $dll_to_inst "64.dll"
      StrCpy $exe_to_del "32.exe"
      StrCpy $dll_to_del "32.dll"
-     StrCpy $sysfolder "$WINDIR\sysnative"
+     File "${lazarus_dir}\openssl\libssl-3-x64.dll"
+     File "${lazarus_dir}\openssl\libcrypto-3-x64.dll"
   ${Else}
      StrCpy $exe_to_inst "32.exe"
      StrCpy $dll_to_inst "32.dll"
      StrCpy $exe_to_del "64.exe"
      StrCpy $dll_to_del "64.dll"
-     StrCpy $sysfolder "$WINDIR\system32"
+     File "${lazarus_dir}\openssl\libssl-3.dll"
+     File "${lazarus_dir}\openssl\libcrypto-3.dll"
   ${EndIf}
-  SetOutPath "$INSTDIR"
+
   ; Delete old files if they exist as we can not rename if the file exists
   Delete /REBOOTOK "$INSTDIR\${prog_name}.exe"
   Delete /REBOOTOK "$INSTDIR\bass.dll"
@@ -247,17 +247,6 @@ Section "" ;No components page, name is not important
   Rename /REBOOTOK "$INSTDIR\${prog_name}win$exe_to_inst" "$INSTDIR\${prog_name}.exe"
   Rename /REBOOTOK "$INSTDIR\bass$dll_to_inst" "$INSTDIR\bass.dll"
   Rename /REBOOTOK "$INSTDIR\bassenc$dll_to_inst" "$INSTDIR\bassenc.dll"
-  ; Install ssl libraries if not already in system folder
-  IfFileExists "$sysfolder\libeay32.dll" ssl_lib_found ssl_lib_not_found
-  ssl_lib_not_found:
-    File "${lazarus_dir}\openssl\OpenSSL License.txt"
-    Rename /REBOOTOK "$INSTDIR\libeay32$dll_to_inst" "$INSTDIR\libeay32.dll"
-    Rename /REBOOTOK "$INSTDIR\ssleay32$dll_to_inst" "$INSTDIR\\ssleay32.dll"
-    Goto ssl_lib_set
-  ssl_lib_found:
-    Delete "$INSTDIR\libeay32$dll_to_inst"
-    Delete "$INSTDIR\ssleay32$dll_to_inst"
-  ssl_lib_set:
   Rename /REBOOTOK "$INSTDIR\plugins\bass_aac$dll_to_inst" "$INSTDIR\plugins\bass_aac.dll"
   Rename /REBOOTOK "$INSTDIR\plugins\basswma$dll_to_inst" "$INSTDIR\plugins\basswma.dll"
   Rename /REBOOTOK "$INSTDIR\plugins\bassflac$dll_to_inst" "$INSTDIR\plugins\bassflac.dll"
@@ -338,6 +327,11 @@ Section Uninstall
   SetShellVarContext all
   ${If} ${RunningX64}
     SetRegView 64    ; change registry entries and install dir for 64 bit
+    Delete "$INSTDIR\libssl-3-x64.dll"
+    Delete "$INSTDIR\libcrypto-3-x64.dll"
+  ${Else}
+    Delete "$INSTDIR\libssl-3.dll"
+    Delete "$INSTDIR\libcrypto-3.dll"
   ${EndIf}
   ; add delete commands to delete whatever files/registry keys/etc you installed here.
   Delete /REBOOTOK "$INSTDIR\${prog_name}.exe"
@@ -347,8 +341,6 @@ Section Uninstall
   Delete "$INSTDIR\${prog_name}.ini"
   Delete /REBOOTOK "$INSTDIR\bass.dll"
   Delete /REBOOTOK "$INSTDIR\bassenc.dll"
-  Delete "$INSTDIR\libeay32.dll"
-  Delete "$INSTDIR\ssleay32.dll"
   Delete "$INSTDIR\licensf.txt"
   Delete "$INSTDIR\license.txt"
   Delete "$INSTDIR\OpenSSL License.txt"

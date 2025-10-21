@@ -135,6 +135,12 @@ BASS_ERROR_DX=Mauvaise version de DX
 BASS_ERROR_TIMEOUT=Le délai minimum est dépassé depuis la création du canal
 BASS_ERROR_UNKNOWN=Erreur inconnue
 
+[idHttpErr]
+idSSLLibraryNotFound=Impossible de charger la bibibliothèque SSL
+IdUnknownProtocol=Protocole inconnu
+IdHostNotFound=Hôte non trouvé
+idHTTP302=Page redirigée provisoirement (302)
+IdUnknownError=Erreur inconnue: %s
 
 [HttpErr]
 ;Http error messages
@@ -180,6 +186,8 @@ Server=Serveur
 22000=v 21H2 "Octobre 2021 Version initiale"
 22621=v 22H2 "Septembre 2022"
 22631=v 23H2 "Octobre 2023"
+26100=v 24H2 "Octobre 2024"
+26200=v 25H2 "Octobre 2025"
 
 [AboutBox]
 Caption=A propos de %s

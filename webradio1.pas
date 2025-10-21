@@ -1,6 +1,6 @@
 {*******************************************************************************
   Webradio1 : main unit code
-  bb - sdtp - march 2025
+  bb - sdtp - october 2025
   Using Un4seen BASS libraries www.un4seen.com
 *******************************************************************************}
 
@@ -298,6 +298,7 @@ type
     sShowEqualizer, SHideEqualizer: String;
     width_wout_equal, width_with_equal: Integer;
     HttpErrMsgNames: array [0..16] of string;
+    idHttpErrMsgNames: array [0..16] of string;
     PrevTop, PrevLeft, PrevWidth, PrevHeight: integer;
     SettingsChanged, RadiosChanged: Boolean;
     FileLength: Int64;
@@ -1791,7 +1792,7 @@ begin
   // If we have checked update and got an error
   if length(AboutBox.ErrorMessage)>0 then
   begin
-    alertmsg := TranslateHttpErrorMsg(AboutBox.ErrorMessage, HttpErrMsgNames);
+    alertmsg := TranslateidHttpErrorMsg(AboutBox.ErrorMessage, idHttpErrMsgNames);
     if AlertDlg(Caption,  alertmsg, [OKBtn, CancelBtn, sNoLongerChkUpdates],
                     true, mtError)= mrYesToAll then FSettings.Settings.NoChkNewVer:= true;
   end;
@@ -2452,7 +2453,7 @@ begin
     if length(sNewVer)=0 then
     begin
       if length(errmsg)=0 then alertmsg:= sCannotGetNewVer
-      else alertmsg:= TranslateHttpErrorMsg(errmsg, HttpErrMsgNames);
+      else alertmsg:= TranslateidHttpErrorMsg(errmsg, idHttpErrMsgNames);
       if AlertDlg(Caption,  alertmsg, [OKBtn, CancelBtn, sNoLongerChkUpdates],
                    true, mtError, alertpos)= mrYesToAll then FSettings.Settings.NoChkNewVer:= true;
       exit;
@@ -2654,6 +2655,13 @@ begin
 
     ErrUnsupportedEnc:= ReadString('main', 'ErrUnsupportedEnc', 'Impossible d''enregistrer, encodage %s non supporté');
     ErrEncoding:= ReadString('main', 'ErrEncoding', 'Erreur d''encodage %d');
+
+    // indy Error messages
+    idHttpErrMsgNames[0]:= ReadString('idHttpErr','idSSLLibraryNotFound','Bibliothèque SSL introuvable');
+    idHttpErrMsgNames[1]:= ReadString('idHttpErr','IdUnknownProtocol', 'Protocole inconnu');
+    idHttpErrMsgNames[2]:= ReadString('idHttpErr','IdHostNotFound', 'Hôte non trouvé');
+    idHttpErrMsgNames[3]:= ReadString('idHttpErr','idHTTP302','Page redirigée provisoirement (302)');
+    idHttpErrMsgNames[10]:= ReadString('idHttpErr','IdUnknownError', 'Erreur inconnue: %s');
 
     // HTTP Error messages
     HttpErrMsgNames[0] := ReadString('HttpErr','SErrInvalidProtocol','Protocole "%s" invalide');

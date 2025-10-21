@@ -8,14 +8,14 @@ object FWebRadioMain: TFWebRadioMain
   Caption = 'FWebRadioMain'
   ClientHeight = 295
   ClientWidth = 950
+  Position = poDesktopCenter
+  LCLVersion = '4.2.0.0'
   OnActivate = FormActivate
   OnChangeBounds = FormChangeBounds
   OnClose = FormClose
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnWindowStateChange = FormWindowStateChange
-  Position = poDesktopCenter
-  LCLVersion = '3.8.0.0'
   object PnlMain: TPanel
     Left = 0
     Height = 251
@@ -6237,12 +6237,12 @@ object FWebRadioMain: TFWebRadioMain
         Width = 36
         Caption = '10'
         Font.Color = clBlack
-        OnClick = SBPresetClick
-        OnContextPopup = SBPresetContextPopup
         ShowHint = True
         ParentFont = False
         ParentShowHint = False
         PopupMenu = PMnuPreset
+        OnClick = SBPresetClick
+        OnContextPopup = SBPresetContextPopup
         TextAutoSize = True
         Toggle = False
         Pressed = False
@@ -6267,12 +6267,12 @@ object FWebRadioMain: TFWebRadioMain
         Width = 36
         Caption = '9'
         Font.Color = clBlack
-        OnClick = SBPresetClick
-        OnContextPopup = SBPresetContextPopup
         ShowHint = True
         ParentFont = False
         ParentShowHint = False
         PopupMenu = PMnuPreset
+        OnClick = SBPresetClick
+        OnContextPopup = SBPresetContextPopup
         TextAutoSize = True
         Toggle = False
         Pressed = False
@@ -6297,12 +6297,12 @@ object FWebRadioMain: TFWebRadioMain
         Width = 36
         Caption = '8'
         Font.Color = clBlack
-        OnClick = SBPresetClick
-        OnContextPopup = SBPresetContextPopup
         ShowHint = True
         ParentFont = False
         ParentShowHint = False
         PopupMenu = PMnuPreset
+        OnClick = SBPresetClick
+        OnContextPopup = SBPresetContextPopup
         TextAutoSize = True
         Toggle = False
         Pressed = False
@@ -6327,12 +6327,12 @@ object FWebRadioMain: TFWebRadioMain
         Width = 36
         Caption = '7'
         Font.Color = clBlack
-        OnClick = SBPresetClick
-        OnContextPopup = SBPresetContextPopup
         ShowHint = True
         ParentFont = False
         ParentShowHint = False
         PopupMenu = PMnuPreset
+        OnClick = SBPresetClick
+        OnContextPopup = SBPresetContextPopup
         TextAutoSize = True
         Toggle = False
         Pressed = False
@@ -6357,12 +6357,12 @@ object FWebRadioMain: TFWebRadioMain
         Width = 36
         Caption = '6'
         Font.Color = clBlack
-        OnClick = SBPresetClick
-        OnContextPopup = SBPresetContextPopup
         ShowHint = True
         ParentFont = False
         ParentShowHint = False
         PopupMenu = PMnuPreset
+        OnClick = SBPresetClick
+        OnContextPopup = SBPresetContextPopup
         TextAutoSize = True
         Toggle = False
         Pressed = False
@@ -6387,12 +6387,12 @@ object FWebRadioMain: TFWebRadioMain
         Width = 36
         Caption = '5'
         Font.Color = clBlack
-        OnClick = SBPresetClick
-        OnContextPopup = SBPresetContextPopup
         ShowHint = True
         ParentFont = False
         ParentShowHint = False
         PopupMenu = PMnuPreset
+        OnClick = SBPresetClick
+        OnContextPopup = SBPresetContextPopup
         TextAutoSize = True
         Toggle = False
         Pressed = False
@@ -6417,12 +6417,12 @@ object FWebRadioMain: TFWebRadioMain
         Width = 36
         Caption = '4'
         Font.Color = clBlack
-        OnClick = SBPresetClick
-        OnContextPopup = SBPresetContextPopup
         ShowHint = True
         ParentFont = False
         ParentShowHint = False
         PopupMenu = PMnuPreset
+        OnClick = SBPresetClick
+        OnContextPopup = SBPresetContextPopup
         TextAutoSize = True
         Toggle = False
         Pressed = False
@@ -6447,12 +6447,12 @@ object FWebRadioMain: TFWebRadioMain
         Width = 36
         Caption = '3'
         Font.Color = clBlack
-        OnClick = SBPresetClick
-        OnContextPopup = SBPresetContextPopup
         ShowHint = True
         ParentFont = False
         ParentShowHint = False
         PopupMenu = PMnuPreset
+        OnClick = SBPresetClick
+        OnContextPopup = SBPresetContextPopup
         TextAutoSize = True
         Toggle = False
         Pressed = False
@@ -6477,12 +6477,12 @@ object FWebRadioMain: TFWebRadioMain
         Width = 36
         Caption = '2'
         Font.Color = clBlack
-        OnClick = SBPresetClick
-        OnContextPopup = SBPresetContextPopup
         ShowHint = True
         ParentFont = False
         ParentShowHint = False
         PopupMenu = PMnuPreset
+        OnClick = SBPresetClick
+        OnContextPopup = SBPresetContextPopup
         TextAutoSize = True
         Toggle = False
         Pressed = False
@@ -6507,12 +6507,12 @@ object FWebRadioMain: TFWebRadioMain
         Width = 36
         Caption = '1'
         Font.Color = clBlack
-        OnClick = SBPresetClick
-        OnContextPopup = SBPresetContextPopup
         ShowHint = True
         ParentFont = False
         ParentShowHint = False
         PopupMenu = PMnuPreset
+        OnClick = SBPresetClick
+        OnContextPopup = SBPresetContextPopup
         TextAutoSize = True
         Toggle = False
         Pressed = False
@@ -6537,12 +6537,12 @@ object FWebRadioMain: TFWebRadioMain
         Width = 36
         Caption = '11'
         Font.Color = clBlack
-        OnClick = SBPresetClick
-        OnContextPopup = SBPresetContextPopup
         ShowHint = True
         ParentFont = False
         ParentShowHint = False
         PopupMenu = PMnuPreset
+        OnClick = SBPresetClick
+        OnContextPopup = SBPresetContextPopup
         TextAutoSize = True
         Toggle = False
         Pressed = False
@@ -6567,12 +6567,12 @@ object FWebRadioMain: TFWebRadioMain
         Width = 36
         Caption = '20'
         Font.Color = clBlack
-        OnClick = SBPresetClick
-        OnContextPopup = SBPresetContextPopup
         ShowHint = True
         ParentFont = False
         ParentShowHint = False
         PopupMenu = PMnuPreset
+        OnClick = SBPresetClick
+        OnContextPopup = SBPresetContextPopup
         TextAutoSize = True
         Toggle = False
         Pressed = False
@@ -6597,12 +6597,12 @@ object FWebRadioMain: TFWebRadioMain
         Width = 36
         Caption = '19'
         Font.Color = clBlack
-        OnClick = SBPresetClick
-        OnContextPopup = SBPresetContextPopup
         ShowHint = True
         ParentFont = False
         ParentShowHint = False
         PopupMenu = PMnuPreset
+        OnClick = SBPresetClick
+        OnContextPopup = SBPresetContextPopup
         TextAutoSize = True
         Toggle = False
         Pressed = False
@@ -6627,12 +6627,12 @@ object FWebRadioMain: TFWebRadioMain
         Width = 36
         Caption = '18'
         Font.Color = clBlack
-        OnClick = SBPresetClick
-        OnContextPopup = SBPresetContextPopup
         ShowHint = True
         ParentFont = False
         ParentShowHint = False
         PopupMenu = PMnuPreset
+        OnClick = SBPresetClick
+        OnContextPopup = SBPresetContextPopup
         TextAutoSize = True
         Toggle = False
         Pressed = False
@@ -6657,12 +6657,12 @@ object FWebRadioMain: TFWebRadioMain
         Width = 36
         Caption = '17'
         Font.Color = clBlack
-        OnClick = SBPresetClick
-        OnContextPopup = SBPresetContextPopup
         ShowHint = True
         ParentFont = False
         ParentShowHint = False
         PopupMenu = PMnuPreset
+        OnClick = SBPresetClick
+        OnContextPopup = SBPresetContextPopup
         TextAutoSize = True
         Toggle = False
         Pressed = False
@@ -6687,12 +6687,12 @@ object FWebRadioMain: TFWebRadioMain
         Width = 36
         Caption = '16'
         Font.Color = clBlack
-        OnClick = SBPresetClick
-        OnContextPopup = SBPresetContextPopup
         ShowHint = True
         ParentFont = False
         ParentShowHint = False
         PopupMenu = PMnuPreset
+        OnClick = SBPresetClick
+        OnContextPopup = SBPresetContextPopup
         TextAutoSize = True
         Toggle = False
         Pressed = False
@@ -6717,12 +6717,12 @@ object FWebRadioMain: TFWebRadioMain
         Width = 36
         Caption = '15'
         Font.Color = clBlack
-        OnClick = SBPresetClick
-        OnContextPopup = SBPresetContextPopup
         ShowHint = True
         ParentFont = False
         ParentShowHint = False
         PopupMenu = PMnuPreset
+        OnClick = SBPresetClick
+        OnContextPopup = SBPresetContextPopup
         TextAutoSize = True
         Toggle = False
         Pressed = False
@@ -6747,12 +6747,12 @@ object FWebRadioMain: TFWebRadioMain
         Width = 36
         Caption = '14'
         Font.Color = clBlack
-        OnClick = SBPresetClick
-        OnContextPopup = SBPresetContextPopup
         ShowHint = True
         ParentFont = False
         ParentShowHint = False
         PopupMenu = PMnuPreset
+        OnClick = SBPresetClick
+        OnContextPopup = SBPresetContextPopup
         TextAutoSize = True
         Toggle = False
         Pressed = False
@@ -6777,12 +6777,12 @@ object FWebRadioMain: TFWebRadioMain
         Width = 36
         Caption = '13'
         Font.Color = clBlack
-        OnClick = SBPresetClick
-        OnContextPopup = SBPresetContextPopup
         ShowHint = True
         ParentFont = False
         ParentShowHint = False
         PopupMenu = PMnuPreset
+        OnClick = SBPresetClick
+        OnContextPopup = SBPresetContextPopup
         TextAutoSize = True
         Toggle = False
         Pressed = False
@@ -6807,12 +6807,12 @@ object FWebRadioMain: TFWebRadioMain
         Width = 36
         Caption = '12'
         Font.Color = clBlack
-        OnClick = SBPresetClick
-        OnContextPopup = SBPresetContextPopup
         ShowHint = True
         ParentFont = False
         ParentShowHint = False
         PopupMenu = PMnuPreset
+        OnClick = SBPresetClick
+        OnContextPopup = SBPresetContextPopup
         TextAutoSize = True
         Toggle = False
         Pressed = False
@@ -6916,9 +6916,9 @@ object FWebRadioMain: TFWebRadioMain
         }
         Margin = 0
         NumGlyphs = 2
-        OnClick = SBPauseClick
         ShowHint = True
         ParentShowHint = False
+        OnClick = SBPauseClick
       end
       object SBStop: TSpeedButton
         Left = 30
@@ -6997,9 +6997,9 @@ object FWebRadioMain: TFWebRadioMain
         }
         Margin = 0
         NumGlyphs = 2
-        OnClick = SBStopClick
         ShowHint = True
         ParentShowHint = False
+        OnClick = SBStopClick
       end
       object SBPlay: TSpeedButton
         Left = 54
@@ -7078,9 +7078,9 @@ object FWebRadioMain: TFWebRadioMain
         }
         Margin = 0
         NumGlyphs = 2
-        OnClick = SBPlayClick
         ShowHint = True
         ParentShowHint = False
+        OnClick = SBPlayClick
       end
       object SBRecord: TSpeedButton
         Left = 78
@@ -7160,9 +7160,9 @@ object FWebRadioMain: TFWebRadioMain
         ImageWidth = 32
         Margin = 0
         NumGlyphs = 2
-        OnClick = SBRecordClick
         ShowHint = True
         ParentShowHint = False
+        OnClick = SBRecordClick
       end
       object SignalMeterL: TSignalMeter
         Left = 8
@@ -7311,9 +7311,9 @@ object FWebRadioMain: TFWebRadioMain
         }
         Margin = 0
         NumGlyphs = 2
-        OnClick = SBMuteClick
         ShowHint = True
         ParentShowHint = False
+        OnClick = SBMuteClick
       end
       object PBLength: TProgressBar
         Left = 8
@@ -7944,9 +7944,9 @@ object FWebRadioMain: TFWebRadioMain
         FF08FFFFFF09FFFFFA05FFFFE002000000000000000000000000
       }
       NumGlyphs = 2
-      OnClick = PmnuChooseRadioClick
       ShowHint = True
       ParentShowHint = False
+      OnClick = PmnuChooseRadioClick
     end
     object SBReadFile: TSpeedButton
       Left = 60
@@ -8022,9 +8022,9 @@ object FWebRadioMain: TFWebRadioMain
         0000000000000000000000000000000000000000000000000000
       }
       NumGlyphs = 2
-      OnClick = PMnuReadFileClick
       ShowHint = True
       ParentShowHint = False
+      OnClick = PMnuReadFileClick
     end
     object SBOpenUrl: TSpeedButton
       Left = 105
@@ -8100,9 +8100,9 @@ object FWebRadioMain: TFWebRadioMain
         0000000000000000000000000000000000000000000000000000
       }
       NumGlyphs = 2
-      OnClick = PMnuOpenURLClick
       ShowHint = True
       ParentShowHint = False
+      OnClick = PMnuOpenURLClick
     end
     object SBEqualizer: TSpeedButton
       Left = 150
@@ -8178,9 +8178,9 @@ object FWebRadioMain: TFWebRadioMain
         FF00FFFFFF00FFFFFF00FFFFFF00929292FFFFFFFF00FFFFFF00
       }
       NumGlyphs = 2
-      OnClick = PMnuEqualizerClick
       ShowHint = True
       ParentShowHint = False
+      OnClick = PMnuEqualizerClick
     end
     object SBSEtings: TSpeedButton
       Left = 195
@@ -8256,9 +8256,9 @@ object FWebRadioMain: TFWebRadioMain
         A1FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
       }
       NumGlyphs = 2
-      OnClick = PMnuSettingsClick
       ShowHint = True
       ParentShowHint = False
+      OnClick = PMnuSettingsClick
     end
     object SBRadList: TSpeedButton
       Left = 240
@@ -8334,9 +8334,9 @@ object FWebRadioMain: TFWebRadioMain
         0000000000000000000000000000000000000000000000000000
       }
       NumGlyphs = 2
-      OnClick = PMnuRadListClick
       ShowHint = True
       ParentShowHint = False
+      OnClick = PMnuRadListClick
     end
     object SBAbout: TSpeedButton
       Left = 376
@@ -8412,9 +8412,9 @@ object FWebRadioMain: TFWebRadioMain
         7FD5A4AE7FB9A4AE7F6300000000000000000000000000000000
       }
       NumGlyphs = 2
-      OnClick = PMnuAboutClick
       ShowHint = True
       ParentShowHint = False
+      OnClick = PMnuAboutClick
     end
     object SBQuit: TSpeedButton
       Left = 420
@@ -8490,9 +8490,9 @@ object FWebRadioMain: TFWebRadioMain
         78FF787878FF0000000000000000000000000000000000000000
       }
       NumGlyphs = 2
-      OnClick = PMnuQuitClick
       ShowHint = True
       ParentShowHint = False
+      OnClick = PMnuQuitClick
     end
     object SBHelp: TSpeedButton
       Left = 330
@@ -8568,9 +8568,9 @@ object FWebRadioMain: TFWebRadioMain
         BCD56485BCB96485BC6300000000000000000000000000000000
       }
       NumGlyphs = 2
-      OnClick = SBHelpClick
       ShowHint = True
       ParentShowHint = False
+      OnClick = SBHelpClick
     end
     object SBSearchRadios: TSpeedButton
       Left = 285
@@ -8646,9 +8646,9 @@ object FWebRadioMain: TFWebRadioMain
         A8FFA8A8A8FFA3A2A2FF00000000000000000000000000000000
       }
       NumGlyphs = 2
-      OnClick = PMnuSearchRadiosClick
       ShowHint = True
       ParentShowHint = False
+      OnClick = PMnuSearchRadiosClick
     end
   end
   object PMnuMain: TPopupMenu

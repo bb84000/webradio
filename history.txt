@@ -147,3 +147,8 @@ Version 1.0.1.0 - 31/03/2025
 
 Version 1.0.1.1 - 09/04/2025
 - Auto update enabled in About Box
+
+Version 1.0.2.0 - 21/10/2025
+- Updated for Win 11 25H2 detection
+- Updated for OpenSSL v3
+
