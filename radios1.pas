@@ -454,7 +454,7 @@ begin
        RadNode.AppendChild(SaveItem(RadNode, 'order', IntToStr(GetItem(i).order)));
        RadNode.AppendChild(SaveItem(RadNode, 'tag', BoolToString(GetItem(i).tag)));
        RadNode.AppendChild(SaveItem(RadNode, 'uid', IntToStr(GetItem(i).uid)));
-       RadNode.AppendChild(SaveItem(RadNode, 'favicon', GetItem(i).favicon));
+       //RadNode.AppendChild(SaveItem(RadNode, 'favicon', GetItem(i).favicon));
 
      except
        Result:= False;

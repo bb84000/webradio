@@ -196,7 +196,7 @@ Section "" ;No components page, name is not important
   File "/oname=bass32.dll" "${lazarus_dir}\Bass\bass.dll"
   File "/oname=bassenc32.dll" "${lazarus_dir}\Bass\bassenc.dll"
 
-  File "${lazarus_dir}\openssl\OpenSSL License.txt"
+  File "${lazarus_dir}\openssl\OpenSSL3 License.txt"
   ; Install plugins
   CreateDirectory "$INSTDIR\plugins"
   SetOutPath "$INSTDIR\plugins"
@@ -344,6 +344,7 @@ Section Uninstall
   Delete "$INSTDIR\licensf.txt"
   Delete "$INSTDIR\license.txt"
   Delete "$INSTDIR\OpenSSL License.txt"
+  Delete "$INSTDIR\OpenSSL3 License.txt"
   Delete "$INSTDIR\uninst.exe"
   RMDir /r "$INSTDIR\lang"
   RMDir /r "$INSTDIR\help"

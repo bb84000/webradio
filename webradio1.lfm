@@ -9,7 +9,7 @@ object FWebRadioMain: TFWebRadioMain
   ClientHeight = 295
   ClientWidth = 950
   Position = poDesktopCenter
-  LCLVersion = '4.2.0.0'
+  LCLVersion = '4.4.0.0'
   OnActivate = FormActivate
   OnChangeBounds = FormChangeBounds
   OnClose = FormClose
@@ -7213,10 +7213,10 @@ object FWebRadioMain: TFWebRadioMain
       end
       object LLeft: TLabel
         Left = 19
-        Height = 15
+        Height = 17
         Hint = 'Voie gauche'
         Top = 120
-        Width = 8
+        Width = 9
         Caption = 'G'
         ParentColor = False
         ParentShowHint = False
@@ -7225,10 +7225,10 @@ object FWebRadioMain: TFWebRadioMain
       end
       object LRight: TLabel
         Left = 49
-        Height = 15
+        Height = 17
         Hint = 'Voie droite'
         Top = 120
-        Width = 8
+        Width = 9
         Caption = 'D'
         ParentColor = False
         ParentShowHint = False

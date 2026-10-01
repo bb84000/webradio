@@ -745,7 +745,7 @@ begin
       // if there is another tag add it to icy
       if length(stag1)>0 then sTag:= sTag+sTag1;
       IcyTag:= GetIcyTag(stag);
-      HintStr:= IcyTag.text;
+      HintStr:= 'Url:: '+url+LineEnding+IcyTag.text;
       RadioEvent.Name:= IcyTag.name;
       BitRate:= IcyTag.bitrate;
     end;
@@ -962,6 +962,22 @@ begin
  Application.Title:= Caption ;
  TrayRadio.Hint:= Caption;
  LRadioIcyName.Hint:= LRadioIcyName.Caption;
+end;
+
+function ToHex(str:String) : String;
+var
+  i: Integer;
+  ch: Char;
+  n: Integer;
+begin
+  result:= '';
+  for i:=1 to length(str)-1 do
+  begin
+    ch:= str[i];
+    n:= Ord(ch);
+    result:= result+IntToHex(n, 2);
+  end;
+
 end;
 
 procedure TFWebRadioMain.RadioTitleChange(Sender: TObject);
